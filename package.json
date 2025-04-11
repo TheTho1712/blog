@@ -1,9 +1,10 @@
 {
   "name": "blog",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "source/index.js",
   "scripts": {
-    "start": "nodemon --inspect index.js",
+    "start": "nodemon --inspect source/index.js",
+    "watch": "sass source/resources/scss/app.scss:source/public/css/app.css --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,9 +22,12 @@
   "homepage": "https://github.com/TheTho1712/blog#readme",
   "description": "",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "express-handlebars": "^8.0.1",
+    "sass": "^1.86.3"
   },
   "devDependencies": {
+    "morgan": "^1.10.0",
     "nodemon": "^3.1.9"
   }
 }

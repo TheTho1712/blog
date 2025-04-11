@@ -1,0 +1,9 @@
+@use 'variables' as var;
+
+h1 {
+    color: var.$color1;
+}
+
+h2{
+    color: blue;
+}

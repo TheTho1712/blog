@@ -9,9 +9,9 @@ class SiteController {
         res.render('search');
     }
 
-                register(req, res) {
-                res.render('testregister');
-        }
+    register(req, res) {
+        res.render('testregister');
+    }
 }
 
 module.exports = new SiteController();

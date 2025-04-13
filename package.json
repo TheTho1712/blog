@@ -5,6 +5,7 @@
   "scripts": {
     "start": "nodemon --inspect source/index.js",
     "watch": "sass source/resources/scss/app.scss:source/public/css/app.css --watch",
+    "prettier": "lint-staged",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,9 +22,20 @@
   },
   "homepage": "https://github.com/TheTho1712/blog#readme",
   "description": "",
+  "lint-staged": {
+    "source/**/*.{js, json, scss}": "prettier --single-quote --trailing-comma all --tab-width 4 --write"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "dependencies": {
     "express": "^5.1.0",
     "express-handlebars": "^8.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.1",
+    "prettier": "^3.5.3",
     "sass": "^1.86.3"
   },
   "devDependencies": {

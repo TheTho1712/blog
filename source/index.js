@@ -6,6 +6,9 @@ const app = express();
 const port = 3000;
 
 const route = require('./routes');
+const db = require('./config/db');
+
+db.connect();
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded()); //middleware  form html
@@ -23,8 +26,6 @@ app.engine(
 );
 app.set('view engine', 'hbs');
 app.set('views', './source/resources/views');
-
-// console.log('PATH: ', path.join(__dirname, 'resouces/views'));
 
 route(app);
 

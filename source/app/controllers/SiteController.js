@@ -1,21 +1,35 @@
 const Dish = require('../models/Dish');
+const { multipleMongooseToObject } = require('../../util/mongoose');
 
 class SiteController {
     // GET /
-    async index(req, res) {
-
-        const dishes = await Dish.find({});
-        res.json(dishes);
-        // res.render('home');
-    }
     // async index(req, res) {
-    //     try {
-    //       const dishes = await Dish.find({});
-    //       res.json(dishes);
-    //     } catch (error) {
-    //       res.status(400).json({ err: "ERROR!!!" });
-    //     }
-    //   }
+
+    //     const dishes = await Dish.find({});
+    //     res.render(dishes);
+    //     // res.render('home');
+    // }
+
+    index(req, res, next) {
+        Dish.find({})
+            .then((dishes) => {
+                res.render('home', {
+                    dishes: multipleMongooseToObject(dishes),
+                });
+            })
+            .catch(next);
+    }
+
+    // index(req, res, next) {
+    //     Dish.find({}, function(err, dishes){
+    //         if(!err) {
+    //             res.json(dishes);
+    //         } else {
+    //             next(err);
+    //             // res.status(400).json({ error: 'error'})
+    //         }
+    //     })
+    // }
 
     //GET /search
     search(req, res) {
@@ -25,6 +39,11 @@ class SiteController {
     register(req, res) {
         res.render('testregister');
     }
+
+    introduce(req, res) {
+        res.render('introduce');
+    }
+
 }
 
 module.exports = new SiteController();

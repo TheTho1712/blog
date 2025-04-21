@@ -1,0 +1,22 @@
+<div class="mt-4">
+    <h3>Cập nhật món ăn</h3>
+    <form method="POST" action="/dishes/{{dish._id}}?_method=PUT">
+        <div class="form-group">
+            <label for="name">Tên món ăn</label>
+            <input type="text" class="form-control" value="{{dish.name}}" id="name" name ="name">
+        </div>
+        <div class="form-group">
+            <label for="description">Mô tả món ăn</label>
+            <textarea class="form-control" id="description" name ="description">{{dish.description}}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="videoId">Video Id</label>
+            <input type="text" class="form-control" value="{{dish.videoId}}" id="videoId" name ="videoId">
+        </div>
+        <div class="form-group">
+            <label for="time">Thời gian làm</label>
+            <input type="text" class="form-control" value="{{dish.time}}" id="time" name ="time">
+        </div>
+        <button type="submit" class="btn btn-primary">Lưu lại</button>
+    </form>
+</div>

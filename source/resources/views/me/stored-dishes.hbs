@@ -1,0 +1,71 @@
+<div class="mt-4">
+    <h3>Bài viết của tôi</h3>
+
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th scope="col">Số bài</th>
+                <th scope="col">Tên món ăn</th>
+                <th scope="col">Thời gian làm</th>
+                <th scope="col">Thời gian tạo</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each dishes}}
+            <tr>
+                <th scope="row">{{sum @index 1}}</th>
+                <td>{{this.name}}</td>
+                <td>{{this.time}}</td>
+                <td>{{this.createdAt}}</td>
+                <td>
+                    <a href="/dishes/{{this._id}}/edit" class="btn btn-link">Sửa</button>
+                    <a href="" class="btn btn-link" data-toggle="modal" data-id="{{this._id}}" data-target="#delete-modal">Xoá</button>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+{{!-- delete dish --}}
+<div id="delete-modal" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Thông báo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn muốn xoá bài viết này?</p>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-delete" type="button" class="btn btn-success">Đồng ý</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Huỷ</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- delete hidden form --}}
+<form name="delete-dish-form"method="POST"></form>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var dishId;
+            var deleteForm = document.forms['delete-dish-form']
+            var btnDelete = document.getElementById('btn-delete');
+            
+            $('#delete-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            dishId = button.data('id');
+            });
+
+            btnDelete.onclick = function() {
+                deleteForm.action = '/dishes/' + dishId + '?_method=DELETE';
+                deleteForm.submit();
+            }
+        });
+    
+</script>

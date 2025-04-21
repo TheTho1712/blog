@@ -1,6 +1,7 @@
+
 class NewsController {
     // GET news
-    index(req, res) {
+    news(req, res) {
         res.render('news');
     }
 

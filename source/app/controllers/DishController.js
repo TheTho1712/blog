@@ -26,7 +26,29 @@ class DishController {
             .catch(error => {
                 res.render('error')
             });
-        // res.json(req.body);
+    }
+
+    //[GET] /dishes/:id/edit
+    edit(req, res, next) {
+        Dish.findById(req.params.id)
+            .then(dish => res.render('dishes/edit', {
+                dish: mongooseToObject(dish)
+            }))
+            .catch(next);
+    }
+
+    // // //[PUT] /dishes/:id
+    update(req, res, next) {
+        Dish.updateOne({ _id: req.params.id }, req.body)
+            .then(() => res.redirect('/me/stored/dishes'))
+            .catch(next);
+    }
+    
+    //[DELETE] /dishes/:id
+    delete(req, res, next) {
+        Dish.deleteOne({_id: req.params.id})
+            .then(() => res.redirect('/me/stored/dishes'))
+            .catch(next);
     }
 
 }

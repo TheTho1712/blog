@@ -1,0 +1,154 @@
+<form name="container-form" method="POST" action="/dishes/handle-form-actions" class="mt-4">
+    <div>
+      <h3>Bài viết đã xoá</h3>
+      <a href="/me/stored/dishes">Danh sách bài viết</a>
+        <div class="mt-4 d-flex align-items-center">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="checkbox-all"
+          />
+          <label class="form-check-label" for="checkbox-all">
+            Chọn tất cả
+          </label>
+        </div>
+        <select
+          class="form-control-sm checkbox-select-all-options"
+          name="action" required>
+          <option value="">--Chọn hành động--</option>
+          <option value="forceDelete">Xóa vĩnh viễn</option>
+          <option value="restore">Khôi phục</option>
+        </select>
+        <button class="btn btn-primary btn-sm check-all-submit-btn disabled">Thực hiện</button>
+      </div>
+    </div>
+
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Số bài</th>
+                <th scope="col">Tên bài viết</th>
+                <th scope="col">Thời gian làm</th>
+                <th scope="col">Thời gian xoá</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each dishes}}
+            <tr>
+                <td>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="dishIds[]" value="{{this._id}}">
+                  </div>
+                </td>
+                <th scope="row">{{sum @index 1}}</th>
+                <td>{{this.name}}</td>
+                <td>{{this.time}}</td>
+                <td>{{this.deletedAt}}</td>
+                <td>
+                    <a href="" class="btn btn-link btn-restore" data-id="{{this._id}}">Khôi phục</button>
+                    <a href="" class="btn btn-link" data-toggle="modal" data-id="{{this._id}}" data-target="#delete-modal">Xoá vĩnh viễn</button>
+                </td>
+            </tr>
+            {{else}}
+            <tr>
+                <td colspan="5" class="text-center">
+                  Thùng rác trống!!!
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+
+{{!-- delete dish --}}
+<div id="delete-modal" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Thông báo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn muốn xoá vĩnh viễn bài viết này?</p>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-delete" type="button" class="btn btn-success">Đồng ý</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Huỷ</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<form name="delete-dish-form"method="POST"></form>
+<form name="restore-dish-form"method="POST"></form>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var dishId;
+        var deleteForm = document.forms['delete-dish-form'];
+        var restoreForm = document.forms['restore-dish-form'];
+        var containerForm = document.forms['container-form'];
+        var btnDelete = document.getElementById('btn-delete');
+        var btnRestore = $('.btn-restore');
+        var checkboxAll =$('#checkbox-all')
+        var dishItemCheckBox=$('input[name="dishIds[]"]')
+        var checkAllSubmitBtn = $('.check-all-submit-btn')
+            
+        $('#delete-modal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        dishId = button.data('id');
+        });
+
+        // khi an vao nut xoa
+        btnDelete.onclick = function() {
+            deleteForm.action = '/dishes/' + dishId + '/force?_method=DELETE';
+            deleteForm.submit();
+        }
+
+        btnRestore.click(function (e) {
+            e.preventDefault();
+            var dishId = $(this).data('id');
+            restoreForm.action = '/dishes/' + dishId + '/restore?_method=PATCH';
+            restoreForm.submit();
+        });
+
+        checkboxAll.change(function(){
+            var isCheckedAll =$(this).prop('checked');
+            dishItemCheckBox.prop('checked',isCheckedAll);
+            renderCheckAllSubmitBtn();
+        });
+
+        dishItemCheckBox.change(function(){
+          var isCheckedAll = dishItemCheckBox.length === $('input[name="dishIds[]"]:checked').length;
+          checkboxAll.prop('checked',isCheckedAll)
+          renderCheckAllSubmitBtn();
+        });
+
+        checkAllSubmitBtn.on('submit',function(event){
+          var isSubmitable= !$(this).hasClass('disabled')
+          if(!isSubmitable) {
+            event.preventDefault();
+          }
+        });
+
+        function renderCheckAllSubmitBtn() {
+          var checkedCount = $('input[name="dishIds[]"]:checked').length;
+          if(checkedCount > 0) {
+            checkAllSubmitBtn.removeClass('disabled');
+          } else {
+            checkAllSubmitBtn.addClass('disabled');
+          }
+        }
+        
+    });
+    
+</script>

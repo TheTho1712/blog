@@ -2,7 +2,6 @@ const Dish = require('../models/Dish');
 const { multipleMongooseToObject } = require('../../util/mongoose');
 
 class SiteController {
-
     index(req, res, next) {
         Dish.find({})
             .then((dishes) => {
@@ -28,6 +27,9 @@ class SiteController {
         res.render('introduce');
     }
 
+    login(req, res) {
+        res.render('login');
+    }
 }
 
 module.exports = new SiteController();

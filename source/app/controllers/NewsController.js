@@ -1,4 +1,3 @@
-
 class NewsController {
     // GET news
     news(req, res) {

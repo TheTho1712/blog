@@ -23,14 +23,26 @@
 
     </div>
 
+
     <table class="table mt-4">
         <thead>
             <tr>
                 <th scope="col"></th>
-                <th scope="col">Số bài</th>
-                <th scope="col">Tên bài viết</th>
-                <th scope="col">Thời gian làm</th>
-                <th scope="col">Thời gian tạo</th>
+                <th scope="col" style="width: 150px;">Số bài</th>
+                <th scope="col">
+                  Tên bài viết
+                  {{{sortable 'name' _sort}}}
+                </th>
+                <th scope="col" style="width: 150px;">
+                  Thời gian làm
+                  {{{sortable 'time' _sort}}}
+
+                  </th>
+                <th scope="col" style="width: 150px;">
+                  Thời gian tạo
+                  {{{sortable 'createdAt' _sort}}}
+
+                  </th>
                 <th scope="col"></th>
             </tr>
         </thead>

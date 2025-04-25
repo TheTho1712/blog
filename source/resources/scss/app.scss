@@ -1,13 +1,21 @@
 @use 'variables' as var;
 @use 'login-register';
+@use 'styles';
 // @use 'variables';
 
 .card-dish-item{
     margin-top: 16px;
 }
 
+.equal-height-row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .checkbox-select-all-options {
     width: 160px;
     margin: 0 16px;
 }
+
+
   

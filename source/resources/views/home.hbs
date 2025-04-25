@@ -1,25 +1,20 @@
-<div class="mt-4">
-    <div class="row">
-        
 
+<div class="mt-4">
+    <div class="row equal-height-row">
         {{#each dishes}}
-        <div class="col-sm-6 col-lg-4">
-            
-            <div class="card card-dish-item">
+        <div class="col-sm-6 col-lg-4 mb-4">
+            <div class="card card-dish-item h-100">
                 <a href="/dishes/{{this.slug}}">
-                
                     <img class="card-img-top" src="{{this.image}}" alt="{{this.name}}">
                 </a>
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                     <a href="/dishes/{{this.slug}}">
                         <h5 class="card-title">{{this.name}}</h5>
                     </a>
-                    <p class="card-text">{{this.description}}</p>
-                    {{!-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
+                    <p class="card-text flex-grow-1">{{shorten this.description 150}}</p>
                 </div>
             </div>
         </div>
         {{/each}}
-
     </div>
 </div>

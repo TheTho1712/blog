@@ -60,6 +60,9 @@
                 </td>
             </tr>
             {{/each}}
+            <form name="delete-dish-form" method="POST">
+              <input type="hidden" name="_method" value="DELETE">
+            </form>
         </tbody>
     </table>
 </div>
@@ -87,8 +90,8 @@
 </div>
 
 
-<form name="delete-dish-form"method="POST"></form>
-<form name="restore-dish-form"method="POST"></form>
+{{!-- <form name="delete-dish-form" method="POST"></form> --}}
+<form name="restore-dish-form" method="POST"></form>
 
 
 <script>
@@ -109,13 +112,17 @@
         });
 
         // khi an vao nut xoa
-        btnDelete.onclick = function() {
-            deleteForm.action = '/dishes/' + dishId + '/force?_method=DELETE';
-            deleteForm.submit();
-        }
+        btnDelete.onclick = function () {
+            if (deleteForm) {
+                deleteForm.action = '/dishes/' + dishId + '/force?_method=DELETE';
+                deleteForm.submit();
+            } else {
+                console.error("Không tìm thấy form 'delete-dish-form'");
+            }
+        };
 
-        btnRestore.click(function (e) {
-            e.preventDefault();
+        btnRestore.click(function (event) {
+            event.preventDefault();
             var dishId = $(this).data('id');
             restoreForm.action = '/dishes/' + dishId + '/restore?_method=PATCH';
             restoreForm.submit();

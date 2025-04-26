@@ -1,4 +1,11 @@
 
+<body>
+    {{#if user}}
+        <p>Xin chào, {{user.name}}</p>
+        <a href="/logout">Logout</a>
+    {{/if}}
+</body>
+
 <div class="mt-4">
     <div class="row equal-height-row">
         {{#each dishes}}
@@ -16,5 +23,11 @@
             </div>
         </div>
         {{/each}}
+
+        
+    
+        {{!-- <script>
+            //document.cookie = `email=abc@gmail.com; max-age=3600; `;
+        </script> --}}
     </div>
 </div>

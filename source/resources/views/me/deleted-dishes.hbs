@@ -90,7 +90,6 @@
 </div>
 
 
-{{!-- <form name="delete-dish-form" method="POST"></form> --}}
 <form name="restore-dish-form" method="POST"></form>
 
 
@@ -117,7 +116,7 @@
                 deleteForm.action = '/dishes/' + dishId + '/force?_method=DELETE';
                 deleteForm.submit();
             } else {
-                console.error("Không tìm thấy form 'delete-dish-form'");
+                console.error("Không tìm thấy form để xóa bài viết.");
             }
         };
 

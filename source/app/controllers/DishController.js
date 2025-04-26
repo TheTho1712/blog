@@ -19,7 +19,7 @@ class DishController {
     //[POST] /dishes/store
     store(req, res, next) {
         req.body.image = `https://i.ytimg.com/vi/${req.body.videoId}/hqdefault.jpg`;
-        req.body._id = 1;
+        // req.body._id = 1;
         const dish = new Dish(req.body);
         dish.save()
             .then(() => res.redirect('/me/stored/dishes'))

@@ -1,0 +1,26 @@
+<div class="container mt-4">
+    <h2>Kết quả tìm kiếm cho "{{keyword}}"</h2>
+    <p>Tìm thấy {{resultsCount}} kết quả</p>
+
+    {{#if dishes.length}}
+        <div class="row">
+            {{#each dishes}}
+                <div class="col-sm-6 col-lg-4 mb-4">
+                    <div class="card">
+                        <a href="/dishes/{{this.slug}}">
+                            <img class="card-img-top" src="{{this.image}}" alt="{{this.name}}">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">{{this.name}}</h5>
+                            <p class="card-text">{{shorten this.description 150}}</p>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    {{else}}
+        <div class="alert alert-info">
+            Không tìm thấy kết quả nào phù hợp với từ khóa "{{keyword}}"
+        </div>
+    {{/if}}
+</div>

@@ -4,9 +4,9 @@
     align-items: center;
     gap: 15px;
     margin-top: 10px;
-  }
-  
-  .social-icon {
+}
+
+.social-icon {
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -18,23 +18,43 @@
     font-size: 20px;
     transition: all 0.3s ease;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  .social-icon.email {
+}
+
+.social-icon.email {
     background-color: #EA4335;
-  }
-  
-  .social-icon.github {
+}
+
+.social-icon.github {
     background-color: #333;
-  }
-  
-  .social-icon.facebook {
+}
+
+.social-icon.facebook {
     background-color: #1877f2;
-  }
-  
-  /* Hover effect */
-  .social-icon:hover {
+}
+
+/* Hover effect */
+.social-icon:hover {
     transform: scale(1.1);
     opacity: 0.85;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-  }
+}
+//footer vẫn ở dưới khi không đủ content
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.main-content {
+    flex: 1;
+}

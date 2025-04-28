@@ -1,8 +1,7 @@
 @use 'footer';
 @use 'login-register';
 @use 'styles';
-// @use 'variables';
-
+@use 'header';
 
 .card-dish-item{
     margin-top: 16px;
@@ -17,5 +16,7 @@
     width: 160px;
     margin: 0 16px;
 }
+
+
 
 

@@ -1,41 +1,73 @@
 
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #6849c4;" >
-  <div class="container">
-      <a class="navbar-brand" style="margin-left: -150px;" href="/">HOME</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #6849c4;" >
+      <div class="container">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          {{!-- <a class="navbar-brand" style="margin-left: -150px;" href="/">HOME</a> --}}
+          <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="navbar-brand" href="/">HOME</a>
+              </li>
+            </ul>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto">
-        
-        <body>
-          {{#if user}}
-              <p style="color: aliceblue;">Xin chào, {{user.name}}</p>
-              <a href="/logout">Logout</a>
-          {{/if}}
-        </body>
-        
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Các tính năng</a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="/register">Đăng ký (chưa hoàn thành)</a>
-              <a class="dropdown-item" href="/login">Đăng nhập (chưa hoàn thành)</a>
-              <div class="dropdown-divider"></div>
+            {{!-- <form class="form-inline my-2 my-lg-0 mx-2" action="/search" method="GET">
+                <div class="d-flex align-items-center position-relative">
+                    <input class="form-control mr-sm-2" type="search" name="q" placeholder="Tìm kiếm..." aria-label="Search" style="width: 300px; padding-right: 40px;">
+                    <button class="btn btn-outline-light position-absolute" type="submit" style="right: 5px; border: none; background: none; padding: 6px 12px;">
+                        <i class="fas fa-search" style="color: #6c757d;"></i>
+                    </button>
+                </div>
+            </form> --}}
+            <form class="form-inline my-2 my-lg-0 mx-2" action="/search" method="GET">
+              <div class="d-flex align-items-center position-relative">
+                <input class="form-control search-input" type="search" name="q" placeholder="Tìm kiếm..." aria-label="Search">
+                <button class="btn search-button position-absolute" type="submit">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+            </form>
 
-              <a class="dropdown-item" href="/dishes/create">Đăng bài viết</a>
+          <ul class="navbar-nav ml-auto">
+            
+            
+            {{#if user}}
+              <li class="nav-item">
+                <span class="nav-link" style="color: aliceblue;">Xin chào, {{user.name}}</span>
+              </li>
+            {{/if}}
 
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/me/stored/dishes">Bài viết của tôi</a>
-              
-              <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">TEST</a>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Các tính năng</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+
+                  {{!-- <a class="dropdown-item" href="/register">Đăng ký (chưa hoàn thành)</a>
+                  <a class="dropdown-item" href="/login">Đăng nhập (chưa hoàn thành)</a> --}}
+
+                  {{#unless user}}
+                    <a class="dropdown-item" href="/register">Đăng ký (chưa hoàn thành)</a>
+                    <a class="dropdown-item" href="/login">Đăng nhập (chưa hoàn thành)</a>
+                    <div class="dropdown-divider"></div>
+                  {{/unless}}
+                  <a class="dropdown-item" href="/dishes/create">Đăng bài viết</a>
+
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="/me/stored/dishes">Bài viết của tôi</a>
+                  {{#if user}}
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="/logout">Đăng xuất</a>
+                  {{/if}}
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+</body>
+
 

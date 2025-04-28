@@ -22,16 +22,21 @@ class SiteController {
     index(req, res, next) {
         
         const session = sessions[req.cookies.sessionId];
-        if (!session) {
-            return res.redirect('/login');
+        // bắt buộc phải đăng nhập mới được vào 
+        // if (!session) {
+        //     return res.redirect('/login');
+        // }
+
+        // const user = fakeDb.user.find((user) => user.id === session.userId); 
+
+        // if (!user) {
+        //     return res.redirect('/login');
+        // }
+        let user = null;
+
+        if (session) {
+            user = fakeDb.user.find((user) => user.id === session.userId);
         }
-
-        const user = fakeDb.user.find((user) => user.id === session.userId);
-
-        if (!user) {
-            return res.redirect('/login');
-        }
-
         Dish.find({})
             .then((dishes) => {
                 res.render('home', {
@@ -42,9 +47,48 @@ class SiteController {
             .catch(next);
     }
 
+    //GET /dishes/:slug
+    dishDetail(req, res, next) {
+        const slug = req.params.slug;
+    
+        Dish.findOne({ slug: slug })
+            .then(dish => {
+                if (!dish) {
+                    return res.status(404).send('Không tìm thấy món ăn');
+                }
+    
+                res.render('dishDetail', {
+                    dish: dish.toObject(),
+                });
+            })
+            .catch(next);
+    }
+
     //GET /search
-    search(req, res) {
-        res.render('search');
+    searchResult(req, res, next) {
+        const keyword = req.query.q;
+        
+        if (!keyword) {
+            return res.redirect('/');
+        }
+
+        Dish.find({
+            $or: [
+                // $regex: So khớp chữ, $options: 'i': Không phân biệt chữ hoa chữ thường
+                { name: { $regex: keyword, $options: 'i' }},
+                { description: { $regex: keyword, $options: 'i' }},
+                { time: { $regex: keyword, $options: 'i' }},
+                { level: { $regex: keyword, $options: 'i' }}
+            ]
+        })
+        .then(dishes => {
+            res.render('searchResults', {
+                dishes: multipleMongooseToObject(dishes),
+                keyword: keyword,
+                resultsCount: dishes.length
+            });
+        })
+        .catch(next);
     }
 
     //GET /register
@@ -81,20 +125,7 @@ class SiteController {
             error: 'Sai tài khoản hoặc mật khẩu không đúng',
         });
     }
-    // test(req, res) {
-    //     const session = sessions[req.cookies.sessionId];
-    //     if (!session) {
-    //         return res.redirect('/login');
-    //     }
-
-    //     const user = fakeDb.user.find((user) => user.id === session.userId);
-
-    //     if (!user) {
-    //         return res.redirect('/login');
-    //     }
-    //     res.render('test', { user });
-    // }
-
+    
     logout(req, res) {
         delete sessions[req.cookies.sessionId];
         res.setHeader(

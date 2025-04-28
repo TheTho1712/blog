@@ -19,7 +19,7 @@ class DishController {
     //[POST] /dishes/store
     store(req, res, next) {
         req.body.image = `https://i.ytimg.com/vi/${req.body.videoId}/hqdefault.jpg`;
-        // req.body._id = 1;
+        req.body._id = 1;
         const dish = new Dish(req.body);
         dish.save()
             .then(() => res.redirect('/me/stored/dishes'))
@@ -66,32 +66,6 @@ class DishController {
             .then(() => res.redirect('/me/bin/dishes'))
             .catch(next);
     }
-
-    // [POST] /dishes/handle-form-actions
-    // handleFormActions(req, res, next) {
-    //     switch(req.body.action) {
-    //         case 'delete':
-    //             Dish.delete({ _id: { $in: req.body.dishIds} })
-    //                 .then(() => res.redirect('/me/stored/dishes'))
-    //                 .catch(next);
-    //             break;
-    //         default:
-    //             res.json({ message: 'Action is invalid'})
-    //         case "forceDelete":
-    //             Dish.deleteMany({ _id: { $in: req.body.dishIds } })
-    //                 .then(() => res.redirect('/me/stored/dishes'));
-    //                 .catch(next);
-    //             break;
-    //         case "restore":
-    //         Dish.restore({ _id: { $in: req.body.dishIds } })
-    //             .then(() => res.redirect("/me/stored/dishes"));
-    //             .catch(next);
-    //             break;
-    //         default:
-    //         res.json({ message: "action invalid" });
-    //         }
-    //     }
-    // }
 
     handleFormActions(req, res, next) {
         switch (req.body.action) {

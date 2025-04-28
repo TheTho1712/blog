@@ -13,6 +13,7 @@ const DishSchema = new mongoose.Schema(
         videoId: { type: String },
         time: { type: String },
         level: { type: String },
+        age: { type: String },
         slug: { type: String, slug: 'name', unique: true },
     },
     {

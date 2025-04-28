@@ -70,15 +70,16 @@ class SiteController {
             sessions[sessionId] = {
                 userId: user.id,
             };
-            // console.log(sessions);
 
             res.setHeader(
                 'Set-Cookie',
                 `sessionId=${sessionId}; HttpOnly; Max-Age=3600`
-            ).redirect('/');
-            return;
+            )
+            return res.render('login', { success: true });
         }
-        res.send('tai khoan khong ton tai');
+        res.render('login', {
+            error: 'Sai tài khoản hoặc mật khẩu không đúng',
+        });
     }
     // test(req, res) {
     //     const session = sessions[req.cookies.sessionId];

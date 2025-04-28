@@ -49,8 +49,8 @@
                 <td>{{this.time}}</td>
                 <td>{{this.deletedAt}}</td>
                 <td>
-                    <a href="" class="btn btn-link btn-restore" data-id="{{this._id}}">Khôi phục</button>
-                    <a href="" class="btn btn-link" data-toggle="modal" data-id="{{this._id}}" data-target="#delete-modal">Xoá vĩnh viễn</button>
+                    <a href="" class="btn btn-link btn-restore" data-id="{{this._id}}">Khôi phục</a>
+                    <a href="" class="btn btn-link" data-toggle="modal" data-id="{{this._id}}" data-target="#delete-modal">Xoá vĩnh viễn</a>
                 </td>
             </tr>
             {{else}}
@@ -60,12 +60,29 @@
                 </td>
             </tr>
             {{/each}}
-            <form name="delete-dish-form" method="POST">
-              <input type="hidden" name="_method" value="DELETE">
-            </form>
+            
         </tbody>
     </table>
+    
 </div>
+
+<form name="restore-dish-form" method="POST"></form>
+<form name="delete-dish-form" method="POST">
+  <input type="hidden" name="_method" value="DELETE">
+</form>
+<form name="restore-dish-form" method="POST">
+  <input type="hidden" name="_method" value="PATCH">
+</form>
+
+{{!-- <form id="force-delete-form" method="POST">
+  <input type="hidden" name="_method" value="DELETE">
+</form>
+
+<form id="restore-form" method="POST">
+  <input type="hidden" name="_method" value="PATCH">
+</form> --}}
+
+
 
 
 {{!-- delete dish --}}
@@ -90,34 +107,37 @@
 </div>
 
 
-<form name="restore-dish-form" method="POST"></form>
+
 
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var dishId;
+
+        //form
         var deleteForm = document.forms['delete-dish-form'];
         var restoreForm = document.forms['restore-dish-form'];
         var containerForm = document.forms['container-form'];
+
+        //btn
         var btnDelete = document.getElementById('btn-delete');
         var btnRestore = $('.btn-restore');
         var checkboxAll =$('#checkbox-all')
         var dishItemCheckBox=$('input[name="dishIds[]"]')
         var checkAllSubmitBtn = $('.check-all-submit-btn')
+
+
             
         $('#delete-modal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget);
-        dishId = button.data('id');
+            var button = $(event.relatedTarget);
+            dishId = button.data('id');
         });
 
         // khi an vao nut xoa
         btnDelete.onclick = function () {
-            if (deleteForm) {
-                deleteForm.action = '/dishes/' + dishId + '/force?_method=DELETE';
-                deleteForm.submit();
-            } else {
-                console.error("Không tìm thấy form để xóa bài viết.");
-            }
+            deleteForm.action = '/dishes/' + dishId + '/force?_method=DELETE';
+            deleteForm.submit();
+              
         };
 
         btnRestore.click(function (event) {

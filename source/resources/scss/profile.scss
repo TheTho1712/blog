@@ -1,0 +1,121 @@
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f6fb;
+    margin: 0;
+    padding: 0;
+}
+
+.information-box {
+    display: flex;
+    gap: 30px;
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 20px;
+    flex-wrap: wrap;
+}
+
+.info-box, .function-box, .danger-box {
+    border-radius: 10px;
+    padding: 20px;
+    background-color: white;
+}
+
+.shadow {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+.shadow:hover {
+    transform: translateY(-3px);
+}
+
+.info-box {
+    background-color: #222;
+    color: #fff;
+    flex: 1;
+    min-width: 250px;
+}
+
+.function-area {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 300px;
+}
+
+.function-box {
+    background-color: #fde2e2;
+}
+
+.danger-box {
+    background-color: #fff8dc;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Avatar */
+.avatar-preview {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+/* Buttons */
+button, .btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: white;
+}
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+.btn-warning {
+    background-color: #f39c12;
+    color: white;
+}
+.btn-warning:hover {
+    background-color: #e67e22;
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+    color: white;
+}
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.btn-back {
+    background-color: #bdc3c7;
+    color: black;
+}
+.btn-back:hover {
+    background-color: #95a5a6;
+}
+
+/* Input fields */
+input[type="password"],
+input[type="file"] {
+    display: block;
+    margin: 10px 0;
+    padding: 8px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+

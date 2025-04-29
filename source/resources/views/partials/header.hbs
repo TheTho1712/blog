@@ -13,39 +13,45 @@
               </li>
             </ul>
 
-            <form class="form-inline my-2 my-lg-0 mx-2" action="/search" method="GET">
+            {{!-- <form class="form-inline my-2 my-lg-0 mx-2" action="/search" method="GET">
               <div class="d-flex align-items-center position-relative">
                 <input class="form-control search-input" type="search" name="q" placeholder="Tìm kiếm..." aria-label="Search">
                 <button class="btn search-button position-absolute" type="submit">
                   <i class="fas fa-search"></i>
                 </button>
               </div>
+            </form> --}}
+            <form action="/search" method="GET">
+              <li class="nav-item mr-3 d-flex align-items-center">
+                <div class="animated-search" id="searchBox">
+                  <i style="margin-left: 15px" class="fas fa-search search-icon"></i>
+                  <input  type="search" name="q" placeholder="Tìm kiếm..." class="search-input" aria-label="Search">
+                </div>
+              </li>
             </form>
-
           <ul class="navbar-nav ml-auto">
-
           {{#if user}}
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle user-dropdown-toggle" href="#" id="userDropdown" role="button"
-              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fa-solid fa-user-circle"></i> {{user.username}}
-            </a>
-            <div class="dropdown-menu dropdown-menu-right user-dropdown-menu" aria-labelledby="userDropdown">
-              <a class="dropdown-item" href="/dishes/create">
-                <i class="fa-solid fa-pen"></i> Đăng bài
-              </a>
-              <a class="dropdown-item" href="/me/stored/dishes">
-                <i class="fa-solid fa-folder-open"></i>Bài viết
-              </a>
-              <a class="dropdown-item" href="/me/infomation">
-                <i class="fa-solid fa-user"></i>Hồ sơ
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item text-danger" href="/logout">
-                <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
-              </a>
-            </div>
-          </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle user-dropdown-toggle" href="#" id="userDropdown" role="button"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fa-solid fa-user-circle"></i> {{user.username}}
+                </a>
+                <div class="dropdown-menu dropdown-menu-right user-dropdown-menu" aria-labelledby="userDropdown">
+                  <a class="dropdown-item" href="/dishes/create">
+                    <i class="fa-solid fa-pen"></i> Đăng bài
+                  </a>
+                  <a class="dropdown-item" href="/me/stored/dishes">
+                    <i class="fa-solid fa-folder-open"></i>Bài viết
+                  </a>
+                  <a class="dropdown-item" href="/profile">
+                    <i class="fa-solid fa-user"></i>Hồ sơ
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item text-danger" href="/logout">
+                    <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                  </a>
+                </div>
+              </li>
         {{else}}
           <li class="nav-item">
             <a class="nav-link btn custom-btn-outline mx-1" href="/register">
@@ -64,4 +70,22 @@
     </nav>
 </body>
 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchBox = document.getElementById("searchBox");
 
+    if (!searchBox) return; // đề phòng null
+
+    searchBox.addEventListener("click", function (e) {
+      e.stopPropagation(); // Không lan ra ngoài
+      searchBox.classList.toggle("active");
+      searchBox.querySelector("input").focus();
+    });
+
+    document.addEventListener("click", function (e) {
+      if (!searchBox.contains(e.target)) {
+        searchBox.classList.remove("active");
+      }
+    });
+  });
+</script>

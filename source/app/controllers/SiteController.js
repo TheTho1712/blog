@@ -5,18 +5,25 @@ const { multipleMongooseToObject } = require('../../util/mongoose');
 
 const sessions = {}
 
+function isValidEmail(email) {
+    // Regex đơn giản kiểm tra định dạng email
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
 class SiteController {
     async index(req, res, next) {
         
         // if (!req.session.user) {
         //     return res.redirect('/login');
         // }
-    
+        const loginSuccess = req.session.loginSuccess;
+        delete req.session.loginSuccess; // clear sau khi dùng
         Dish.find({})
             .then((dishes) => {
                 res.render('home', {
                     user: req.session.user,
                     dishes: multipleMongooseToObject(dishes),
+                    loginSuccess,
                 });
             })
             .catch(next);
@@ -55,28 +62,58 @@ class SiteController {
     }
 
     //POST /register
+    // async register(req, res) {
+    //     const { username, password, email } = req.body;
+
+    //     const hashedPassword = await bcrypt.hash(password, 10);
+    
+    //     const newUser = new User({ username, password: hashedPassword, email });
+    //     await newUser.save();
+    
+        
+    //     res.redirect('/login');
+    // };
+
     async register(req, res) {
-        const { username, password, email } = req.body;
+        const { username, password, email, gender, age } = req.body;
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        if (!isValidEmail(email)) {
+            return res.render('register', {
+                error: 'Email không hợp lệ. Vui lòng nhập đúng định dạng.',
+            });
+        }
     
-        const newUser = new User({ username, password: hashedPassword, email });
-        await newUser.save();
+        try {
+
+            // Kiểm tra xem email đã tồn tại trong db chưa
+            const existingUser = await User.findOne({ email });
+            if (existingUser) {
+                return res.render('register', {
+                    error: 'Email đã được sử dụng.',
+                });
+        }
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const newUser = new User({ username, password: hashedPassword, email, gender, age });
+            await newUser.save();
     
-        res.setHeader('Set-Cookie', 'registerSuccess=true; Max-Age=5; Path=/');
-        res.redirect('/login');
-    };
-
-
-
-    //GET /introduce
-    introduce(req, res) {
-        res.render('introduce');
+            return res.render('register', { success: true });
+    
+        } catch (error) {
+            console.error(error);
+            return res.render('register', {
+                error: 'Đã xảy ra lỗi khi đăng ký. Vui lòng thử lại.',
+            });
+        }
     }
 
+
     loginForm(req, res) {
-        const success = req.query.success === 'true';
-        res.render('login');
+        // const success = req.query.success === 'true';
+        // res.render('login');
+        const passwordChanged = req.session.passwordChanged;
+        delete req.session.passwordChanged;
+
+        res.render('login', { passwordChanged });
     }
 
     //POST /login
@@ -137,6 +174,8 @@ class SiteController {
     //     }
     // }
 
+    
+
     async login(req, res) {
         const { email, password } = req.body;
     
@@ -162,7 +201,9 @@ class SiteController {
                 email: user.email
             };
     
-            return res.redirect('/');
+            return res.render('login', {
+                success: true,
+            });
         } catch (err) {
             console.error(err);
             res.render('login', {
@@ -188,7 +229,44 @@ class SiteController {
     //         `sessionId=; Max-Age=0`
     //     ).redirect('/');
     // }
+    //GET //me/profile
+    profile(req, res) { 
+        res.render('profile', {
+            user: req.session.user,
+        });
+    }
 
+    changePasswordForm(req, res) {
+        res.render('change-password');
+    }
+
+    async changePassword(req, res) {
+        const { currentPassword, newPassword } = req.body;
+        const user = await User.findById(req.session.user._id);
+
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        if (!isMatch) {
+            return res.render('change-password', {
+                error: 'Mật khẩu hiện tại không đúng.',
+            });
+        }
+
+        user.password = await bcrypt.hash(newPassword, 10);
+        await user.save();
+
+        // Đặt cờ trong session để hiển thị thông báo ở trang login
+        req.session.passwordChanged = true;
+
+        // Xóa session user và chuyển về login
+        req.session.user = null;
+        res.redirect('/login');
+    }
+
+    async deleteAccount(req, res) {
+        await User.findByIdAndDelete(req.session.user._id);
+        req.session.destroy();
+        res.redirect('/');
+    }
 }
 
 module.exports = new SiteController();

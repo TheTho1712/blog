@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thông tin tài khoản</title>
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="information-box">
+        <!-- Cột trái: Thông tin tài khoản -->
+        <div class="info-box shadow">
+            <h2><i class="fa-solid fa-user"></i> Thông tin tài khoản</h2>
+            <p><strong><i class="fa-solid fa-user-tag"></i> Tên đăng nhập:</strong> {{user.username}}</p>
+            <p><strong><i class="fa-solid fa-envelope"></i> Email:</strong> {{user.email}}</p>
+            <p><strong><i class="fa-solid fa-venus-mars"></i> Giới tính:</strong> {{user.gender}}</p>
+            <p><strong><i class="fa-solid fa-cake-candles"></i> Tuổi:</strong> {{user.age}}</p>
+        </div>
+
+        <!-- Cột phải: chức năng -->
+        <div class="function-area">
+            <!-- Ô đỏ: Đổi avatar & mật khẩu -->
+            <div class="function-box shadow">
+                <h3><i class="fa-solid fa-image"></i> Ảnh đại diện</h3>
+                <img src="{{user.avatarUrl}}" alt="Avatar" class="avatar-preview" />
+                <form action="/profile/update-avatar" method="POST" enctype="multipart/form-data">
+                    <input type="file" name="avatar" accept="image/*" required>
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-upload"></i> Cập nhật ảnh đại diện</button>
+                </form>
+
+                <hr>
+
+                <h3><i class="fa-solid fa-key"></i> Đổi mật khẩu</h3>
+                <form action="/profile/change-password" method="POST">
+                    <input type="password" name="currentPassword" placeholder="Mật khẩu hiện tại" required>
+                    <input type="password" name="newPassword" placeholder="Mật khẩu mới" required>
+                    <button type="submit" class="btn btn-warning"><i class="fa-solid fa-rotate"></i> Đổi mật khẩu</button>
+                </form>
+            </div>
+
+            <!-- Ô vàng: Xoá và quay lại -->
+            <div class="danger-box shadow">
+                <form action="/profile/delete" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xoá tài khoản không?');">
+                    <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Xoá tài khoản</button>
+                </form>
+                <a href="/" class="btn btn-back"><i class="fa-solid fa-arrow-left"></i> Quay về trang chủ</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

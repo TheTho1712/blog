@@ -1,85 +1,3 @@
-{{!-- <!DOCTYPE html>
-<html lang ="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Form HTML CSS</title>
-    <link rel="stylesheet" href="/css/app.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-</head>
-
-<body class="login-page">
-    
-    <div class="wrapper">
-        <div class="form-container">
-            <form action="/login" method="POST">
-                <h1>Đăng nhập</h1>
-                {{#if error}}
-                <script>
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Đăng nhập thất bại!',
-                        text: 'Tài khoản hoặc mật khẩu bạn nhập không chính xác!',
-                        confirmButtonText: 'OK'
-                    }).then(() => {
-                        window.location.href = '/login'; // Chuyển hướng đến trang đăng nhập
-                    });
-                </script>
-                {{/if}}
-
-                {{#if success}}
-                <script>
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Đăng nhập thành công!',
-                        text: 'Chào mừng bạn quay trở lại!',
-                        confirmButtonText: 'OK'
-                    }).then(() => {
-                        window.location.href = '/'; // Chuyển hướng đến trang chủ
-                    });
-                </script>
-                {{/if}}
-                
-                <div class="input-box">
-                    <input type="email" name="email" id="email" value="nguyenvana@gmail.com" placeholder="Tên đăng nhập"
-                    required>
-                    <i class='bx bxs-user'></i>
-                </div>
-
-                <div class="input-box">
-                    <input type="password" name="password" id="password" value="1234" placeholder="Nhập mật khẩu"
-                    required>
-                    <i class='bx bxs-lock-alt' ></i>
-                </div>
-
-                <button type="submit" class="btn">Đăng nhập</button>
-
-                <div class="register">
-                    <p>Bạn chưa có tài khoản? 
-                        <a href="/register">Đăng ký</a>
-                    </p>
-                </div>
-            </form>
-        </div>
-    </div>
-</body>
-
-{{#if loginSuccess}}
-<script>
-    Swal.fire({
-        icon: 'success',
-        title: 'Đăng nhập thành công!',
-        text: 'Chào mừng bạn quay trở lại!',
-        confirmButtonText: 'OK'
-    }).then(() => {
-        window.location.href = '/';
-    });
-</script>
-{{/if}} --}}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -100,33 +18,10 @@
         <div class="form-container">
             <form action="/login" method="POST">
                 <h1>Đăng nhập</h1>
-                {{#if error}}
-                <script>
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Đăng nhập thất bại!',
-                        text: 'Tài khoản hoặc mật khẩu bạn nhập không chính xác!',
-                        confirmButtonText: 'OK'
-                    }).then(() => {
-                        window.location.href = '/login';
-                    });
-                </script>
-                {{/if}}
-                {{#if success}}
-                <script>
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Đăng nhập thành công!',
-                        text: 'Chào mừng bạn quay trở lại!',
-                        confirmButtonText: 'OK'
-                    }).then(() => {
-                        window.location.href = '/';
-                    });
-                </script>
-                {{/if}}
+                
 
                 <div class="input-box">
-                    <input type="email" name="email" id="email" placeholder="Tên đăng nhập" required>
+                    <input type="email" name="email" id="email" placeholder="Email" required>
                     <i class='bx bxs-user'></i>
                 </div>
 
@@ -146,5 +41,38 @@
 </body>
 </html>
 
-<!-- REGISTER PAGE (copy and rename as needed) -->
-<!-- Similar structure and style, just change the form -->
+{{#if error}}
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Đăng nhập thất bại!',
+            text: 'Tài khoản hoặc mật khẩu bạn nhập không chính xác!',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            window.location.href = '/login';
+        });
+    </script>
+    {{/if}}
+    {{#if success}}
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Đăng nhập thành công!',
+            text: 'Chào mừng bạn quay trở lại!',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            window.location.href = '/';
+        });
+    </script>
+{{/if}}
+
+{{#if passwordChanged}}
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Mật khẩu đã được cập nhật!',
+        text: 'Vui lòng đăng nhập lại.',
+        confirmButtonText: 'OK'
+    });
+</script>
+{{/if}}

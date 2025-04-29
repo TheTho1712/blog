@@ -24,17 +24,34 @@
                     required>
                     <i class='bx bxs-user'></i>
                 </div>
-                <div class="input-box">
-                    <input type="password" name="password" placeholder="Nhập mật khẩu"
-                    required>
-                    <i class='bx bxs-lock-alt' ></i>
-                </div>
 
                 <div class="input-box">
                     <input type="text" name="email" placeholder="Email"
                     required>
                     <i class='bx bxs-envelope' ></i>
                 </div>
+
+                <div class="input-box">
+                    <input type="password" name="password" placeholder="Nhập mật khẩu"
+                    required>
+                    <i class='bx bxs-lock-alt' ></i>
+                </div>
+                
+                <div class="input-box">
+                    <select name="gender" required>
+                        <option value="" disabled selected>Chọn giới tính</option>
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                        <option value="Khác">Khác</option>
+                    </select>
+                    <i class='bx bx-male-female'></i>
+                </div>
+
+                <div class="input-box">
+                    <input type="number" name="age" placeholder="Tuổi" min="0" required>
+                    <i class='bx bx-calendar'></i>
+                </div>
+                                
 
                 <button type="submit" class="btn">Đăng ký</button>
 
@@ -48,16 +65,26 @@
     </div>
 </body>
 
+{{#if success}}
 <script>
-    document.querySelector('form').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
-        Swal.fire({
-            title: 'Đăng ký thành công!',
-            text: 'Tài khoản của bạn đã được tạo.',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        }).then(() => {
-            this.submit(); // Submit the form after the alert is closed
-        });
+    Swal.fire({
+        icon: 'success',
+        title: 'Đăng ký thành công!',
+        text: 'Bây giờ bạn có thể đăng nhập',
+        confirmButtonText: 'OK'
+    }).then(() => {
+        window.location.href = '/login';
     });
 </script>
+{{/if}}
+
+{{#if error}}
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Đăng ký thất bại!',
+        text: '{{error}}',
+        confirmButtonText: 'OK'
+    });
+</script>
+{{/if}}

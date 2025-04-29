@@ -3,9 +3,12 @@ const router = express.Router();
 
 const siteController = require('../app/controllers/SiteController');
 
+
+router.post('/profile/delete', siteController.deleteAccount);
+router.get('/profile/change-password', siteController.changePasswordForm);
+router.post('/profile/change-password', siteController.changePassword);
+router.get('/profile', siteController.profile);
 router.get('/search', siteController.searchResult);
-// router.get('/test', siteController.test);
-router.get('/introduce', siteController.introduce);
 router.post('/register', siteController.register);
 router.get('/register', siteController.registerForm);
 router.get('/logout', siteController.logout);

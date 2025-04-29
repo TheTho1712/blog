@@ -23,10 +23,12 @@
   "homepage": "https://github.com/TheTho1712/blog#readme",
   "description": "",
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "boxicons": "^2.1.4",
     "cookie-parser": "^1.4.7",
     "express": "^5.1.0",
     "express-handlebars": "^8.0.1",
+    "express-session": "^1.18.1",
     "method-override": "^3.0.0",
     "mongoose": "^8.13.2",
     "mongoose-delete": "^1.0.2",

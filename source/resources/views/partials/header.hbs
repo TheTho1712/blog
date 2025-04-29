@@ -7,21 +7,12 @@
               <span class="navbar-toggler-icon"></span>
             </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          {{!-- <a class="navbar-brand" style="margin-left: -150px;" href="/">HOME</a> --}}
           <ul class="navbar-nav mr-auto">
               <li class="nav-item">
                 <a class="navbar-brand" href="/">HOME</a>
               </li>
             </ul>
 
-            {{!-- <form class="form-inline my-2 my-lg-0 mx-2" action="/search" method="GET">
-                <div class="d-flex align-items-center position-relative">
-                    <input class="form-control mr-sm-2" type="search" name="q" placeholder="Tìm kiếm..." aria-label="Search" style="width: 300px; padding-right: 40px;">
-                    <button class="btn btn-outline-light position-absolute" type="submit" style="right: 5px; border: none; background: none; padding: 6px 12px;">
-                        <i class="fas fa-search" style="color: #6c757d;"></i>
-                    </button>
-                </div>
-            </form> --}}
             <form class="form-inline my-2 my-lg-0 mx-2" action="/search" method="GET">
               <div class="d-flex align-items-center position-relative">
                 <input class="form-control search-input" type="search" name="q" placeholder="Tìm kiếm..." aria-label="Search">
@@ -32,38 +23,41 @@
             </form>
 
           <ul class="navbar-nav ml-auto">
-            
-            
-            {{#if user}}
-              <li class="nav-item">
-                <span class="nav-link" style="color: aliceblue;">Xin chào, {{user.name}}</span>
-              </li>
-            {{/if}}
 
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Các tính năng</a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-
-
-                  {{!-- <a class="dropdown-item" href="/register">Đăng ký (chưa hoàn thành)</a>
-                  <a class="dropdown-item" href="/login">Đăng nhập (chưa hoàn thành)</a> --}}
-
-                  {{#unless user}}
-                    <a class="dropdown-item" href="/register">Đăng ký (chưa hoàn thành)</a>
-                    <a class="dropdown-item" href="/login">Đăng nhập (chưa hoàn thành)</a>
-                    <div class="dropdown-divider"></div>
-                  {{/unless}}
-                  <a class="dropdown-item" href="/dishes/create">Đăng bài viết</a>
-
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="/me/stored/dishes">Bài viết của tôi</a>
-                  {{#if user}}
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="/logout">Đăng xuất</a>
-                  {{/if}}
-              </div>
-            </li>
+          {{#if user}}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle user-dropdown-toggle" href="#" id="userDropdown" role="button"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa-solid fa-user-circle"></i> {{user.username}}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right user-dropdown-menu" aria-labelledby="userDropdown">
+              <a class="dropdown-item" href="/dishes/create">
+                <i class="fa-solid fa-pen"></i> Đăng bài
+              </a>
+              <a class="dropdown-item" href="/me/stored/dishes">
+                <i class="fa-solid fa-folder-open"></i>Bài viết
+              </a>
+              <a class="dropdown-item" href="/me/infomation">
+                <i class="fa-solid fa-user"></i>Hồ sơ
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item text-danger" href="/logout">
+                <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+              </a>
+            </div>
+          </li>
+        {{else}}
+          <li class="nav-item">
+            <a class="nav-link btn custom-btn-outline mx-1" href="/register">
+              <i class="fa-solid fa-user-plus"></i> Đăng ký
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link btn custom-btn-outline mx-1" href="/login">
+              <i class="fa-solid fa-right-to-bracket"></i> Đăng nhập
+            </a>
+          </li>
+        {{/if}}
           </ul>
         </div>
       </div>

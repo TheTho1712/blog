@@ -5,7 +5,8 @@ body.login-page {
     background-size: cover;
 
     .wrapper {
-        height: 100vh;
+        // height: 100vh;
+        min-height: calc(100vh - 100px);
         display: flex;
         justify-content: center;
         align-items: center;

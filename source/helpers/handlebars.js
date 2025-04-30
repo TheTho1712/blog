@@ -33,6 +33,7 @@ module.exports = {
             return text.substring(0, length) + '...';
         }
         return text;
-    }
+    },
+    notEq: (a, b) => a !== b
 
 }

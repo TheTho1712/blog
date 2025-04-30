@@ -2,7 +2,9 @@ const Dish = require('../models/Dish');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const { multipleMongooseToObject } = require('../../util/mongoose');
-
+const path = require('path');
+const fs = require('fs');
+const DEFAULT_AVATAR = '/img/default-avatar.png';
 const sessions = {}
 
 function isValidEmail(email) {
@@ -74,6 +76,7 @@ class SiteController {
     //     res.redirect('/login');
     // };
 
+    //POST /register
     async register(req, res) {
         const { username, password, email, gender, age } = req.body;
 
@@ -93,7 +96,14 @@ class SiteController {
                 });
         }
             const hashedPassword = await bcrypt.hash(password, 10);
-            const newUser = new User({ username, password: hashedPassword, email, gender, age });
+            const newUser = new User({ 
+                username,
+                password: hashedPassword,
+                email, 
+                gender, 
+                age,
+                avatar: DEFAULT_AVATAR, // Đường dẫn đến ảnh mặc định
+            });
             await newUser.save();
     
             return res.render('register', { success: true });
@@ -106,10 +116,8 @@ class SiteController {
         }
     }
 
-
+    //GET /login
     loginForm(req, res) {
-        // const success = req.query.success === 'true';
-        // res.render('login');
         const passwordChanged = req.session.passwordChanged;
         delete req.session.passwordChanged;
 
@@ -117,65 +125,6 @@ class SiteController {
     }
 
     //POST /login
-    // login(req, res) {
-    //     const { email, password } = req.body;
-    //     const user = fakeDb.user.find((user) => user.email === email && user.password === password);
-    //     if (user) {
-    //         const sessionId = Date.now().toString();
-    //         sessions[sessionId] = {
-    //             userId: user.id,
-    //         };
-
-    //         res.setHeader(
-    //             'Set-Cookie',
-    //             `sessionId=${sessionId}; HttpOnly; Max-Age=3600`
-    //         )
-    //         return res.render('login', { success: true });
-    //     }
-    //     res.render('login', {
-    //         error: 'Sai tài khoản hoặc mật khẩu không đúng',
-    //     });
-    // }
-    // async login(req, res) {
-    //     const { email, password } = req.body;
-
-    //     try {
-    //         const user = await User.findOne({ email });
-    //         if(!user) {
-    //             return res.render('login', {
-    //                 error: 'Sai tài khoản hoặc mật khẩu không đúng',
-    //             });
-    //         }
-
-    //         const passwordMatch = await bcrypt.compare(password, user.password);
-    //         if (!passwordMatch) {
-    //             return res.render('login', {
-    //                 error: 'Sai tài khoản hoặc mật khẩu không đúng',
-    //             });
-    //         }
-    //         // const sessionId = Date.now().toString();
-    //         // sessions[sessionId] = {
-    //         //     userId: user._id,
-    //         // };
-    //         // res.setHeader('Set-Cookie', [
-    //         //     'loginSuccess=true; Max-Age=5; Path=/',
-    //         //     `sessionId=${sessionId}; HttpOnly; Max-Age=3600`
-    //         // ])
-    //         req.session.user = {
-    //             _id: user._id,
-    //             username: user.username,
-    //           };
-    //         return res.redirect('/');
-    //     } catch (err) {
-    //         console.error(err);
-    //         res.render('login', {
-    //             error: 'Đã xảy ra lỗi khi đăng nhập',
-    //         });
-    //     }
-    // }
-
-    
-
     async login(req, res) {
         const { email, password } = req.body;
     
@@ -198,7 +147,10 @@ class SiteController {
             req.session.user = {
                 _id: user._id,
                 username: user.username,
-                email: user.email
+                email: user.email,
+                gender: user.gender,
+                age: user.age,
+                avatar: user.avatar,
             };
     
             return res.render('login', {
@@ -212,6 +164,7 @@ class SiteController {
         }
     }
     
+
     logout(req, res) {
         req.session.destroy((err) => {
             if (err) {
@@ -221,25 +174,25 @@ class SiteController {
         });
     }
     
-    
-    // logout(req, res) {
-    //     delete sessions[req.cookies.sessionId];
-    //     res.setHeader(
-    //         'Set-Cookie',
-    //         `sessionId=; Max-Age=0`
-    //     ).redirect('/');
-    // }
     //GET //me/profile
     profile(req, res) { 
+        const success = req.session.success;
+        const error = req.session.error;
+        delete req.session.success;
+        delete req.session.error;
         res.render('profile', {
             user: req.session.user,
+            success,
+            error,
         });
     }
 
+    //GET /profile/change-password
     changePasswordForm(req, res) {
         res.render('change-password');
     }
 
+    //POST /profile/change-password
     async changePassword(req, res) {
         const { currentPassword, newPassword } = req.body;
         const user = await User.findById(req.session.user._id);
@@ -262,10 +215,66 @@ class SiteController {
         res.redirect('/login');
     }
 
+    //GET /profile/change-avatar
+    changeAvatarForm(req, res) {
+        res.render('profile', {
+            user: req.session.user,
+        });
+    }
+
+    //POST /profile/change-avatar
+    // Xử lý đổi avatar
+    async changeAvatar(req, res) {
+        if (!req.file) {
+            req.session.error = 'Vui lòng chọn một hình ảnh.';
+            return res.redirect('/profile');
+        }
+
+        const avatarPath = '/uploads/avatars/' + req.file.filename;
+
+        // xoá avatar cũ nếu không phải avatar mặc định
+        const oldAvatar = req.session.user.avatar;
+        if (oldAvatar && oldAvatar !== DEFAULT_AVATAR) {
+            const oldPath = path.join(__dirname, '../../public', oldAvatar);
+            fs.unlink(oldPath, (err) => {
+                if (err) console.error('Không thể xóa ảnh cũ:', err);
+            });
+}
+
+        // cập nhật user
+        await User.findByIdAndUpdate(req.session.user._id, { avatar: avatarPath });
+        req.session.user.avatar = avatarPath;
+
+        req.session.success = 'Cập nhật avatar thành công';
+        res.redirect('/profile');
+    }
+
+    // POST /profile/delete
     async deleteAccount(req, res) {
         await User.findByIdAndDelete(req.session.user._id);
         req.session.destroy();
         res.redirect('/');
+    }
+
+    // POST /profile/delete-avatar
+    async deleteAvatar(req, res) {
+        const DEFAULT_AVATAR = '/img/default-avatar.png';
+        const oldAvatar = req.session.user.avatar;
+    
+        // Nếu avatar hiện tại không phải là mặc định thì xoá file cũ
+        if (oldAvatar && oldAvatar !== DEFAULT_AVATAR) {
+            const oldPath = path.join(__dirname, '../../public', oldAvatar);
+            fs.unlink(oldPath, (err) => {
+                if (err) console.error('Không thể xóa ảnh cũ:', err);
+            });
+        }
+    
+        // Cập nhật lại avatar thành mặc định
+        await User.findByIdAndUpdate(req.session.user._id, { avatar: DEFAULT_AVATAR });
+        req.session.user.avatar = DEFAULT_AVATAR;
+    
+        req.session.success = 'Avatar đã được đặt lại mặc định.';
+        res.redirect('/profile');
     }
 }
 

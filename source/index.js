@@ -58,22 +58,6 @@ const User = require('./app/models/User');
 
 
 
-// app.post('/register', async (req, res) => {
-//     const { username, password, email } = req.body;
-
-//     const hashedPassword = await bcrypt.hash(password, 10);
-
-//     const newUser = new User({ username, password: hashedPassword, email });
-//     await newUser.save();
-
-//     res.redirect('/login');
-// });
-
-
-
-
-
-
 
 app.listen(port, () => {
     console.log(`App listening on port ${port}`);

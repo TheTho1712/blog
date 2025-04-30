@@ -1,5 +1,6 @@
 const Dish = require('../models/Dish');
 const { multipleMongooseToObject } = require('../../util/mongoose');
+const User = require('../models/User');
 
 class MeController {
     //GET /me/stored/dishes
@@ -12,6 +13,7 @@ class MeController {
         ])
             .then(([dishes, deletedCount]) =>
                 res.render('me/stored-dishes', {
+                    user: req.session.user,
                     dishes,
                     deletedCount,
                 }),
@@ -25,6 +27,7 @@ class MeController {
         Dish.findWithDeleted({ deleted: true })
             .then((dishes) =>
                 res.render('me/deleted-dishes', {
+                    user: req.session.user,
                     dishes: multipleMongooseToObject(dishes),
                 }),
             )

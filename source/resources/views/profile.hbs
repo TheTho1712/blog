@@ -11,7 +11,7 @@
         <!-- Cột trái: Thông tin tài khoản -->
         <div class="info-box shadow">
             <h2><i class="fa-solid fa-user"></i> Thông tin tài khoản</h2>
-            <p><strong><i class="fa-solid fa-user-tag"></i> Tên đăng nhập:</strong> {{user.username}}</p>
+            <p><strong><i class="fa-solid fa-user-tag"></i> Tên người dùng:</strong> {{user.username}}</p>
             <p><strong><i class="fa-solid fa-envelope"></i> Email:</strong> {{user.email}}</p>
             <p><strong><i class="fa-solid fa-venus-mars"></i> Giới tính:</strong> {{user.gender}}</p>
             <p><strong><i class="fa-solid fa-cake-candles"></i> Tuổi:</strong> {{user.age}}</p>
@@ -22,14 +22,17 @@
             <!-- Ô đỏ: Đổi avatar & mật khẩu -->
             <div class="function-box shadow">
                 <h3><i class="fa-solid fa-image"></i> Ảnh đại diện</h3>
-                <img src="{{user.avatarUrl}}" alt="Avatar" class="avatar-preview" />
-                <form action="/profile/update-avatar" method="POST" enctype="multipart/form-data">
+                {{!-- <img src="{{user.avatar}}" alt="Avatar" class="avatar-preview" /> --}}
+                <img src="{{#if user.avatar}}{{user.avatar}}{{else}}/uploads/avatars/default-avatar.png{{/if}}" alt="Avatar" class="avatar-preview" />
+
+                <form action="/profile/change-avatar" method="POST" enctype="multipart/form-data">
                     <input type="file" name="avatar" accept="image/*" required>
                     <button type="submit" class="btn btn-primary"><i class="fa-solid fa-upload"></i> Cập nhật ảnh đại diện</button>
                 </form>
-
+                <form action="/profile/delete-avatar" method="POST" onsubmit="return confirm('Bạn có chắc muốn xoá avatar hiện tại?');">
+                    <button type="submit" class="btn btn-danger">Xoá avatar</button>
+                </form>
                 <hr>
-
                 <h3><i class="fa-solid fa-key"></i> Đổi mật khẩu</h3>
                 <form action="/profile/change-password" method="POST">
                     <input type="password" name="currentPassword" placeholder="Mật khẩu hiện tại" required>
@@ -49,3 +52,10 @@
     </div>
 </body>
 </html>
+
+{{#if success}}
+    <p class="alert alert-success">{{success}}</p>
+{{/if}}
+{{#if error}}
+    <p class="alert alert-danger">{{error}}</p>
+{{/if}}

@@ -34,7 +34,13 @@
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle user-dropdown-toggle" href="#" id="userDropdown" role="button"
                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="fa-solid fa-user-circle"></i> {{user.username}}
+                  {{!-- <img src="{{#if user.avatar}}{{user.avatar}}{{else}}/img/default-avatar.png{{/if}}" alt="Avatar" class="avatar-header"/> --}}
+                  {{#if user.avatar}}
+                    <img src="{{user.avatar}}" alt="Avatar" class="avatar-header"/>
+                  {{else}}
+                    <img src="/img/default-avatar.png" alt="Avatar" class="avatar-header"/>
+                  {{/if}}
+                  <span>{{user.username}}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right user-dropdown-menu" aria-labelledby="userDropdown">
                   <a class="dropdown-item" href="/dishes/create">

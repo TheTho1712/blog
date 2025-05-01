@@ -34,6 +34,9 @@ module.exports = {
         }
         return text;
     },
-    notEq: (a, b) => a !== b
+    notEq: (a, b) => a !== b,
 
+    ifEquals: function (arg1, arg2, options) {
+        return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+    }
 }

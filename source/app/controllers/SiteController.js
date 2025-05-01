@@ -238,8 +238,8 @@ class SiteController {
             const oldPath = path.join(__dirname, '../../public', oldAvatar);
             fs.unlink(oldPath, (err) => {
                 if (err) console.error('Không thể xóa ảnh cũ:', err);
-            });
-}
+        });
+    }
 
         // cập nhật user
         await User.findByIdAndUpdate(req.session.user._id, { avatar: avatarPath });
@@ -247,14 +247,14 @@ class SiteController {
 
         req.session.success = 'Cập nhật avatar thành công';
         res.redirect('/profile');
-    }
+    };
 
     // POST /profile/delete
     async deleteAccount(req, res) {
         await User.findByIdAndDelete(req.session.user._id);
         req.session.destroy();
         res.redirect('/');
-    }
+    };
 
     // POST /profile/delete-avatar
     async deleteAvatar(req, res) {
@@ -275,7 +275,34 @@ class SiteController {
     
         req.session.success = 'Đã xoá avatar';
         res.redirect('/profile');
-    }
+    };
+
+    // POST /profile/update
+    async editProfileForm(req, res) {
+        const { username, email, gender, age } = req.body;
+        const userId = req.session.user._id; // hoặc lấy từ JWT, cookie...
+    
+        try {
+            await User.updateOne({ _id: userId }, {
+                username,
+                email,
+                gender,
+                age
+            });
+
+            req.session.user.username = username;
+            req.session.user.email = email;
+            req.session.user.gender = gender;
+            req.session.user.age = age;
+            // Cập nhật thông tin người dùng trong session
+            req.session.success = 'Cập nhật thông tin thành công';
+    
+            res.redirect('/profile');
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Lỗi cập nhật thông tin');
+        }
+    };
 }
 
 module.exports = new SiteController();

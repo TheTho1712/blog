@@ -5,6 +5,7 @@ const upload = require('../app/middlewares/upAvatar');
 
 const siteController = require('../app/controllers/SiteController');
 
+router.post('/profile/edit', userAuth, siteController.editProfileForm);
 router.post('/profile/delete-avatar', siteController.deleteAvatar);
 router.get('/profile/change-avatar', userAuth, siteController.changeAvatarForm);
 router.post('/profile/change-avatar', userAuth, upload.single('avatar'), siteController.changeAvatar);

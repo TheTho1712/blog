@@ -5,6 +5,6 @@ const meController = require('../app/controllers/MeController');
 const userAuth = require('../app/middlewares/userAuth');
 
 router.get('/stored/dishes', userAuth, meController.storedDishes);
-router.get('/bin/dishes', meController.deletedDishes);
+router.get('/bin/dishes', userAuth, meController.deletedDishes);
 
 module.exports = router;

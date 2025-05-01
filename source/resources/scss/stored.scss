@@ -1,0 +1,127 @@
+/* Tạo khoảng cách và căn giữa các thành phần */
+.my-dish-page {
+    margin-left: 16px;
+    margin-right: 8px;
+  }
+  
+  .my-dish-page select.custom-control {
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    font-size: 14px;
+    min-width: 160px;
+    height: 38px;
+  }
+  
+  /* Nút "Thực hiện" */
+  .my-dish-page-btn button {
+    padding: 6px 16px;
+    font-size: 14px;
+    height: 38px;
+    border-radius: 8px;
+    background-color: #28a745;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .my-dish-page-btn button:disabled {
+    background-color: #94d3a2;
+    cursor: not-allowed;
+  }
+  
+  /* Tiêu đề và liên kết thùng rác */
+  h3 {
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  a[href*="/me/bin/dishes"] {
+    font-size: 14px;
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  a[href*="/me/bin/dishes"]:hover {
+    text-decoration: underline;
+  }
+  
+  /* Bảng */
+  table.table {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: #fff;
+  }
+  
+  table.table th, table.table td {
+    vertical-align: middle;
+    font-size: 14px;
+  }
+  
+  table.table thead {
+    background-color: #f1f3f5;
+    font-weight: 600;
+  }
+  
+  table.table tbody tr:hover {
+    background-color: #f8f9fa;
+  }
+  
+  /* Các nút sửa/xoá */
+  .btn.btn-link {
+    padding: 4px 8px;
+    font-size: 13px;
+    color: #007bff;
+  }
+  
+  .btn.btn-link:hover {
+    text-decoration: underline;
+    color: #0056b3;
+  }
+  
+  /* Modal */
+  .modal-content {
+    border-radius: 8px;
+  }
+  
+  .modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  .modal-footer button {
+    min-width: 80px;
+  }
+  
+  // /* Responsive nếu cần */
+  // @media (max-width: 768px) {
+  //   .d-flex.align-items-center {
+  //     flex-direction: column;
+  //     align-items: flex-start;
+  //   }
+  
+  //   .my-dish-page,
+  //   .my-dish-page-btn {
+  //     margin-top: 8px;
+  //   }
+  // }
+
+  /* Căn giữa checkbox theo chiều dọc và ngang */
+.table td .form-check {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .table td .form-check-input {
+    margin: 0;
+  }
+  
+  
+  
+
+  

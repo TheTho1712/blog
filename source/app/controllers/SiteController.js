@@ -273,7 +273,7 @@ class SiteController {
         await User.findByIdAndUpdate(req.session.user._id, { avatar: DEFAULT_AVATAR });
         req.session.user.avatar = DEFAULT_AVATAR;
     
-        req.session.success = 'Avatar đã được đặt lại mặc định.';
+        req.session.success = 'Đã xoá avatar';
         res.redirect('/profile');
     }
 }

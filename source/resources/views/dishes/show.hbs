@@ -2,8 +2,9 @@
     <div class="row">
         <div class="col-lg-3">
             <!-- Nút TEST -->
-                <button id="toggleUserInfoBtn" class="btn btn-outline-dark">Test</button>
-            <ul>
+            <button id="toggleUserInfoBtn" class="btn btn-outline-dark">Thông tin</button>
+
+            <ul id="userInfo" class="user-info">
                 <li>Thời gian thực hiện: {{dish.time}}</li>
                 <li>Trình độ: {{dish.level}}</li>
                 <li>Độ tuổi: {{dish.age}}</li>
@@ -17,4 +18,15 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggleBtn = document.getElementById('toggleUserInfoBtn');
+        const userInfo = document.getElementById('userInfo');
+
+        toggleBtn.addEventListener('click', function () {
+            userInfo.classList.toggle('show');
+        });
+    });
+</script>
 

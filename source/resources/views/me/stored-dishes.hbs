@@ -12,13 +12,17 @@
             Chọn tất cả
           </label>
         </div>
-
-        <select class="form-control form-control-sm checkbox-select-all-options" name="action" required>
-          <option value="">-- Hành động --</option>
+        <div class="my-dish-page">
+        <select class="custom-control checkbox-select-all-options" name="action" required>
+          <option value="">--Hành động--</option>
           <option value="delete">Xoá</option>
         </select>
-
-        <button type="submit" class="btn btn-primary btn-sm check-all-submit-btn" disabled>Thực hiện</button>
+        </div>
+        
+        <div class="my-dish-page-btn">
+          <button type="submit" class="btn btn-success btn-sm check-all-submit-btn" disabled>Thực hiện</button>
+        </div>
+        
 
       </div>
 
@@ -76,6 +80,9 @@
         </tbody>
     </table>
 </form>
+
+
+
 
 
 {{!-- delete dish --}}
@@ -137,14 +144,14 @@
               checkboxAll.prop('checked', isCheckedAll);
               renderCheckAllSubmitBtn();
             });
-
+/*
             containerForm.on('submit', function(event) {
               var isSubmittable = !checkAllSubmitBtn.hasClass('disabled');
               if(!isSubmittable) {
                 event.preventDefault();
               }
             });
-
+*/
             function renderCheckAllSubmitBtn() {
               var checkedCount = $('input[name="dishIds[]"]:checked').length;
               if(checkedCount > 0) {

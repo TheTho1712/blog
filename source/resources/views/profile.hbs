@@ -15,6 +15,8 @@
             <p><strong><i class="fa-solid fa-envelope"></i> Email:</strong> {{user.email}}</p>
             <p><strong><i class="fa-solid fa-venus-mars"></i> Giới tính:</strong> {{user.gender}}</p>
             <p><strong><i class="fa-solid fa-cake-candles"></i> Tuổi:</strong> {{user.age}}</p>
+            <button id="edit-profile-btn" class="btn btn-warning btn-sm mt-2">Chỉnh sửa (chưa hoàn thành)</button>
+
         </div>
 
         <!-- Cột phải: chức năng -->
@@ -22,16 +24,35 @@
             <!-- Ô đỏ: Đổi avatar & mật khẩu -->
             <div class="function-box shadow">
                 <h3><i class="fa-solid fa-image"></i> Ảnh đại diện</h3>
-                {{!-- <img src="{{user.avatar}}" alt="Avatar" class="avatar-preview" /> --}}
                 <img src="{{#if user.avatar}}{{user.avatar}}{{else}}/uploads/avatars/default-avatar.png{{/if}}" alt="Avatar" class="avatar-preview" />
 
-                <form action="/profile/change-avatar" method="POST" enctype="multipart/form-data">
+                {{!-- <form action="/profile/change-avatar" method="POST" enctype="multipart/form-data">
                     <input type="file" name="avatar" accept="image/*" required>
                     <button type="submit" class="btn btn-primary"><i class="fa-solid fa-upload"></i> Cập nhật ảnh đại diện</button>
                 </form>
                 <form action="/profile/delete-avatar" method="POST" onsubmit="return confirm('Bạn có chắc muốn xoá avatar hiện tại?');">
-                    <button type="submit" class="btn btn-danger">Xoá avatar</button>
-                </form>
+                    <button type="submit" class="btn btn-danger mt-4">Xoá avatar</button>
+                </form> --}}
+                
+                <div class="avatar-form">
+                    <form action="/profile/change-avatar" method="POST" enctype="multipart/form-data">
+                        <input type="file" name="avatar" accept="image/*" required>
+                        <div class="avatar-action-row">
+                            <button type="submit" class="btn btn-info">
+                                <i class="fa-solid fa-upload"></i> Cập nhật ảnh đại diện
+                            </button>
+                        </div>
+                    </form>
+                    <form action="/profile/delete-avatar" method="POST" onsubmit="return confirm('Bạn có chắc muốn xoá avatar hiện tại?');">
+                        <div class="avatar-action-row">
+                            <button type="submit" class="btn btn-danger">
+                                Xoá avatar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                
                 <hr>
                 <h3><i class="fa-solid fa-key"></i> Đổi mật khẩu</h3>
                 <form action="/profile/change-password" method="POST">
@@ -46,7 +67,7 @@
                 <form action="/profile/delete" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xoá tài khoản không?');">
                     <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Xoá tài khoản</button>
                 </form>
-                <a href="/" class="btn btn-back"><i class="fa-solid fa-arrow-left"></i> Quay về trang chủ</a>
+                <a href="/" class="btn btn-back"><i class="fa-solid fa-left-long"></i> Quay về trang chủ</a>
             </div>
         </div>
     </div>
@@ -58,4 +79,23 @@
 {{/if}}
 {{#if error}}
     <p class="alert alert-danger">{{error}}</p>
+{{/if}}
+{{#if error}}
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Lỗi',
+        text: '{{error}}',
+    });
+</script>
+{{/if}}
+
+{{#if success}}
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Thành công',
+        text: '{{success}}',
+    });
+</script>
 {{/if}}

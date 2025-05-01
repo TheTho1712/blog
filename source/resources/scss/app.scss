@@ -3,21 +3,153 @@
 @use 'styles';
 @use 'header';
 @use 'profile';
+@use 'create';
+@use 'stored';
+@use 'deleted';
 
-.card-dish-item{
-    margin-top: 16px;
-}
-
+/* Khoảng cách 2 bên */
 .equal-height-row {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  
+  /* Tạo hiệu ứng bo góc + đổ bóng cho card */
+  .card-dish-item {
+    border: none;
+    border-radius: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden;
+    background-color: #fff;
+  }
+  
+  /* Hover nhẹ cho card */
+  .card-dish-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Ảnh bo góc trên */
+  .card-img-top {
+    height: 200px;
+    object-fit: cover;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+  }
+  
+  /* Hover làm ảnh sáng nhẹ */
+  .img-hover {
+    transition: opacity 0.3s ease;
+  }
+  .img-hover:hover {
+    opacity: 0.85;
+  }
+  
+  /* Card title đẹp hơn */
+  .card-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Responsive padding dưới cùng */
+  .card-body {
+    padding: 1rem;
+  }
+  
+  /* Đảm bảo card chiều cao bằng nhau */
+  .card {
     display: flex;
-    flex-wrap: wrap;
-}
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  /* Text mô tả làm nhẹ và gọn */
+  .card-text {
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+  
+
+
 
 .checkbox-select-all-options {
     width: 160px;
     margin: 0 16px;
 }
 
+body {
+    background-color: #f6f6f6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
+/* Container tổng */
+.mt-4 {
+    margin-top: 2rem;
+}
 
+/* Nút Thông tin */
+#toggleUserInfoBtn {
+    margin-bottom: 1rem;
+    width: 100%;
+    font-weight: bold;
+    background-color: #fff;
+    border: 2px solid #6c63ff;
+    color: #6c63ff;
+    transition: 0.3s ease;
+}
 
+#toggleUserInfoBtn:hover {
+    background-color: #6c63ff;
+    color: white;
+}
+
+/* Thông tin thực hiện */
+.col-lg-3 ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.col-lg-3 li {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #444;
+}
+
+/* Tiêu đề món ăn */
+.col-lg-9 h2 {
+    color: #000000;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+/* Mô tả */
+.col-lg-9 p {
+    margin-top: 1rem;
+    line-height: 1.6;
+    color: #333;
+    font-size: 16px;
+}
+
+/* Video */
+iframe {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.user-info {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, opacity 0.5s ease;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* Khi mở */
+.user-info.show {
+    max-height: 300px; /* hoặc lớn hơn nếu nội dung dài */
+    opacity: 1;
+    margin-top: 10px;
+    padding-left: 20px;
+}

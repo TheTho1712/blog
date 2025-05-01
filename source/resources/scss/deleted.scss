@@ -1,0 +1,89 @@
+/* Tiêu đề & liên kết */
+h3 {
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  a[href*="/me/stored/dishes"] {
+    font-size: 14px;
+    color: #000000;
+    text-decoration: none;
+  }
+  
+  a[href*="/me/stored/dishes"]:hover {
+    text-decoration: underline;
+  }
+  
+  /* Form hành động */
+  .my-delete-page {
+    margin-left: 16px;
+    margin-right: 8px;
+  }
+  
+  .my-delete-page select.checkbox-select-all-options {
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    font-size: 14px;
+    min-width: 160px;
+    height: 38px;
+  }
+  
+  .my-delete-page-btn button {
+    padding: 6px 16px;
+    font-size: 14px;
+    height: 38px;
+    border-radius: 8px;
+    background-color: #28a745;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .my-delete-page-btn button:hover {
+    background-color: #218838;
+  }
+  
+  .my-delete-page-btn button:disabled,
+  .my-delete-page-btn .disabled {
+    background-color: #94d3a2;
+    cursor: not-allowed;
+  }
+  
+  /* Bảng */
+  table.table {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: #fff;
+  }
+  
+  table.table th,
+  table.table td {
+    vertical-align: middle;
+    font-size: 14px;
+  }
+  
+  table.table thead {
+    background-color: #f1f3f5;
+    font-weight: 600;
+  }
+  
+  table.table tbody tr:hover {
+    background-color: #f8f9fa;
+  }
+  
+  /* Nút "khôi phục" và "xoá vĩnh viễn" */
+  .btn.btn-link {
+    padding: 4px 8px;
+    font-size: 13px;
+    color: #007bff;
+  }
+  
+  .btn.btn-link:hover {
+    text-decoration: underline;
+    color: #0056b3;
+  }
+  

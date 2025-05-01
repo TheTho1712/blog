@@ -1,0 +1,63 @@
+
+/* Form wrapper */
+.form-wrapper {
+    max-width: 600px;
+    margin: 40px auto;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+/* Heading */
+.form-wrapper h2 {
+    text-align: center;
+    color: #e74c3c;
+    margin-bottom: 30px;
+}
+
+/* Form group */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Form labels */
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Input fields */
+.form-control, .form-select {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 15px;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #8e44ad;
+    outline: none;
+}
+
+/* Submit button */
+.btn-primary {
+    width: 100%;
+    background-color: #007bff;
+    color: white;
+    padding: 14px;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #1166c2;
+}

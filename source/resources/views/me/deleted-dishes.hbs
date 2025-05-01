@@ -2,7 +2,7 @@
 <form name="container-form" method="POST" action="/dishes/handle-form-actions" class="mt-4">
     <div>
       <h3>Bài viết đã xoá</h3>
-      <a href="/me/stored/dishes">Danh sách bài viết</a>
+      <a href="/me/stored/dishes" style="color: #007bff">Danh sách bài viết</a>
         <div class="mt-4 d-flex align-items-center">
         <div class="form-check">
           <input
@@ -15,14 +15,20 @@
             Chọn tất cả
           </label>
         </div>
-        <select
-          class="form-control-sm checkbox-select-all-options"
+        <div class="my-delete-page">
+          <select
+          class="custom-control-sm checkbox-select-all-options"
           name="action" required>
-          <option value="">--Chọn hành động--</option>
+          <option value="">--Hành động--</option>
           <option value="forceDelete">Xóa vĩnh viễn</option>
           <option value="restore">Khôi phục</option>
         </select>
-        <button class="btn btn-primary btn-sm check-all-submit-btn disabled">Thực hiện</button>
+        </div>
+
+        <div class="my-delete-page-btn">
+          <button class="btn btn-success btn-sm check-all-submit-btn" disabled>Thực hiện</button>
+        </div>
+        
       </div>
     </div>
     <table class="table mt-4">
@@ -159,19 +165,27 @@
           renderCheckAllSubmitBtn();
         });
 
+        containerForm.on('submit', function(event) {
+          var isSubmittable = !checkAllSubmitBtn.hasClass('disabled');
+          if(!isSubmittable) {
+            event.preventDefault();
+          }
+        });
+
         checkAllSubmitBtn.on('submit',function(event){
           var isSubmitable= !$(this).hasClass('disabled')
           if(!isSubmitable) {
             event.preventDefault();
           }
         });
+        
 
         function renderCheckAllSubmitBtn() {
           var checkedCount = $('input[name="dishIds[]"]:checked').length;
           if(checkedCount > 0) {
-            checkAllSubmitBtn.removeClass('disabled');
+            checkAllSubmitBtn.attr('disabled', false);
           } else {
-            checkAllSubmitBtn.addClass('disabled');
+            checkAllSubmitBtn.attr('disabled', true);
           }
         }
         

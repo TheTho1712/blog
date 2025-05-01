@@ -199,9 +199,11 @@ class SiteController {
 
         const isMatch = await bcrypt.compare(currentPassword, user.password);
         if (!isMatch) {
-            return res.render('change-password', {
-                error: 'Mật khẩu hiện tại không đúng.',
-            });
+            // return res.render('change-password', {
+            //     error: 'Mật khẩu hiện tại không đúng.',
+            // });
+            req.session.error = 'Mật khẩu hiện tại không đúng.';
+        return res.redirect('/profile');
         }
 
         user.password = await bcrypt.hash(newPassword, 10);
@@ -245,7 +247,7 @@ class SiteController {
         await User.findByIdAndUpdate(req.session.user._id, { avatar: avatarPath });
         req.session.user.avatar = avatarPath;
 
-        req.session.success = 'Cập nhật avatar thành công';
+        req.session.success = 'Cập nhật ảnh đại diện thành công';
         res.redirect('/profile');
     };
 
@@ -273,14 +275,14 @@ class SiteController {
         await User.findByIdAndUpdate(req.session.user._id, { avatar: DEFAULT_AVATAR });
         req.session.user.avatar = DEFAULT_AVATAR;
     
-        req.session.success = 'Đã xoá avatar';
+        req.session.success = 'Đã xoá ảnh đại diện';
         res.redirect('/profile');
     };
 
     // POST /profile/update
     async editProfileForm(req, res) {
         const { username, email, gender, age } = req.body;
-        const userId = req.session.user._id; // hoặc lấy từ JWT, cookie...
+        const userId = req.session.user._id;
     
         try {
             await User.updateOne({ _id: userId }, {

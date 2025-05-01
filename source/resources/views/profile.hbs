@@ -24,6 +24,7 @@
                     <select name="gender">
                         <option value="Nam" {{#ifEquals user.gender "Nam"}}selected{{/ifEquals}}>Nam</option>   
                         <option value="Nữ" {{#ifEquals user.gender "Nữ"}}selected{{/ifEquals}}>Nữ</option>
+                        <option value="Khác" {{#ifEquals user.gender "Khác"}}selected{{/ifEquals}}>Khác</option>
                     </select>
                     <input type="number" name="age" value="{{user.age}}">
                     <button type="submit">Lưu</button>
@@ -55,12 +56,17 @@
                             </button>
                         </div>
                     </form>
-                    <form action="/profile/delete-avatar" method="POST" onsubmit="return confirm('Bạn có chắc muốn xoá avatar hiện tại?');">
+                    {{!-- <form action="/profile/delete-avatar" method="POST" onsubmit="return confirm('Bạn có chắc muốn xoá avatar hiện tại?');">
                         <div class="avatar-action-row">
                             <button type="submit" class="btn btn-danger">
-                                Xoá avatar
+                                <i class="fa-solid fa-dumpster"></i> Xoá avatar
                             </button>
                         </div>
+                    </form> --}}
+                    <form id="delete-avatar-form" action="/profile/delete-avatar" method="POST">
+                        <button type="button" id="delete-avatar-btn" class="btn btn-danger">
+                            <i class="fa-solid fa-dumpster"></i> Xoá ảnh đại diện
+                        </button>
                     </form>
                 </div>
 
@@ -76,8 +82,13 @@
 
             <!-- Ô vàng: Xoá và quay lại -->
             <div class="danger-box shadow">
-                <form action="/profile/delete" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xoá tài khoản không?');">
+                {{!-- <form action="/profile/delete" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xoá tài khoản không?');">
                     <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Xoá tài khoản</button>
+                </form> --}}
+                <form id="delete-account-form" action="/profile/delete" method="POST">
+                    <button type="button" id="delete-account-btn" class="btn btn-danger">
+                        <i class="fa-solid fa-trash"></i> Xoá tài khoản
+                    </button>
                 </form>
                 <a href="/" class="btn btn-back"><i class="fa-solid fa-left-long"></i> Quay về trang chủ</a>
             </div>
@@ -86,29 +97,72 @@
 
 <script>
     document.getElementById("edit-profile-btn").addEventListener("click", function () {
+        // toggle fomr chỉnh sửa thông tin tài khoản
         const form = document.getElementById("edit-form");
         form.style.display = form.style.display === "none" ? "block" : "none";
     });
+        // Xác nhận xoá tài khoản bằng SweetAlert2
+    document.getElementById("delete-account-btn").addEventListener("click", function () {
+        Swal.fire({
+            title: 'Bạn có chắc chắn?',
+            text: 'Thao tác này sẽ xóa vĩnh viễn tài khoản của bạn!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Xoá tài khoản',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("delete-account-form").submit();
+            }
+        });
+    });
+
+    document.getElementById("delete-avatar-btn").addEventListener("click", function () {
+        Swal.fire({
+            title: 'Bạn có chắc chắn?',
+            text: 'Thao tác này sẽ xóa ảnh đại diện của bạn!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Xoá ảnh đại diện',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("delete-avatar-form").submit();
+            }
+        });
+    });
+    
 </script>
 
 {{#if success}}
 <script>
     Swal.fire({
+        toast: true,
+        position: 'top-end',
         icon: 'success',
-        title: 'Thành công',
-        text: '{{success}}',
-        confirmButtonColor: '#3085d6'
+        title: '{{success}}',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
     });
 </script>
 {{/if}}
 
+
 {{#if error}}
 <script>
     Swal.fire({
+        toast: true,
+        position: 'top-end',
         icon: 'error',
-        title: 'Lỗi',
-        text: '{{error}}',
-        confirmButtonColor: '#d33'
+        title: '{{error}}',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
     });
 </script>
 {{/if}}

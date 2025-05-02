@@ -6,8 +6,9 @@ const upload = require('../app/middlewares/upAvatar');
 
 const profileController = require('../app/controllers/ProfileController');
 
+router.post('/profile/delete-completed/:id', userAuth, profileController.deleteCompletedOne);
 router.post('/profile/delete/:id', userAuth, profileController.deleteTask);
-router.post('/profile/completed', userAuth, profileController.completeTask);
+router.post('/profile/completed', userAuth, profileController.completeTask); // Hoàn thành task
 router.post('/profile/delete-completed', profileController.deleteCompleted);
 router.get('/profile/completed', userAuth, profileController.completeTasksForm);
 router.post('/profile/edit', userAuth, profileController.editProfileForm);

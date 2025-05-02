@@ -248,6 +248,27 @@ class ProfileController {
         res.redirect('/profile?success=Đã xoá hết việc hoàn thành');
     }
     
+    async deleteCompletedOne(req, res) {
+        const taskId = req.params.id;
+        const userId = req.session.user._id;
+
+    try {
+        const task = await CompletedTask.findOne({ _id: taskId, userId });
+        if (!task) {
+            req.session.error = 'Không tìm thấy công việc đã hoàn thành.';
+            return res.redirect('/profile/completed');
+        }
+
+        await task.deleteOne();
+        req.session.success = 'Đã xoá công việc đã hoàn thành.';
+        res.redirect('/profile/completed');
+    } catch (err) {
+        console.error('Lỗi khi xoá task đã hoàn thành:', err);
+        req.session.error = 'Lỗi khi xoá công việc đã hoàn thành.';
+        res.redirect('/profile/completed');
+    }
+    }
+    
 
 }
 

@@ -31,7 +31,7 @@
                     <button type="submit">Lưu</button>
                 </form>
         <hr>
-        <h3 class="task-title"><i class="fa-solid fa-list-check"></i> Việc cần làm</h3>
+        <h3 class="task-title"><i class="fa-solid fa-list-check"></i> To-do-list</h3>
 
         <form action="/profile" method="POST" class="d-flex gap-2 mt-2">
             <input type="text" name="content" placeholder="Nhập việc cần làm..." required class="form-control">
@@ -102,9 +102,6 @@
 
             <!-- Ô vàng: Xoá và quay lại -->
             <div class="danger-box shadow">
-                {{!-- <form action="/profile/delete" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xoá tài khoản không?');">
-                    <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Xoá tài khoản</button>
-                </form> --}}
                 <form id="delete-account-form" action="/profile/delete" method="POST">
                     <button type="button" id="delete-account-btn" class="btn btn-danger">
                         <i class="fa-solid fa-trash"></i> Xoá tài khoản

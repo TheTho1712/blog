@@ -43,7 +43,7 @@ class SiteController {
             $or: [
                 // $regex: So khớp chữ, $options: 'i': Không phân biệt chữ hoa chữ thường
                 { name: { $regex: keyword, $options: 'i' }},
-                { description: { $regex: keyword, $options: 'i' }},
+                // { description: { $regex: keyword, $options: 'i' }},
                 { time: { $regex: keyword, $options: 'i' }},
                 { level: { $regex: keyword, $options: 'i' }}
             ]
@@ -62,19 +62,6 @@ class SiteController {
     registerForm(req, res) {
         res.render('register');
     }
-
-    //POST /register
-    // async register(req, res) {
-    //     const { username, password, email } = req.body;
-
-    //     const hashedPassword = await bcrypt.hash(password, 10);
-    
-    //     const newUser = new User({ username, password: hashedPassword, email });
-    //     await newUser.save();
-    
-        
-    //     res.redirect('/login');
-    // };
 
     //POST /register
     async register(req, res) {
@@ -175,136 +162,136 @@ class SiteController {
     }
     
     //GET //me/profile
-    profile(req, res) { 
-        const success = req.session.success;
-        const error = req.session.error;
-        delete req.session.success;
-        delete req.session.error;
-        res.render('profile', {
-            user: req.session.user,
-            success,
-            error,
-        });
-    }
+    // profile(req, res) { 
+    //     const success = req.session.success;
+    //     const error = req.session.error;
+    //     delete req.session.success;
+    //     delete req.session.error;
+    //     res.render('profile', {
+    //         user: req.session.user,
+    //         success,
+    //         error,
+    //     });
+    // }
 
-    //GET /profile/change-password
-    changePasswordForm(req, res) {
-        res.render('change-password');
-    }
+    // //GET /profile/change-password
+    // changePasswordForm(req, res) {
+    //     res.render('change-password');
+    // }
 
-    //POST /profile/change-password
-    async changePassword(req, res) {
-        const { currentPassword, newPassword } = req.body;
-        const user = await User.findById(req.session.user._id);
+    // //POST /profile/change-password
+    // async changePassword(req, res) {
+    //     const { currentPassword, newPassword } = req.body;
+    //     const user = await User.findById(req.session.user._id);
 
-        const isMatch = await bcrypt.compare(currentPassword, user.password);
-        if (!isMatch) {
-            // return res.render('change-password', {
-            //     error: 'Mật khẩu hiện tại không đúng.',
-            // });
-            req.session.error = 'Mật khẩu hiện tại không đúng.';
-        return res.redirect('/profile');
-        }
+    //     const isMatch = await bcrypt.compare(currentPassword, user.password);
+    //     if (!isMatch) {
+    //         // return res.render('change-password', {
+    //         //     error: 'Mật khẩu hiện tại không đúng.',
+    //         // });
+    //         req.session.error = 'Mật khẩu hiện tại không đúng.';
+    //     return res.redirect('/profile');
+    //     }
 
-        user.password = await bcrypt.hash(newPassword, 10);
-        await user.save();
+    //     user.password = await bcrypt.hash(newPassword, 10);
+    //     await user.save();
 
-        // Đặt cờ trong session để hiển thị thông báo ở trang login
-        req.session.passwordChanged = true;
+    //     // Đặt cờ trong session để hiển thị thông báo ở trang login
+    //     req.session.passwordChanged = true;
 
-        // Xóa session user và chuyển về login
-        req.session.user = null;
-        res.redirect('/login');
-    }
+    //     // Xóa session user và chuyển về login
+    //     req.session.user = null;
+    //     res.redirect('/login');
+    // }
 
-    //GET /profile/change-avatar
-    changeAvatarForm(req, res) {
-        res.render('profile', {
-            user: req.session.user,
-        });
-    }
+    // //GET /profile/change-avatar
+    // changeAvatarForm(req, res) {
+    //     res.render('profile', {
+    //         user: req.session.user,
+    //     });
+    // }
 
-    //POST /profile/change-avatar
-    // Xử lý đổi avatar
-    async changeAvatar(req, res) {
-        if (!req.file) {
-            req.session.error = 'Vui lòng chọn một hình ảnh.';
-            return res.redirect('/profile');
-        }
+    // //POST /profile/change-avatar
+    // // Xử lý đổi avatar
+    // async changeAvatar(req, res) {
+    //     if (!req.file) {
+    //         req.session.error = 'Vui lòng chọn một hình ảnh.';
+    //         return res.redirect('/profile');
+    //     }
 
-        const avatarPath = '/uploads/avatars/' + req.file.filename;
+    //     const avatarPath = '/uploads/avatars/' + req.file.filename;
 
-        // xoá avatar cũ nếu không phải avatar mặc định
-        const oldAvatar = req.session.user.avatar;
-        if (oldAvatar && oldAvatar !== DEFAULT_AVATAR) {
-            const oldPath = path.join(__dirname, '../../public', oldAvatar);
-            fs.unlink(oldPath, (err) => {
-                if (err) console.error('Không thể xóa ảnh cũ:', err);
-        });
-    }
+    //     // xoá avatar cũ nếu không phải avatar mặc định
+    //     const oldAvatar = req.session.user.avatar;
+    //     if (oldAvatar && oldAvatar !== DEFAULT_AVATAR) {
+    //         const oldPath = path.join(__dirname, '../../public', oldAvatar);
+    //         fs.unlink(oldPath, (err) => {
+    //             if (err) console.error('Không thể xóa ảnh cũ:', err);
+    //     });
+    // }
 
-        // cập nhật user
-        await User.findByIdAndUpdate(req.session.user._id, { avatar: avatarPath });
-        req.session.user.avatar = avatarPath;
+    //     // cập nhật user
+    //     await User.findByIdAndUpdate(req.session.user._id, { avatar: avatarPath });
+    //     req.session.user.avatar = avatarPath;
 
-        req.session.success = 'Cập nhật ảnh đại diện thành công';
-        res.redirect('/profile');
-    };
+    //     req.session.success = 'Cập nhật ảnh đại diện thành công';
+    //     res.redirect('/profile');
+    // };
 
-    // POST /profile/delete
-    async deleteAccount(req, res) {
-        await User.findByIdAndDelete(req.session.user._id);
-        req.session.destroy();
-        res.redirect('/');
-    };
+    // // POST /profile/delete
+    // async deleteAccount(req, res) {
+    //     await User.findByIdAndDelete(req.session.user._id);
+    //     req.session.destroy();
+    //     res.redirect('/');
+    // };
 
-    // POST /profile/delete-avatar
-    async deleteAvatar(req, res) {
-        const DEFAULT_AVATAR = '/img/default-avatar.png';
-        const oldAvatar = req.session.user.avatar;
+    // // POST /profile/delete-avatar
+    // async deleteAvatar(req, res) {
+    //     const DEFAULT_AVATAR = '/img/default-avatar.png';
+    //     const oldAvatar = req.session.user.avatar;
     
-        // Nếu avatar hiện tại không phải là mặc định thì xoá file cũ
-        if (oldAvatar && oldAvatar !== DEFAULT_AVATAR) {
-            const oldPath = path.join(__dirname, '../../public', oldAvatar);
-            fs.unlink(oldPath, (err) => {
-                if (err) console.error('Không thể xóa ảnh cũ:', err);
-            });
-        }
+    //     // Nếu avatar hiện tại không phải là mặc định thì xoá file cũ
+    //     if (oldAvatar && oldAvatar !== DEFAULT_AVATAR) {
+    //         const oldPath = path.join(__dirname, '../../public', oldAvatar);
+    //         fs.unlink(oldPath, (err) => {
+    //             if (err) console.error('Không thể xóa ảnh cũ:', err);
+    //         });
+    //     }
     
-        // Cập nhật lại avatar thành mặc định
-        await User.findByIdAndUpdate(req.session.user._id, { avatar: DEFAULT_AVATAR });
-        req.session.user.avatar = DEFAULT_AVATAR;
+    //     // Cập nhật lại avatar thành mặc định
+    //     await User.findByIdAndUpdate(req.session.user._id, { avatar: DEFAULT_AVATAR });
+    //     req.session.user.avatar = DEFAULT_AVATAR;
     
-        req.session.success = 'Đã xoá ảnh đại diện';
-        res.redirect('/profile');
-    };
+    //     req.session.success = 'Đã xoá ảnh đại diện';
+    //     res.redirect('/profile');
+    // };
 
-    // POST /profile/update
-    async editProfileForm(req, res) {
-        const { username, email, gender, age } = req.body;
-        const userId = req.session.user._id;
+    // // POST /profile/update
+    // async editProfileForm(req, res) {
+    //     const { username, email, gender, age } = req.body;
+    //     const userId = req.session.user._id;
     
-        try {
-            await User.updateOne({ _id: userId }, {
-                username,
-                email,
-                gender,
-                age
-            });
+    //     try {
+    //         await User.updateOne({ _id: userId }, {
+    //             username,
+    //             email,
+    //             gender,
+    //             age
+    //         });
 
-            req.session.user.username = username;
-            req.session.user.email = email;
-            req.session.user.gender = gender;
-            req.session.user.age = age;
-            // Cập nhật thông tin người dùng trong session
-            req.session.success = 'Cập nhật thông tin thành công';
+    //         req.session.user.username = username;
+    //         req.session.user.email = email;
+    //         req.session.user.gender = gender;
+    //         req.session.user.age = age;
+    //         // Cập nhật thông tin người dùng trong session
+    //         req.session.success = 'Cập nhật thông tin thành công';
     
-            res.redirect('/profile');
-        } catch (err) {
-            console.error(err);
-            res.status(500).send('Lỗi cập nhật thông tin');
-        }
-    };
+    //         res.redirect('/profile');
+    //     } catch (err) {
+    //         console.error(err);
+    //         res.status(500).send('Lỗi cập nhật thông tin');
+    //     }
+    // };
 }
 
 module.exports = new SiteController();

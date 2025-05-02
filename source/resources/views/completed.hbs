@@ -1,0 +1,61 @@
+{{!-- <h2><i class="fa-solid fa-check-double"></i> Việc đã hoàn thành</h2>
+<ul class="task-list mt-3">
+  {{#each completedTasks}}
+    <li><i class="fa-solid fa-check"></i> {{this.content}} <small class="text-muted">({{this.completedAt}})</small></li>
+  {{/each}}
+</ul>
+<p>Số lượng việc đã hoàn thành: {{completedTasks.length}}</p>
+<a href="/profile" class="btn btn-primary mt-3"><i class="fa-solid fa-arrow-left"></i> Quay lại</a> --}}
+
+{{!-- 
+<h2><i class="fa-solid fa-check-double"></i> Việc đã hoàn thành</h2>
+<ul class="task-list mt-3">
+  {{#each completedTasks}}
+    <li class="d-flex justify-content-between align-items-center mb-2">
+      <span>
+        <i class="fa-solid fa-check text-success"></i> 
+        {{this.content}} 
+        <small class="text-muted">({{this.completedAt}})</small>
+      </span>
+
+      <form action="/profile/delete-completed/{{this._id}}" method="POST" style="display:inline;">
+        <button type="submit" class="btn btn-sm btn-danger">
+          <i class="fa-solid fa-trash"></i> Xoá
+        </button>
+      </form>
+    </li>
+  {{/each}}
+</ul>
+
+<p>Số lượng việc đã hoàn thành: {{completedTasks.length}}</p>
+<a href="/profile" class="btn btn-primary mt-3">
+  <i class="fa-solid fa-arrow-left"></i> Quay lại
+</a> --}}
+
+<h2><i class="fa-solid fa-check-double"></i> Việc đã hoàn thành</h2>
+<ul class="task-list mt-3">
+  {{#each completedTasks}}
+    <li class="d-flex justify-content-between align-items-center">
+      <span><i class="fa-solid fa-check"></i> {{this.content}} <small class="text-muted">({{this.completedAt}})</small></span>
+
+      <!-- Nút xoá từng task hoàn thành -->
+      <form action="/profile/delete/{{this._id}}" method="POST" style="display:inline;">
+        <button type="submit" class="btn btn-sm btn-danger">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </form>
+    </li>
+  {{/each}}
+</ul>
+
+<p>Số lượng việc đã hoàn thành: {{completedTasks.length}}</p>
+
+<!-- Nút xoá tất cả task hoàn thành -->
+<form action="/profile/deleteCompleted" method="POST">
+  <button type="submit" class="btn btn-danger mt-2">
+    <i class="fa-solid fa-trash-can"></i> Xoá tất cả việc đã hoàn thành
+  </button>
+</form>
+
+<a href="/profile" class="btn btn-primary mt-3"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
+

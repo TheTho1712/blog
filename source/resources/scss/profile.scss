@@ -222,3 +222,52 @@ input[type="password"] {
     background-color: #ec971f;
 }
 
+/* Phần việc cần làm */
+.task-title {
+    color: white;
+
+    i {
+        color: white;
+    }
+}
+form[action="/profile"] {
+    display: flex;
+    gap: 10px;
+    margin-top: 1rem;
+    align-items: center;
+}
+
+form[action="/profile"] input[type="text"] {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+/* Nút thêm việc */
+form[action="/profile"] button {
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+/* Danh sách việc */
+.task-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.task-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 1rem;
+}
+
+.task-list input[type="checkbox"] {
+    transform: scale(1.2);
+    cursor: pointer;
+}

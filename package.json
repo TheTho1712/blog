@@ -23,6 +23,7 @@
   "homepage": "https://github.com/TheTho1712/blog#readme",
   "description": "",
   "dependencies": {
+    "@handlebars/allow-prototype-access": "^1.0.5",
     "bcryptjs": "^3.0.2",
     "boxicons": "^2.1.4",
     "cookie-parser": "^1.4.7",

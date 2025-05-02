@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -10,7 +11,7 @@
 </head>
 <body>
     <div class="information-box">
-        <!-- Cột trái: Thông tin tài khoản -->
+        <!-- Cột trái: Thông tin tài khoản (ô đen) -->
         <div class="info-box shadow">
             <h2><i class="fa-solid fa-user"></i> Thông tin tài khoản</h2>
             <p><strong><i class="fa-solid fa-user-tag"></i> Tên người dùng:</strong> {{user.username}}</p>
@@ -29,6 +30,40 @@
                     <input type="number" name="age" value="{{user.age}}">
                     <button type="submit">Lưu</button>
                 </form>
+        <hr>
+        <h3 class="task-title"><i class="fa-solid fa-list-check"></i> Việc cần làm</h3>
+
+        <form action="/profile" method="POST" class="d-flex gap-2 mt-2">
+            <input type="text" name="content" placeholder="Nhập việc cần làm..." required class="form-control">
+            <button type="submit" class="btn btn-success btn-sm">
+                <i class="fa-solid fa-plus"></i> Thêm
+            </button>
+        </form>
+
+        <form id="task-complete-form" action="/profile/completed" method="POST">
+            <ul class="task-list mt-3">
+                {{#each tasks}}
+        <li class="d-flex justify-content-between align-items-center mb-2">
+            <label class="mb-0">
+                <input type="checkbox" name="completedTasks" value="{{this._id}}">
+                {{#if content}}{{content}}{{else}}<i>(Không có nội dung)</i>{{/if}}
+            </label>
+
+            <button type="button" class="btn btn-sm btn-danger" onclick="deleteTask('{{this._id}}')">
+                <i class="fa-solid fa-trash"></i> Xoá
+            </button>
+        </li>
+    {{/each}}
+            </ul>
+            
+            <button type="submit" class="btn btn-outline-success mt-2"><i class="fa-solid fa-check"></i> Hoàn thành</button>
+            <a href="/profile/completed" class="btn btn-secondary mt-2">
+                <i class="fa-solid fa-clock-rotate-left"></i> Xem việc đã hoàn thành
+            </a>
+            <p>Số lượng việc cần làm: {{tasks.length}}</p>
+        </form>
+        
+        
 
         </div>
 
@@ -38,14 +73,6 @@
             <div class="function-box shadow">
                 <h3><i class="fa-solid fa-image"></i> Ảnh đại diện</h3>
                 <img src="{{#if user.avatar}}{{user.avatar}}{{else}}/uploads/avatars/default-avatar.png{{/if}}" alt="Avatar" class="avatar-preview" />
-
-                {{!-- <form action="/profile/change-avatar" method="POST" enctype="multipart/form-data">
-                    <input type="file" name="avatar" accept="image/*" required>
-                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-upload"></i> Cập nhật ảnh đại diện</button>
-                </form>
-                <form action="/profile/delete-avatar" method="POST" onsubmit="return confirm('Bạn có chắc muốn xoá avatar hiện tại?');">
-                    <button type="submit" class="btn btn-danger mt-4">Xoá avatar</button>
-                </form> --}}
                 
                 <div class="avatar-form">
                     <form action="/profile/change-avatar" method="POST" enctype="multipart/form-data">
@@ -56,13 +83,7 @@
                             </button>
                         </div>
                     </form>
-                    {{!-- <form action="/profile/delete-avatar" method="POST" onsubmit="return confirm('Bạn có chắc muốn xoá avatar hiện tại?');">
-                        <div class="avatar-action-row">
-                            <button type="submit" class="btn btn-danger">
-                                <i class="fa-solid fa-dumpster"></i> Xoá avatar
-                            </button>
-                        </div>
-                    </form> --}}
+
                     <form id="delete-avatar-form" action="/profile/delete-avatar" method="POST">
                         <button type="button" id="delete-avatar-btn" class="btn btn-danger">
                             <i class="fa-solid fa-dumpster"></i> Xoá ảnh đại diện
@@ -70,7 +91,6 @@
                     </form>
                 </div>
 
-                
                 <hr>
                 <h3><i class="fa-solid fa-key"></i> Đổi mật khẩu</h3>
                 <form action="/profile/change-password" method="POST">
@@ -95,7 +115,17 @@
         </div>
     </div>
 
+<form id="deleteForm" method="POST" style="display:none;"></form>
+
 <script>
+    function deleteTask(taskId) {
+        if (confirm('Bạn có chắc muốn xoá task này không?')) {
+            const form = document.getElementById('deleteForm');
+            form.action = `/profile/delete/${taskId}`;
+            form.submit();
+        }
+    }
+
     document.getElementById("edit-profile-btn").addEventListener("click", function () {
         // toggle fomr chỉnh sửa thông tin tài khoản
         const form = document.getElementById("edit-form");

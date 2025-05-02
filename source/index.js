@@ -8,6 +8,8 @@ const session = require('express-session');
 const bcrypt = require('bcryptjs');
 const app = express();
 const port = 3000;
+const Handlebars = require('handlebars');
+const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
 
 const SortMiddleware = require('./app/middlewares/SortMiddleware');
 
@@ -43,6 +45,7 @@ app.engine(
     'hbs',
     engine({
         extname: '.hbs',
+        handlebars: allowInsecurePrototypeAccess(Handlebars),
         helpers: require('./helpers/handlebars'),
     }),
 );

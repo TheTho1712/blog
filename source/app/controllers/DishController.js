@@ -5,8 +5,10 @@ class DishController {
     //[GET] /dishes/:slug
     show(req, res, next) {
         Dish.findOne({ slug: req.params.slug })
+          .populate('userId').lean()
             .then((dish) => {
-                res.render('dishes/show', { dish: mongooseToObject(dish) });
+                // res.render('dishes/show', { dish: mongooseToObject(dish) });
+                res.render('dishes/show', { dish });
             })
             .catch(next);
     }
@@ -19,8 +21,13 @@ class DishController {
     //[POST] /dishes/store
     store(req, res, next) {
         req.body.image = `https://i.ytimg.com/vi/${req.body.videoId}/hqdefault.jpg`;
+        req.body.userId = req.session.user._id;
         req.body._id = 1;
-        const dish = new Dish(req.body);
+        // const dish = new Dish(req.body);
+        const dish = new Dish({
+          ...req.body,
+          userId: req.session.user._id,
+        });
         dish.save()
             .then(() => res.redirect('/me/stored/dishes'))
             .catch((error) => {

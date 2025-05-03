@@ -18,3 +18,49 @@
   </div>
 </div>
 
+<nav aria-label="Page navigation">
+  <ul class="pagination justify-content-center mt-4">
+    {{!-- Nút về trang đầu --}}
+    <li class="page-item {{#if (lt currentPage 2)}}disabled{{/if}}">
+      <a class="page-link" href="?page=1" aria-label="First">
+        <span aria-hidden="true">&laquo;&laquo;</span>
+      </a>
+    </li>
+
+    {{!-- Nút Previous --}}
+    <li class="page-item {{#if (lt currentPage 2)}}disabled{{/if}}">
+      <a class="page-link" href="?page={{subtract currentPage 1}}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+
+    {{!-- {{#each (range 1 totalPages)}}
+      <li class="page-item {{#ifEquals this ../currentPage}}active{{/ifEquals}}">
+        <a class="page-link" href="?page={{this}}">{{this}}</a>
+      </li>
+    {{/each}} --}}
+
+    {{#each (range currentPage totalPages)}}
+      <li class="page-item {{#ifEquals this ../currentPage}}active{{/ifEquals}}">
+        <a class="page-link" href="?page={{this}}">{{this}}</a>
+      </li>
+    {{/each}}
+
+
+    {{!-- Nút Next --}}
+    <li class="page-item {{#if (gte currentPage totalPages)}}disabled{{/if}}">
+      <a class="page-link" href="?page={{sum currentPage 1}}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+
+    {{!-- Nút đến trang cuối --}}
+    <li class="page-item {{#if (gte currentPage totalPages)}}disabled{{/if}}">
+      <a class="page-link" href="?page={{totalPages}}" aria-label="Last">
+        <span aria-hidden="true">&raquo;&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+

@@ -13,23 +13,54 @@ function isValidEmail(email) {
 }
 
 class SiteController {
-    async index(req, res, next) {
+    // async index(req, res, next) {
         
+    //     // if (!req.session.user) {
+    //     //     return res.redirect('/login');
+    //     // }
+    //     const loginSuccess = req.session.loginSuccess;
+    //     delete req.session.loginSuccess; // clear sau khi dùng
+    //     Dish.find({})
+    //         .then((dishes) => {
+    //             res.render('home', {
+    //                 user: req.session.user,
+    //                 dishes: multipleMongooseToObject(dishes),
+    //                 loginSuccess,
+    //             });
+    //         })
+    //         .catch(next);
+    // }
+
+    async index(req, res, next) {
+        // Kiểm tra đăng nhập nếu cần
         // if (!req.session.user) {
         //     return res.redirect('/login');
         // }
+    
         const loginSuccess = req.session.loginSuccess;
-        delete req.session.loginSuccess; // clear sau khi dùng
-        Dish.find({})
-            .then((dishes) => {
-                res.render('home', {
-                    user: req.session.user,
-                    dishes: multipleMongooseToObject(dishes),
-                    loginSuccess,
-                });
-            })
-            .catch(next);
+        delete req.session.loginSuccess; // Clear session sau khi dùng
+    
+        const PAGE_SIZE = 6; // Số món ăn trên mỗi trang
+        const page = parseInt(req.query.page) || 1;
+    
+        try {
+            const totalDishes = await Dish.countDocuments({});
+            const dishes = await Dish.find({})
+                .skip((page - 1) * PAGE_SIZE)
+                .limit(PAGE_SIZE);
+    
+            res.render('home', {
+                user: req.session.user,
+                dishes: multipleMongooseToObject(dishes),
+                loginSuccess,
+                currentPage: page,
+                totalPages: Math.ceil(totalDishes / PAGE_SIZE),
+            });
+        } catch (error) {
+            next(error);
+        }
     }
+    
 
     //GET /search
     searchResult(req, res, next) {
@@ -43,13 +74,13 @@ class SiteController {
             $or: [
                 // $regex: So khớp chữ, $options: 'i': Không phân biệt chữ hoa chữ thường
                 { name: { $regex: keyword, $options: 'i' }},
-                // { description: { $regex: keyword, $options: 'i' }},
+                { description: { $regex: keyword, $options: 'i' }},
                 { time: { $regex: keyword, $options: 'i' }},
                 { level: { $regex: keyword, $options: 'i' }}
             ]
         })
         .then(dishes => {
-            res.render('searchResults', {
+            res.render('search-results', {
                 dishes: multipleMongooseToObject(dishes),
                 keyword: keyword,
                 resultsCount: dishes.length
@@ -161,137 +192,28 @@ class SiteController {
         });
     }
     
-    //GET //me/profile
-    // profile(req, res) { 
-    //     const success = req.session.success;
-    //     const error = req.session.error;
-    //     delete req.session.success;
-    //     delete req.session.error;
-    //     res.render('profile', {
-    //         user: req.session.user,
-    //         success,
-    //         error,
-    //     });
-    // }
+    // async pagination(req, res, next) {
+    //     // const page = parseInt(req.query.page) || 1; // Trang hiện tại
+    //     // const skip = (page - 1) * PAGE_SIZE; // Số lượng món ăn cần bỏ qua
 
-    // //GET /profile/change-password
-    // changePasswordForm(req, res) {
-    //     res.render('change-password');
-    // }
-
-    // //POST /profile/change-password
-    // async changePassword(req, res) {
-    //     const { currentPassword, newPassword } = req.body;
-    //     const user = await User.findById(req.session.user._id);
-
-    //     const isMatch = await bcrypt.compare(currentPassword, user.password);
-    //     if (!isMatch) {
-    //         // return res.render('change-password', {
-    //         //     error: 'Mật khẩu hiện tại không đúng.',
-    //         // });
-    //         req.session.error = 'Mật khẩu hiện tại không đúng.';
-    //     return res.redirect('/profile');
-    //     }
-
-    //     user.password = await bcrypt.hash(newPassword, 10);
-    //     await user.save();
-
-    //     // Đặt cờ trong session để hiển thị thông báo ở trang login
-    //     req.session.passwordChanged = true;
-
-    //     // Xóa session user và chuyển về login
-    //     req.session.user = null;
-    //     res.redirect('/login');
-    // }
-
-    // //GET /profile/change-avatar
-    // changeAvatarForm(req, res) {
-    //     res.render('profile', {
-    //         user: req.session.user,
-    //     });
-    // }
-
-    // //POST /profile/change-avatar
-    // // Xử lý đổi avatar
-    // async changeAvatar(req, res) {
-    //     if (!req.file) {
-    //         req.session.error = 'Vui lòng chọn một hình ảnh.';
-    //         return res.redirect('/profile');
-    //     }
-
-    //     const avatarPath = '/uploads/avatars/' + req.file.filename;
-
-    //     // xoá avatar cũ nếu không phải avatar mặc định
-    //     const oldAvatar = req.session.user.avatar;
-    //     if (oldAvatar && oldAvatar !== DEFAULT_AVATAR) {
-    //         const oldPath = path.join(__dirname, '../../public', oldAvatar);
-    //         fs.unlink(oldPath, (err) => {
-    //             if (err) console.error('Không thể xóa ảnh cũ:', err);
-    //     });
-    // }
-
-    //     // cập nhật user
-    //     await User.findByIdAndUpdate(req.session.user._id, { avatar: avatarPath });
-    //     req.session.user.avatar = avatarPath;
-
-    //     req.session.success = 'Cập nhật ảnh đại diện thành công';
-    //     res.redirect('/profile');
-    // };
-
-    // // POST /profile/delete
-    // async deleteAccount(req, res) {
-    //     await User.findByIdAndDelete(req.session.user._id);
-    //     req.session.destroy();
-    //     res.redirect('/');
-    // };
-
-    // // POST /profile/delete-avatar
-    // async deleteAvatar(req, res) {
-    //     const DEFAULT_AVATAR = '/img/default-avatar.png';
-    //     const oldAvatar = req.session.user.avatar;
-    
-    //     // Nếu avatar hiện tại không phải là mặc định thì xoá file cũ
-    //     if (oldAvatar && oldAvatar !== DEFAULT_AVATAR) {
-    //         const oldPath = path.join(__dirname, '../../public', oldAvatar);
-    //         fs.unlink(oldPath, (err) => {
-    //             if (err) console.error('Không thể xóa ảnh cũ:', err);
-    //         });
-    //     }
-    
-    //     // Cập nhật lại avatar thành mặc định
-    //     await User.findByIdAndUpdate(req.session.user._id, { avatar: DEFAULT_AVATAR });
-    //     req.session.user.avatar = DEFAULT_AVATAR;
-    
-    //     req.session.success = 'Đã xoá ảnh đại diện';
-    //     res.redirect('/profile');
-    // };
-
-    // // POST /profile/update
-    // async editProfileForm(req, res) {
-    //     const { username, email, gender, age } = req.body;
-    //     const userId = req.session.user._id;
-    
     //     try {
-    //         await User.updateOne({ _id: userId }, {
-    //             username,
-    //             email,
-    //             gender,
-    //             age
-    //         });
+    //         const page = parseInt(req.query.page) || 1; // Trang hiện tại
+    //         const totalDishes = await Dish.countDocuments({}); // Tổng số món ăn
+    //         const dishes = await Dish.find({})
+    //             .skip((page - 1) * PAGE_SIZE)
+    //             .limit(PAGE_SIZE);
 
-    //         req.session.user.username = username;
-    //         req.session.user.email = email;
-    //         req.session.user.gender = gender;
-    //         req.session.user.age = age;
-    //         // Cập nhật thông tin người dùng trong session
-    //         req.session.success = 'Cập nhật thông tin thành công';
-    
-    //         res.redirect('/profile');
-    //     } catch (err) {
-    //         console.error(err);
-    //         res.status(500).send('Lỗi cập nhật thông tin');
+    //         res.render('home', {
+    //             // dishes: multipleMongooseToObject(dishes),
+    //             dishes,
+    //             currentPage: page,
+    //             totalPages: Math.ceil(totalDishes / PAGE_SIZE), // Tổng số trang
+    //         });
+    //     } catch (error) {
+    //         next(error);
     //     }
-    // };
+    // }
+
 }
 
 module.exports = new SiteController();

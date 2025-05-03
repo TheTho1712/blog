@@ -15,6 +15,8 @@ const DishSchema = new mongoose.Schema(
         level: { type: String },
         age: { type: String },
         slug: { type: String, slug: 'name', unique: true },
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', require: true },
+        
     },
     {
         _id: false,

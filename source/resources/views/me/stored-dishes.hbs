@@ -1,10 +1,7 @@
 <form class="mt-4" name="container-form" method="POST" action="/dishes/handle-form-actions">
-
     <div>
       <h3>Bài viết của tôi</h3>
       <a href="/me/bin/dishes">Thùng rác ({{deletedCount}})</a>
-
-
       <div class="mt-4 d-flex align-items-center">
           <div class="form-check">
           <input class="form-check-input" type="checkbox" value="" id="checkbox-all">
@@ -22,14 +19,8 @@
         <div class="my-dish-page-btn">
           <button type="submit" class="btn btn-success btn-sm check-all-submit-btn" disabled>Thực hiện</button>
         </div>
-        
-
       </div>
-
-
     </div>
-
-
     <table class="table mt-4">
         <thead>
             <tr>
@@ -82,9 +73,6 @@
 </form>
 
 
-
-
-
 {{!-- delete dish --}}
 <div id="delete-modal" class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
@@ -110,55 +98,48 @@
 <form name="delete-dish-form"method="POST"></form>
 
 <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var dishId;
-            var deleteForm = document.forms['delete-dish-form'];
-            //var containerForm = document.forms['container-form'];
-            var containerForm = $('form[name="container-form"]');
-            var btnDelete = document.getElementById('btn-delete');
-            var checkboxAll = $('#checkbox-all');
-            var dishItemCheckbox = $('input[name="dishIds[]"]');
-            var checkAllSubmitBtn = $('.check-all-submit-btn');
-            
-            //khi hop hoi thoai hien len va an dong y
-            $('#delete-modal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            dishId = button.data('id');
-            });
-
-            //khi an vao nut xoa
-            btnDelete.onclick = function() {
-                deleteForm.action = '/dishes/' + dishId + '?_method=DELETE';
-                deleteForm.submit();
-            }
-
-            //khi thay doi o chon tat ca
-            checkboxAll.change(function() {
-              var isCheckedAll = $(this).prop('checked');
-              dishItemCheckbox.prop('checked', isCheckedAll);
-              renderCheckAllSubmitBtn();
-            });
-
-            dishItemCheckbox.change(function() {
-              var isCheckedAll = dishItemCheckbox.length === $('input[name="dishIds[]"]:checked').length;
-              checkboxAll.prop('checked', isCheckedAll);
-              renderCheckAllSubmitBtn();
-            });
-/*
-            containerForm.on('submit', function(event) {
-              var isSubmittable = !checkAllSubmitBtn.hasClass('disabled');
-              if(!isSubmittable) {
-                event.preventDefault();
-              }
-            });
-*/
-            function renderCheckAllSubmitBtn() {
-              var checkedCount = $('input[name="dishIds[]"]:checked').length;
-              if(checkedCount > 0) {
-                checkAllSubmitBtn.attr('disabled', false);
-              } else {
-                checkAllSubmitBtn.attr('disabled', true);
-              }
-            }
+    document.addEventListener('DOMContentLoaded', function() {
+        var dishId;
+        var deleteForm = document.forms['delete-dish-form'];
+        //var containerForm = document.forms['container-form'];
+        var containerForm = $('form[name="container-form"]');
+        var btnDelete = document.getElementById('btn-delete');
+        var checkboxAll = $('#checkbox-all');
+        var dishItemCheckbox = $('input[name="dishIds[]"]');
+        var checkAllSubmitBtn = $('.check-all-submit-btn');
+        
+        //khi hop hoi thoai hien len va an dong y
+        $('#delete-modal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        dishId = button.data('id');
         });
+
+        //khi an vao nut xoa
+        btnDelete.onclick = function() {
+            deleteForm.action = '/dishes/' + dishId + '?_method=DELETE';
+            deleteForm.submit();
+        }
+
+        //khi thay doi o chon tat ca
+        checkboxAll.change(function() {
+          var isCheckedAll = $(this).prop('checked');
+          dishItemCheckbox.prop('checked', isCheckedAll);
+          renderCheckAllSubmitBtn();
+        });
+
+        dishItemCheckbox.change(function() {
+          var isCheckedAll = dishItemCheckbox.length === $('input[name="dishIds[]"]:checked').length;
+          checkboxAll.prop('checked', isCheckedAll);
+          renderCheckAllSubmitBtn();
+        });
+        
+        function renderCheckAllSubmitBtn() {
+          var checkedCount = $('input[name="dishIds[]"]:checked').length;
+          if(checkedCount > 0) {
+            checkAllSubmitBtn.attr('disabled', false);
+          } else {
+            checkAllSubmitBtn.attr('disabled', true);
+          }
+        }
+    });
 </script>

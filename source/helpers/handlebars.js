@@ -44,14 +44,6 @@ module.exports = {
         return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
     },
 
-    // range: function(start, end) {
-    //     let result = [];
-    //     for (let i = start; i <= end; i++) {
-    //         result.push(i);
-    //     }
-    //     return result;
-    // }
-
     range: function (currentPage, totalPages) {
         let delta = 2; // số trang trước/sau currentPage (=> tổng cộng 5 trang)
         let start = Math.max(1, currentPage - delta);

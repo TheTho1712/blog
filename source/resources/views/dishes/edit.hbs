@@ -1,6 +1,6 @@
 <div class="mt-4">
     <h3>Cập nhật bài viết</h3>
-    <form method="POST" action="/dishes/{{dish._id}}?_method=PUT">
+    <form method="POST" action="/dishes/{{dish._id}}?_method=PUT" enctype="multipart/form-data">
         <div class="form-group">
             <label for="name">Tên bài viết</label>
             <input type="text" class="form-control" value="{{dish.name}}" id="name" name ="name">
@@ -21,6 +21,43 @@
             <label for="level">Trình độ</label>
             <input type="text" class="form-control" value="{{dish.level}}" id="level" name ="level">
         </div>
+        <div class="form-group">
+            <label for="time"> Độ tuổi</label>
+            <input type="text" class="form-control" value="{{dish.age}}" id="age" name ="age">
+        </div>
+        <div class="form-group">
+            <label for="ingredients">Nguyên liệu</label>
+            <textarea type="text" class="form-control" id="ingredients" name ="ingredients"> {{dish.ingredients}}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="steps">Các bước thực hiện</label>
+            <textarea type="text" class="form-control" id="steps" name ="steps"> {{dish.steps}}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="tips">Mẹo & lưu ý</label>
+            <textarea type="text" class="form-control" id="tips" name ="tips">{{dish.tips}}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="images">Ảnh minh họa (chọn nhiều)</label>
+            <input type="file" class="form-control" id="images" name ="images" multiple>
+        </div>
+
         <button type="submit" class="btn btn-primary">Lưu lại</button>
     </form>
 </div>
+
+<script src="https://cdn.tiny.cloud/1/7c1oeb0f0i9bzwd4tv75954b7taoa6a1wlhvc6m0tbv0by4a/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+  tinymce.init({
+    selector: '#ingredients',
+    menubar: false,
+    plugins: 'lists link image table code',
+    toolbar: 'bold italic underline | bullist numlist | undo redo | link',
+  });
+  tinymce.init({
+    selector: '#steps',
+    menubar: false,
+    plugins: 'lists link image table code',
+    toolbar: 'bold italic underline | bullist numlist | undo redo | link',
+  });
+</script>

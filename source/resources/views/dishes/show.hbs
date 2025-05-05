@@ -1,34 +1,97 @@
-<div class="mt-4">
+
+<div class="container mt-5">
     <div class="row">
-        <div class="col-lg-3">
-            <!-- Nút TEST -->
-            <button id="toggleUserInfoBtn" class="btn btn-outline-dark">Thông tin</button>
+        <!-- Cột thông tin bên trái -->
+        <div class="col-md-4 mb-3">
+            {{#if dish.imageUrl}}
+            <img src="{{dish.imageUrl}}" alt="{{dish.name}}" class="img-fluid rounded shadow">
+            {{/if}}
 
-            <ul id="userInfo" class="user-info">
-                <li>Thời gian thực hiện: {{dish.time}}</li>
-                <li>Trình độ: {{dish.level}}</li>
-                <li>Độ tuổi: {{dish.age}}</li>
-                <li>Tác giả bài viết: {{dish.userId.username}}</li>
-
+            <ul class="list-group mt-4">
+                <li class="list-group-item"><strong>⏱ Duration:</strong> {{dish.time}}</li>
+                <li class="list-group-item"><strong>🎯 Trình độ:</strong> {{dish.level}}</li>
+                <li class="list-group-item"><strong>👶 Độ tuổi:</strong> {{dish.age}}</li>
+                <li class="list-group-item"><strong>✍️ Tác giả:</strong> {{dish.userId.username}}</li>
             </ul>
         </div>
 
-        <div class="col-lg-9">
-            <h2>{{dish.name}}</h2>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{dish.videoId}}?si=5yhRCasHauNwjnsM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <!-- Cột nội dung chính -->
+        <div class="col-md-8">
+            <h2 class="text-primary">{{dish.name}}</h2>
+
+            {{#if dish.videoId}}
+            <div class="col-lg-9">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/{{dish.videoId}}?si=5yhRCasHauNwjnsM" title="YouTube video player" frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+            {{/if}}
+
+            {{#if dish.description}}
+            <h5 class="text-secondary">📝 Mô tả</h5>
             <p>{{dish.description}}</p>
+            {{/if}}
+
+            {{#if dish.ingredients}}
+            <h5 class="text-secondary"> 🛒 Nguyên liệu</h5>
+            <div>
+                {{{dish.ingredients}}}
+            </div>
+            {{/if}}
+
+            {{#if dish.steps}}
+            <h5 class="text-secondary">👨‍🍳 Các bước thực hiện</h5>
+            <div>
+                {{{dish.steps}}}
+            </div>
+            {{/if}}
+
+            <!-- Swiper chính: Ảnh lớn -->
+            <div class="swiper swiper-main">
+            <div class="swiper-wrapper">
+                {{#each dish.expImages}}
+                <div class="swiper-slide">
+                    <img src="{{this}}" alt="Step Image">
+                </div>
+                {{/each}}
+            </div>
+            </div>
+
+            <!-- Swiper phụ: Thumbnail -->
+            <div class="swiper swiper-thumbs">
+            <div class="swiper-wrapper">
+                {{#each dish.expImages}}
+                <div class="swiper-slide">
+                    <img src="{{this}}" alt="Step Thumbnail">
+                </div>
+                {{/each}}
+            </div>
+            </div>
+
+            <!-- SwiperJS -->
+            {{#if dish.tips}}
+            <h5 class="text-secondary">💡 Mẹo nhỏ</h5>
+            <p>{{dish.tips}}</p>
+            {{/if}}
         </div>
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const toggleBtn = document.getElementById('toggleUserInfoBtn');
-        const userInfo = document.getElementById('userInfo');
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 
-        toggleBtn.addEventListener('click', function () {
-            userInfo.classList.toggle('show');
-        });
+<script>
+    const thumbSwiper = new Swiper('.swiper-thumbs', {
+    spaceBetween: 10,
+    slidesPerView: 4,
+    freeMode: true,
+    watchSlidesProgress: true,
+    });
+
+    const mainSwiper = new Swiper('.swiper-main', {
+    spaceBetween: 10,
+    thumbs: {
+        swiper: thumbSwiper,
+    },
     });
 </script>
+
 

@@ -47,11 +47,12 @@ class SiteController {
             const totalDishes = await Dish.countDocuments({});
             const dishes = await Dish.find({})
                 .skip((page - 1) * PAGE_SIZE)
-                .limit(PAGE_SIZE);
+                .limit(PAGE_SIZE)
+                .lean();
     
             res.render('home', {
                 user: req.session.user,
-                dishes: multipleMongooseToObject(dishes),
+                dishes,
                 loginSuccess,
                 currentPage: page,
                 totalPages: Math.ceil(totalDishes / PAGE_SIZE),

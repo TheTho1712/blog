@@ -16,7 +16,10 @@ const DishSchema = new mongoose.Schema(
         age: { type: String },
         slug: { type: String, slug: 'name', unique: true },
         userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', require: true },
-        
+        ingredients: [{ type: String }],
+        steps: [{ type: String }],
+        expImages: [{ type: String }],
+        tips: { type: String },
     },
     {
         _id: false,

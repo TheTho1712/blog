@@ -1,35 +1,94 @@
+
 <div class="mt-4">
     <h3 class="text-center text-danger">Đăng bài viết</h3>
-    <div class="form-wrapper">
-        <form method="POST" action="/dishes/store">
-            <div class="form-group mt-4">
-                <label for="name">Tên bài viết</label>
-                <input type="text" class="form-control" id="name" name ="name">
+    <form method="POST" action="/dishes/store" enctype="multipart/form-data">
+        <div class="row mt-4">
+            <!-- Cột trái -->
+            <div class="col-lg-6">
+                <div class="form-column">
+                    <div class="form-group mb-3">
+                        <label for="name"> Tên bài viết</label>
+                        <input type="text" class="form-control" id="name" name="name">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="description"> Mô tả</label>
+                        <input type="text" class="form-control" id="description" name="description">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="videoId"> Video Id</label>
+                        <input type="text" class="form-control" id="videoId" name="videoId">
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="time"> Duration</label>
+                        <input type="text" class="form-control" id="time" name="time">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="level"> Trình độ</label>
+                        <input type="text" class="form-control" id="level" name="level">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="age"> Độ tuổi</label>
+                        <input type="text" class="form-control" id="age" name="age">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="images"> Ảnh minh họa (chọn nhiều)</label>
+                        <input type="file" class="form-control" id="images" name="images" multiple>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="tips"> Mẹo & lưu ý</label>
+                        <textarea class="form-control" id="tips" name="tips" rows="3"></textarea>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="description">Mô tả</label>
-                <input type="text" class="form-control" id="description" name ="description">
+
+            <!-- Cột phải -->
+            <div class="col-lg-6">
+                <div class="form-column">
+                    <div class="form-group mb-3">
+                        <label for="ingredients"> Nguyên liệu</label>
+                        <textarea class="form-control" id="ingredients" name="ingredients" rows="4"></textarea>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="steps"> Các bước thực hiện</label>
+                        <textarea class="form-control" id="steps" name="steps" rows="4"></textarea>
+                    </div>
+                    
+                </div>
             </div>
-            <div class="form-group">
-                <label for="videoId">Video Id</label>
-                <input type="text" class="form-control" id="videoId" name ="videoId">
-            </div>
-            <div class="form-group">
-                <label for="time">Thời gian</label>
-                <input type="text" class="form-control" id="time" name ="time">
-            </div>
-            <div class="form-group">
-                <label for="level">Trình độ</label>
-                <input type="text" class="form-control" id="level" name ="level">
-            </div>
-            
-            <div class="form-group">
-                <label for="age">Độ tuổi</label>
-                <input type="text" class="form-control" id="age" name ="age">
-            </div>
-            
-            <button type="submit" class="btn btn-primary">Thêm bài viết</button>
-        </form>
-    </div>
-    
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary px-4">Thêm bài viết</button>
+        </div>
+    </form>
 </div>
+
+<style>
+    .form-column {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+</style>
+
+<script src="https://cdn.tiny.cloud/1/7c1oeb0f0i9bzwd4tv75954b7taoa6a1wlhvc6m0tbv0by4a/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+  tinymce.init({
+    selector: '#ingredients',
+    menubar: false,
+    plugins: 'lists link image table code',
+    toolbar: 'bold italic underline | bullist numlist | undo redo | link',
+    height: 200,
+  });
+
+  tinymce.init({
+    selector: '#steps',
+    menubar: false,
+    plugins: 'lists link image table code',
+    toolbar: 'bold italic underline | bullist numlist | undo redo | link',
+    height: 525,
+  });
+</script>

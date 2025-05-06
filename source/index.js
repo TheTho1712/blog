@@ -34,10 +34,7 @@ app.use(session({
     cookie: { maxAge: 3600000 }
 }));
 
-app.use((req, res, next) => {
-    res.locals.user = req.session.user || null;
-    next();
-});
+
 
 
 //template engine
@@ -52,6 +49,11 @@ app.engine(
 app.set('view engine', 'hbs');
 app.set('views', './source/resources/views');
 app.use(express.urlencoded({ extended: false }));
+
+app.use((req, res, next) => {
+    res.locals.user = req.session.user || null;
+    next();
+});
 
 //routes init
 route(app);

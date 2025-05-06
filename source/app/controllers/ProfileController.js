@@ -14,38 +14,25 @@ const sessions = {}
 class ProfileController {
     
     //GET /profile
-    async profile(req, res) { 
-        // const user = req.session.user;
-        // const tasks = await Task.find({ userId: user._id });
-        // const success = req.session.success;
-        // const error = req.session.error;
-        // delete req.session.success;
-        // delete req.session.error;
-        // res.render('profile', {
-        //     user: req.session.user,
-        //     tasks,
-        //     success,
-        //     error,
-        // });
-        const user = req.session.user;
+    async profile(req, res) {
+        try {
+            const user = await User.findById(req.session.user._id);
+            const tasks = await Task.find({ userId: user._id });
+            const success = req.session.success;
+            const error = req.session.error;
+            delete req.session.success;
+            delete req.session.error;
 
-    try {
-        const tasks = await Task.find({ userId: user._id });
-        const success = req.session.success;
-        const error = req.session.error;
-        delete req.session.success;
-        delete req.session.error;
-
-        res.render('profile', {
-            user,
-            tasks,
-            success,
-            error,
-        });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Lỗi khi tải trang hồ sơ');
-    }
+            res.render('profile', {
+                user,
+                tasks,
+                success,
+                error,
+            });
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Lỗi khi tải trang hồ sơ');
+        }
     }
     
     //GET /profile/change-password

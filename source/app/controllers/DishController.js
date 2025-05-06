@@ -50,78 +50,41 @@ class DishController {
             .catch(next);
     }
 
-    // // //[PUT] /dishes/:id
-    // update(req, res, next) {
-    //     Dish.updateOne({ _id: req.params.id }, req.body)
-    //         .then(() => res.redirect('/me/stored/dishes'))
-    //         .catch(next);
-    // }
-
-    // [PUT] /dishes/:id
-  //   async update(req, res, next) {
-  //     // const updateData = { ...req.body };
-  
-  //     // if (req.files && req.files.length > 0) {
-  //     //     updateData.expImages = req.files.map(file => '/pictures/' + file.filename);
-  //     // }
-  
-  //     // Dish.updateOne({ _id: req.params.id }, updateData)
-  //     //     .then(() => res.redirect('/me/stored/dishes'))
-  //     //     .catch(next);
-  //     try {
-  //       const updateData = { ...req.body };
-
-  //       // Lấy dữ liệu món ăn cũ
-  //       const dish = await Dish.findById(req.params.id);
-
-  //       // Xử lý ảnh nếu có
-  //       if (req.files && req.files.length > 0) {
-  //           updateData.expImages = req.files.map(file => '/pictures/' + file.filename);
-  //       }
-
-  //       await Dish.updateOne({ _id: req.params.id }, updateData);
-  //       res.redirect('/me/stored/dishes');
-  //   } catch (error) {
-  //       console.error('Error when updating dish:', error);
-  //       res.status(500).send('Không thể cập nhật món ăn');
-  //   }
-  // }
-
-  async update(req, res, next) {
-    try {
-      const updateData = { ...req.body };
-  
-      // Lấy dữ liệu món ăn cũ
-      const dish = await Dish.findById(req.params.id);
-  
-      // Nếu có ảnh mới => XÓA ẢNH CŨ
-      if (req.files && req.files.length > 0) {
-        if (dish.expImages && dish.expImages.length > 0) {
-          dish.expImages.forEach(imagePath => {
-            const relativePath = imagePath.replace(/^\/+/, ''); // bỏ dấu / đầu
-            const fullPath = path.join(__dirname, '..',  '..', 'public', relativePath);
-            // console.log('Trying to delete file at:', fullPath);
-            if (fs.existsSync(fullPath)) {
-              fs.unlinkSync(fullPath);
-            }
-          });
+    async update(req, res, next) {
+      try {
+        const updateData = { ...req.body };
+    
+        // Lấy dữ liệu món ăn cũ
+        const dish = await Dish.findById(req.params.id);
+    
+        // Nếu có ảnh mới => XÓA ẢNH CŨ
+        if (req.files && req.files.length > 0) {
+          if (dish.expImages && dish.expImages.length > 0) {
+            dish.expImages.forEach(imagePath => {
+              const relativePath = imagePath.replace(/^\/+/, ''); // bỏ dấu / đầu
+              const fullPath = path.join(__dirname, '..',  '..', 'public', relativePath);
+              // console.log('Trying to delete file at:', fullPath);
+              if (fs.existsSync(fullPath)) {
+                fs.unlinkSync(fullPath);
+              }
+            });
+          }
+          // Gán ảnh mới
+          updateData.expImages = req.files.map(file => '/pictures/' + file.filename);
         }
-        // Gán ảnh mới
-        updateData.expImages = req.files.map(file => '/pictures/' + file.filename);
-      }
 
-      // Cập nhật lại thumbnail nếu videoId mới được cung cấp
-      if (updateData.videoId) {
-        updateData.image = `https://img.youtube.com/vi/${updateData.videoId}/sddefault.jpg`;
-      }
+        // Cập nhật lại thumbnail nếu videoId mới được cung cấp
+        if (updateData.videoId) {
+          updateData.image = `https://img.youtube.com/vi/${updateData.videoId}/sddefault.jpg`;
+        }
 
-      await Dish.updateOne({ _id: req.params.id }, updateData);
-      res.redirect('/me/stored/dishes');
-    } catch (error) {
-      console.error('Error when updating dish:', error);
-      res.status(500).send('Không thể cập nhật món ăn');
+        await Dish.updateOne({ _id: req.params.id }, updateData);
+        res.redirect('/');
+      } catch (error) {
+        console.error('Error when updating dish:', error);
+        res.status(500).send('Không thể cập nhật món ăn');
+      }
     }
-  }
 
     // [DELETE] /dishes/:id
     delete(req, res, next) {

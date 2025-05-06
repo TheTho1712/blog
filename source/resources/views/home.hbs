@@ -34,12 +34,6 @@
       </a>
     </li>
 
-    {{!-- {{#each (range 1 totalPages)}}
-      <li class="page-item {{#ifEquals this ../currentPage}}active{{/ifEquals}}">
-        <a class="page-link" href="?page={{this}}">{{this}}</a>
-      </li>
-    {{/each}} --}}
-
     {{#each (range currentPage totalPages)}}
       <li class="page-item {{#ifEquals this ../currentPage}}active{{/ifEquals}}">
         <a class="page-link" href="?page={{this}}">{{this}}</a>
@@ -63,4 +57,14 @@
   </ul>
 </nav>
 
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{{#each notifications}}
+  <script>
+    Swal.fire({
+      icon: 'warning',
+      title: 'Thông báo',
+      text: `{{{this.message}}}`,
+      confirmButtonText: 'Đã hiểu',
+    });
+  </script>
+{{/each}}

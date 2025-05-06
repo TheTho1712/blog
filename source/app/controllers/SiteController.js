@@ -4,8 +4,11 @@ const bcrypt = require('bcryptjs');
 const { multipleMongooseToObject } = require('../../util/mongoose');
 const path = require('path');
 const fs = require('fs');
+const { removeListener } = require('process');
 const DEFAULT_AVATAR = '/img/default-avatar.png';
 const sessions = {}
+
+const Notification = require('../models/Notification');
 
 function isValidEmail(email) {
     // Regex đơn giản kiểm tra định dạng email
@@ -14,33 +17,36 @@ function isValidEmail(email) {
 
 class SiteController {
     // async index(req, res, next) {
-        
-    //     // if (!req.session.user) {
-    //     //     return res.redirect('/login');
-    //     // }
     //     const loginSuccess = req.session.loginSuccess;
-    //     delete req.session.loginSuccess; // clear sau khi dùng
-    //     Dish.find({})
-    //         .then((dishes) => {
-    //             res.render('home', {
-    //                 user: req.session.user,
-    //                 dishes: multipleMongooseToObject(dishes),
-    //                 loginSuccess,
-    //             });
-    //         })
-    //         .catch(next);
+    //     delete req.session.loginSuccess; // Clear session sau khi dùng
+    
+    //     const PAGE_SIZE = 6; // Số món ăn trên mỗi trang
+    //     const page = parseInt(req.query.page) || 1;
+    
+    //     try {
+    //         const totalDishes = await Dish.countDocuments({});
+    //         const dishes = await Dish.find({})
+    //             .skip((page - 1) * PAGE_SIZE)
+    //             .limit(PAGE_SIZE)
+    //             .lean();
+    
+    //         res.render('home', {
+    //             user: req.session.user,
+    //             dishes,
+    //             loginSuccess,
+    //             currentPage: page,
+    //             totalPages: Math.ceil(totalDishes / PAGE_SIZE),
+    //         });
+    //     } catch (error) {
+    //         next(error);
+    //     }
     // }
-
+    
     async index(req, res, next) {
-        // Kiểm tra đăng nhập nếu cần
-        // if (!req.session.user) {
-        //     return res.redirect('/login');
-        // }
-    
         const loginSuccess = req.session.loginSuccess;
-        delete req.session.loginSuccess; // Clear session sau khi dùng
+        delete req.session.loginSuccess;
     
-        const PAGE_SIZE = 6; // Số món ăn trên mỗi trang
+        const PAGE_SIZE = 6;
         const page = parseInt(req.query.page) || 1;
     
         try {
@@ -50,18 +56,32 @@ class SiteController {
                 .limit(PAGE_SIZE)
                 .lean();
     
+            const notifications = req.session.user
+                ? await Notification.find({
+                      userId: req.session.user._id,
+                      isRead: false
+                  }).lean()
+                : [];
+    
+            if (req.session.user) {
+                await Notification.updateMany(
+                    { userId: req.session.user._id, isRead: false },
+                    { isRead: true }
+                );
+            }
+    
             res.render('home', {
                 user: req.session.user,
                 dishes,
                 loginSuccess,
                 currentPage: page,
                 totalPages: Math.ceil(totalDishes / PAGE_SIZE),
+                notifications,
             });
         } catch (error) {
             next(error);
         }
     }
-    
 
     //GET /search
     searchResult(req, res, next) {

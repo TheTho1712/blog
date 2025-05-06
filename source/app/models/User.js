@@ -7,6 +7,7 @@ const UserSchema = new mongoose.Schema({
     avatar: { type: String, default: '/img/default-avatar.png' },
     gender: { type: String, enum: ['Nam', 'Nữ', 'Khác'], default: 'Khác' },
     age: { type: Number, min: 0 },
+    role: { type: String, enum: ['admin', 'user'], default: 'user' },
 }, {
     timestamps: true,
 });

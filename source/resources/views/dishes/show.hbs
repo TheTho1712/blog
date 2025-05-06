@@ -10,8 +10,9 @@
             <ul class="list-group mt-4">
                 <li class="list-group-item"><strong>⏱ Duration:</strong> {{dish.time}}</li>
                 <li class="list-group-item"><strong>🎯 Trình độ:</strong> {{dish.level}}</li>
-                <li class="list-group-item"><strong>👶 Độ tuổi:</strong> {{dish.age}}</li>
                 <li class="list-group-item"><strong>✍️ Tác giả:</strong> {{dish.userId.username}}</li>
+                <li class="list-group-item"><strong>👑 Vai trò:</strong>
+                {{#ifEquals dish.userId.role 'admin'}}Admin{{else}}Thành viên{{/ifEquals}}</li>
             </ul>
         </div>
 

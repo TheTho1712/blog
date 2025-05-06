@@ -1,3 +1,4 @@
+const { json } = require('express');
 const Handlebars = require('handlebars');
 
 module.exports = {
@@ -63,7 +64,10 @@ module.exports = {
           result.push(i);
         }
         return result;
-      }
+      },
       
+      json: function (context) {
+        return JSON.stringify(context);
+      },
 
 }

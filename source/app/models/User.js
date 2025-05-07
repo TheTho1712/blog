@@ -8,6 +8,9 @@ const UserSchema = new mongoose.Schema({
     gender: { type: String, enum: ['Nam', 'Nữ', 'Khác'], default: 'Khác' },
     age: { type: Number, min: 0 },
     role: { type: String, enum: ['admin', 'user'], default: 'user' },
+    token: { type: String,  },
+    resetToken: { type: String, },
+    resetTokenExpiration: { type: Date, },
 }, {
     timestamps: true,
 });

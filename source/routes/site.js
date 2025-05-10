@@ -17,7 +17,6 @@ router.get('/register', siteController.registerForm);
 router.get('/logout', siteController.logout);
 router.post('/login', siteController.login);
 router.get('/login', siteController.loginForm);
-// router.get('/', siteController.pagination);
 router.get('/', siteController.index);
 
 module.exports = router;

@@ -13,8 +13,8 @@ const crypto = require('crypto');
 
 const Notification = require('../models/Notification');
 
-const email = process.env.EMAIL;
-const password = process.env.GMAIL_APP_PASSWORD;
+// const email = process.env.EMAIL;
+// const password = process.env.GMAIL_APP_PASSWORD;
 
 function isValidEmail(email) {
     // Regex đơn giản kiểm tra định dạng email
@@ -22,32 +22,6 @@ function isValidEmail(email) {
 }
 
 class SiteController {
-    // async index(req, res, next) {
-    //     const loginSuccess = req.session.loginSuccess;
-    //     delete req.session.loginSuccess; // Clear session sau khi dùng
-    
-    //     const PAGE_SIZE = 6; // Số món ăn trên mỗi trang
-    //     const page = parseInt(req.query.page) || 1;
-    
-    //     try {
-    //         const totalDishes = await Dish.countDocuments({});
-    //         const dishes = await Dish.find({})
-    //             .skip((page - 1) * PAGE_SIZE)
-    //             .limit(PAGE_SIZE)
-    //             .lean();
-    
-    //         res.render('home', {
-    //             user: req.session.user,
-    //             dishes,
-    //             loginSuccess,
-    //             currentPage: page,
-    //             totalPages: Math.ceil(totalDishes / PAGE_SIZE),
-    //         });
-    //     } catch (error) {
-    //         next(error);
-    //     }
-    // }
-    
     async index(req, res, next) {
         const loginSuccess = req.session.loginSuccess;
         delete req.session.loginSuccess;
@@ -58,6 +32,7 @@ class SiteController {
         try {
             const totalDishes = await Dish.countDocuments({});
             const dishes = await Dish.find({})
+                .sort({ createdAt: -1 }) // sắp xếp theo ngày tạo mới nhất
                 .skip((page - 1) * PAGE_SIZE)
                 .limit(PAGE_SIZE)
                 .lean();
@@ -275,11 +250,9 @@ class SiteController {
                     <h1>Xin chào ${user.username},</h1>
                     <p>Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn.</p>
                     <p>Vui lòng nhấp vào liên kết dưới đây để đặt lại mật khẩu của bạn:</p>
-                    <a href="${resetLink}">${resetLink}</a>
-                    <p>Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.</p>
-                `
+                    <a href="${resetLink}"> Nhấn vào đây</a>
+                    <p>Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.</p>`
             })
-
             res.render('forgot-password', { success: true });
         }
         catch (error) {
@@ -305,7 +278,6 @@ class SiteController {
             if (expiredUser) {
                 console.log('Tìm thấy user nhưng token đã hết hạn.');
                 console.log('resetTokenExpiration:', expiredUser.resetTokenExpiration);
-                console.log('Hiện tại:', Date.now());
             } else {
                 console.log('Token không khớp với DB');
             }
@@ -324,11 +296,6 @@ class SiteController {
             resetToken: token,
             resetTokenExpiration: { $gt: Date.now() }
         });
-
-        // if (!user) {
-        //     return res.render('reset-password', { error: 'Token không hợp lệ hoặc đã hết hạn.' });
-        // }
-
         if (!user) {
             req.session.tokenError = 'Liên kết không hợp lệ hoặc đã hết hạn. Vui lòng thử lại.';
             return res.redirect('/forgot-password');

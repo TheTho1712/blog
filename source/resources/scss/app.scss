@@ -3,9 +3,10 @@
 @use 'styles';
 @use 'header';
 @use 'profile';
-@use 'create';
 @use 'stored';
 @use 'deleted';
+@use 'forgot-password';
+
 
 /* Khoảng cách 2 bên */
 .equal-height-row {

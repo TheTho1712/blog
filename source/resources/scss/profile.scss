@@ -347,3 +347,140 @@ form[action="/profile"] button {
   border-color: #e67e22 !important;
   color: white !important;
 }
+
+ /* CSS để tạo kiểu cho nút quản lý */
+.d-flex.gap-2.mb-2 {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Tăng khoảng cách giữa các phần tử */
+}
+.btn-primary.admin-button {
+    background: linear-gradient(45deg, #3a416f, #4e54c8);
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 8px rgba(78, 84, 200, 0.3);
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary.admin-button:hover {
+    background: linear-gradient(45deg, #4e54c8, #3a416f);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(78, 84, 200, 0.4);
+}
+
+.btn-primary.admin-button i {
+    font-size: 1.1em;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+// Add a profile-page wrapper class to your profile page's main container
+
+/* Scope all button styles to the profile page */
+.information-box {
+    /* Your existing information-box styles remain */
+    
+    /* Scoped button styles */
+    button, .btn {
+        padding: 8px 15px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    button:hover, .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+
+    /* Button variants with gradients */
+    .btn-info {
+        background: linear-gradient(45deg, #2980b9, #3498db);
+        color: white;
+    }
+    .btn-info:hover {
+        background: linear-gradient(45deg, #3498db, #2980b9);
+    }
+
+    .btn-warning {
+        background: linear-gradient(45deg, #e67e22, #f39c12);
+        color: white;
+    }
+    .btn-warning:hover {
+        background: linear-gradient(45deg, #f39c12, #e67e22);
+    }
+
+    .btn-danger {
+        background: linear-gradient(45deg, #c0392b, #e74c3c);
+        color: white;
+    }
+    .btn-danger:hover {
+        background: linear-gradient(45deg, #e74c3c, #c0392b);
+    }
+
+    .btn-back {
+        background: linear-gradient(45deg, #95a5a6, #bdc3c7);
+        color: #2c3e50;
+    }
+    .btn-back:hover {
+        background: linear-gradient(45deg, #bdc3c7, #95a5a6);
+    }
+
+    .btn-primary {
+        background: linear-gradient(45deg, #3a416f, #4e54c8);
+        color: white;
+    }
+    .btn-primary:hover {
+        background: linear-gradient(45deg, #4e54c8, #3a416f);
+    }
+
+    .btn-outline-success {
+        background: linear-gradient(45deg, #e67e22, #f39c12) !important;
+        color: white !important;
+        border: none !important;
+    }
+    .btn-outline-success:hover {
+        background: linear-gradient(45deg, #f39c12, #e67e22) !important;
+    }
+
+    /* Icon styling for all buttons */
+    button i, .btn i {
+        font-size: 1.1em;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Admin button specifics */
+    .btn-primary.admin-button {
+        background: linear-gradient(45deg, #3a416f, #4e54c8);
+        border: none;
+        border-radius: 5px;
+        padding: 8px 15px;
+        color: white;
+        font-weight: 600;
+        box-shadow: 0 4px 8px rgba(78, 84, 200, 0.3);
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-primary.admin-button:hover {
+        background: linear-gradient(45deg, #4e54c8, #3a416f);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(78, 84, 200, 0.4);
+    }
+
+}

@@ -33,7 +33,7 @@ class DishController {
           userId: req.session.user._id,
         });
         dish.save()
-            .then(() => res.redirect('/me/stored/dishes'))
+            .then(() => res.redirect('/'))
             .catch((error) => {
                 res.status(500).send(`Error when saving dish: ${error.message}`);
             });

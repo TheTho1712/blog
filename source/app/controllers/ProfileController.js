@@ -7,12 +7,9 @@ const Task = require('../models/Task'); // Import model Task
 const CompletedTask = require('../models/CompletedTask'); // Import model CompletedTask
 
 const DEFAULT_AVATAR = '/img/default-avatar.png';
-const sessions = {}
-
-
+const sessions = {};
 
 class ProfileController {
-    
     //GET /profile
     async profile(req, res) {
         try {
@@ -34,7 +31,7 @@ class ProfileController {
             res.status(500).send('Lỗi khi tải trang hồ sơ');
         }
     }
-    
+
     //GET /profile/change-password
     changePasswordForm(req, res) {
         res.render('change-password');
@@ -47,11 +44,8 @@ class ProfileController {
 
         const isMatch = await bcrypt.compare(currentPassword, user.password);
         if (!isMatch) {
-            // return res.render('change-password', {
-            //     error: 'Mật khẩu hiện tại không đúng.',
-            // });
             req.session.error = 'Mật khẩu hiện tại không đúng.';
-        return res.redirect('/profile');
+            return res.redirect('/profile');
         }
 
         user.password = await bcrypt.hash(newPassword, 10);
@@ -88,29 +82,31 @@ class ProfileController {
             const oldPath = path.join(__dirname, '../../public', oldAvatar);
             fs.unlink(oldPath, (err) => {
                 if (err) console.error('Không thể xóa ảnh cũ:', err);
-        });
-    }
+            });
+        }
 
         // cập nhật user
-        await User.findByIdAndUpdate(req.session.user._id, { avatar: avatarPath });
+        await User.findByIdAndUpdate(req.session.user._id, {
+            avatar: avatarPath,
+        });
         req.session.user.avatar = avatarPath;
 
         req.session.success = 'Cập nhật ảnh đại diện thành công';
         res.redirect('/profile');
-    };
+    }
 
     // POST /profile/delete
     async deleteAccount(req, res) {
         await User.findByIdAndDelete(req.session.user._id);
         req.session.destroy();
         res.redirect('/');
-    };
+    }
 
     // POST /profile/delete-avatar
     async deleteAvatar(req, res) {
         const DEFAULT_AVATAR = '/img/default-avatar.png';
         const oldAvatar = req.session.user.avatar;
-    
+
         // Nếu avatar hiện tại không phải là mặc định thì xoá file cũ
         if (oldAvatar && oldAvatar !== DEFAULT_AVATAR) {
             const oldPath = path.join(__dirname, '../../public', oldAvatar);
@@ -118,27 +114,33 @@ class ProfileController {
                 if (err) console.error('Không thể xóa ảnh cũ:', err);
             });
         }
-    
+
         // Cập nhật lại avatar thành mặc định
-        await User.findByIdAndUpdate(req.session.user._id, { avatar: DEFAULT_AVATAR });
+        await User.findByIdAndUpdate(req.session.user._id, {
+            avatar: DEFAULT_AVATAR,
+        });
         req.session.user.avatar = DEFAULT_AVATAR;
-    
+
         req.session.success = 'Đã xoá ảnh đại diện';
         res.redirect('/profile');
-    };
+    }
 
     // POST /profile/update
     async editProfileForm(req, res) {
-        const { username, email, gender, age } = req.body;
+        const { username, email, gender, age , role} = req.body;
         const userId = req.session.user._id;
-    
+
         try {
-            await User.updateOne({ _id: userId }, {
-                username,
-                email,
-                gender,
-                age
-            });
+            await User.updateOne(
+                { _id: userId },
+                {
+                    username,
+                    email,
+                    gender,
+                    age,
+                    role,
+                },
+            );
 
             req.session.user.username = username;
             req.session.user.email = email;
@@ -146,13 +148,13 @@ class ProfileController {
             req.session.user.age = age;
             // Cập nhật thông tin người dùng trong session
             req.session.success = 'Cập nhật thông tin thành công';
-    
+
             res.redirect('/profile');
         } catch (err) {
             console.error(err);
             res.status(500).send('Lỗi cập nhật thông tin');
         }
-    };
+    }
 
     async addTask(req, res, next) {
         const user = req.session.user;
@@ -165,10 +167,10 @@ class ProfileController {
         try {
             const newTask = new Task({
                 content,
-                userId: user._id
+                userId: user._id,
             });
             await newTask.save();
-            res.redirect('/profile?success=Thêm công việc thành công');
+            res.redirect('/profile');
         } catch (err) {
             console.error(err);
             res.redirect('/profile?error=Lỗi khi thêm công việc');
@@ -178,12 +180,16 @@ class ProfileController {
     async completeTasksForm(req, res) {
         try {
             const userId = req.session.user._id;
-            const completedTasks = await CompletedTask.find({ userId }).sort({ completedAt: -1 });
+            const completedTasks = await CompletedTask.find({ userId }).sort({
+                completedAt: -1,
+            });
             res.render('completed', { completedTasks });
-          } catch (err) {
+        } catch (err) {
             console.error(err);
-            res.redirect('/profile?error=Lỗi khi tải danh sách việc đã hoàn thành');
-          }
+            res.redirect(
+                '/profile?error=Lỗi khi tải danh sách việc đã hoàn thành',
+            );
+        }
     }
 
     async completeTask(req, res) {
@@ -192,14 +198,15 @@ class ProfileController {
 
         try {
             for (const id of completedIds) {
-            const task = await Task.findById(id);
-            if (task) {
-                await CompletedTask.create({
-                content: task.content,
-                userId: task.userId
-                });
-                await task.deleteOne();
-            }
+                const task = await Task.findById(id);
+                if (task) {
+                    await CompletedTask.create({
+                        content: task.content,
+                        userId: task.userId,
+                    });
+                    await task.deleteOne();
+                    req.session.success = 'Đã hoàn thành task';
+                }
             }
             res.redirect('/profile'); // Refresh lại trang, đã mất task được check
         } catch (error) {
@@ -212,51 +219,58 @@ class ProfileController {
     async deleteTask(req, res) {
         const taskId = req.params.id;
         const userId = req.session.user._id;
-    
+
         try {
             const task = await Task.findOne({ _id: taskId, userId });
             if (!task) {
                 return res.redirect('/profile?error=Không tìm thấy task');
             }
-    
+
             await task.deleteOne();
-            res.redirect('/profile?success=Đã xoá task');
-            
+            req.session.success = 'Đã xoá task';
+            res.redirect('/profile');
         } catch (err) {
             console.error(err);
             res.redirect('/profile?error=Lỗi khi xoá task');
         }
     }
-    
+
     //
     async deleteCompleted(req, res) {
         const userId = req.session.user._id;
-        await Task.deleteMany({ userId, completed: true });
-        res.redirect('/profile?success=Đã xoá hết việc hoàn thành');
+        try {
+            await CompletedTask.deleteMany({ userId });
+            req.session.success = 'Đã xoá tất cả công việc đã hoàn thành';
+            res.redirect('/profile/completed');
+        } catch (err) {
+            console.error('Lỗi khi xoá tất cả công việc đã hoàn thành:', err);
+            req.session.error = 'Lỗi khi xoá tất cả công việc đã hoàn thành';
+            res.redirect('/profile/completed');
+        }
     }
-    
+
     async deleteCompletedOne(req, res) {
         const taskId = req.params.id;
         const userId = req.session.user._id;
 
-    try {
-        const task = await CompletedTask.findOne({ _id: taskId, userId });
-        if (!task) {
-            req.session.error = 'Không tìm thấy công việc đã hoàn thành.';
-            return res.redirect('/profile/completed');
+        try {
+            const task = await CompletedTask.findOne({ _id: taskId, userId });
+            if (!task) {
+                req.session.error = 'Không tìm thấy công việc đã hoàn thành.';
+                return res.redirect('/profile/completed');
+            }
+
+            await task.deleteOne();
+            req.session.success = 'Đã xoá công việc đã hoàn thành.';
+            res.redirect('/profile/completed');
+        } catch (err) {
+            console.error('Lỗi khi xoá task đã hoàn thành:', err);
+            req.session.error = 'Lỗi khi xoá công việc đã hoàn thành.';
+            res.redirect('/profile/completed');
         }
+    }
 
-        await task.deleteOne();
-        req.session.success = 'Đã xoá công việc đã hoàn thành.';
-        res.redirect('/profile/completed');
-    } catch (err) {
-        console.error('Lỗi khi xoá task đã hoàn thành:', err);
-        req.session.error = 'Lỗi khi xoá công việc đã hoàn thành.';
-        res.redirect('/profile/completed');
-    }
-    }
     
-
 }
 
 module.exports = new ProfileController();

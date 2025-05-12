@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const userAuth = require('../app/middlewares/userAuth');
 const upload = require('../app/middlewares/upAvatar');
-
+const userAuth = require('../app/middlewares/userAuth');
 
 const siteController = require('../app/controllers/SiteController');
-
+const User = require('../app/models/User');
 
 router.post('/reset-password', siteController.resetPassword);
 router.get('/reset-password', siteController.resetPasswordForm);

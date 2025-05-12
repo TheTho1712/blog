@@ -6,7 +6,7 @@ const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const DishSchema = new mongoose.Schema(
     {
-        _id: { type: Number},
+        _id: { type: Number },
         name: { type: String, require: true, minLength: 1 },
         description: { type: String },
         image: { type: String },
@@ -15,7 +15,11 @@ const DishSchema = new mongoose.Schema(
         level: { type: String },
         age: { type: String },
         slug: { type: String, slug: 'name', unique: true },
-        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', require: true },
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            require: true,
+        },
         ingredients: [{ type: String }],
         steps: [{ type: String }],
         expImages: [{ type: String }],
@@ -27,14 +31,13 @@ const DishSchema = new mongoose.Schema(
     },
 );
 
-DishSchema.query.sortable = function({ column, type } = {}) {
+DishSchema.query.sortable = function ({ column, type } = {}) {
     const isValidType = ['asc', 'desc'].includes(type?.toLowerCase());
     if (column && isValidType) {
         return this.sort({ [column]: type.toLowerCase() });
     }
     return this;
 };
-
 
 //them plugins
 mongoose.plugin(slug);

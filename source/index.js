@@ -9,7 +9,9 @@ const bcrypt = require('bcryptjs');
 const app = express();
 const port = 3000;
 const Handlebars = require('handlebars');
-const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
+const {
+    allowInsecurePrototypeAccess,
+} = require('@handlebars/allow-prototype-access');
 
 const SortMiddleware = require('./app/middlewares/SortMiddleware');
 
@@ -20,22 +22,20 @@ const mongoose = require('./util/mongoose');
 db.connect();
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.urlencoded({ extended: true})); //middleware  form html
+app.use(express.urlencoded({ extended: true })); //middleware  form html
 app.use(express.json()); //middleware javascript
 app.use(methodOverride('_method'));
 app.use(SortMiddleware); //custom middlewares
 app.use(cookieParser());
 
-
-app.use(session({
-    secret: 'secret-key', // thay bằng chuỗi mạnh khi lên production
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 3600000 }
-}));
-
-
-
+app.use(
+    session({
+        secret: 'secret-key', // thay bằng chuỗi mạnh khi lên production
+        resave: false,
+        saveUninitialized: false,
+        cookie: { maxAge: 3600000 },
+    }),
+);
 
 //template engine
 app.engine(
@@ -59,10 +59,6 @@ app.use((req, res, next) => {
 route(app);
 
 const User = require('./app/models/User');
-
-
-
-
 
 app.listen(port, () => {
     console.log(`App listening on port ${port}`);

@@ -24,7 +24,7 @@
 <p>Số lượng việc đã hoàn thành: {{completedTasks.length}}</p>
 
 <!-- Nút xoá tất cả task hoàn thành -->
-<form action="/profile/deleteCompleted" method="POST">
+<form action="/profile/delete-completed" method="POST">
   <button type="submit" class="btn btn-danger mt-2">
     <i class="fa-solid fa-trash-can"></i> Xoá tất cả việc đã hoàn thành
   </button>
@@ -32,4 +32,64 @@
 
 <a href="/profile" class="btn btn-primary mt-3 mb-5"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
+<script>
+
+    // Xoá từng việc đã hoàn thành
+    document.querySelectorAll('form[action^="/profile/delete-completed/"]').forEach(function(form) {
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        Swal.fire({
+          title: 'Xác nhận',
+          text: "Bạn chắc chắn muốn xoá việc này?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Đồng ý!',
+          cancelButtonText: 'Huỷ'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.submit();
+          }
+        });
+      });
+    });
+
+
+
+    // Xoá tất cả việc đã hoàn thành
+    document.querySelector('form[action="/profile/delete-completed"]').addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      Swal.fire({
+        title: 'Xác nhận',
+        text: "Bạn chắc chắn muốn xoá hết các task đã hoàn thành?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Đồng ý!',
+        cancelButtonText: 'Huỷ'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.submit();
+        }
+      });
+    
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const deleteAllButton = document.querySelector('form[action="/profile/delete-completed"] button');
+      const taskCount = {{completedTasks.length}};
+      
+      if (taskCount === 0) {
+        deleteAllButton.disabled = true;
+        deleteAllButton.classList.add('opacity-50');
+        deleteAllButton.style.cursor = 'not-allowed';
+      }
+    });
+</script>

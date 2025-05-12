@@ -46,17 +46,17 @@
             <form id="task-complete-form" action="/profile/completed" method="POST">
                 <ul class="task-list mt-3">
                     {{#each tasks}}
-            <li class="d-flex justify-content-between align-items-center mb-2">
-                <label class="mb-0">
-                    <input type="checkbox" name="completedTasks" value="{{this._id}}">
-                    {{#if content}}{{content}}{{else}}<i>(Không có nội dung)</i>{{/if}}
-                </label>
+                        <li class="d-flex justify-content-between align-items-center mb-2">
+                            <label class="mb-0">
+                                <input type="checkbox" name="completedTasks" value="{{this._id}}">
+                                {{#if content}}{{content}}{{else}}<i>(Không có nội dung)</i>{{/if}}
+                            </label>
 
-                <button type="button" class="btn btn-sm btn-danger" onclick="deleteTask('{{this._id}}')">
-                    <i class="fa-solid fa-trash"></i> Xoá
-                </button>
-            </li>
-        {{/each}}
+                            <button type="button" class="btn btn-sm btn-danger" onclick="deleteTask('{{this._id}}')">
+                                <i class="fa-solid fa-trash"></i> Xoá
+                            </button>
+                        </li>
+                    {{/each}}
                 </ul>
                 
                 <button type="submit" class="btn btn-outline-success mt-2"><i class="fa-solid fa-check"></i> Hoàn thành</button>
@@ -74,34 +74,6 @@
                     {{/ifEquals}}
                 </div>
             </div>
-                
-
-    <style>
-        .role-area {
-        display: flex;
-        flex-direction: column;
-        min-height: 140px; /* Hoặc 100vh hoặc 500px nếu bạn muốn khung cố định cao */
-    }
-    .role-icon {
-        margin-top: auto;
-        text-align: center;
-        padding-bottom: 10px;
-    }
-    .tooltip-inner {
-        background-color: #343a40 !important; /* màu nền */
-        color: #f8f9fa !important;            /* màu chữ */
-        font-size: 0.875rem;
-        padding: 5px 10px;
-        border-radius: 0.5rem;
-    }
-
-    .tooltip.bs-tooltip-top .arrow::before {
-        border-top-color: #343a40 !important;
-    }
-
-
-    </style>
-        
             </div>
 
             <!-- Cột phải: chức năng -->
@@ -139,11 +111,6 @@
 
                 <!-- Ô vàng: Xoá và quay lại -->
                 <div class="danger-box shadow">
-                    {{!-- <form id="delete-account-form" action="/profile/delete" method="POST">
-                        <button type="button" id="delete-account-btn" class="btn btn-danger">
-                            <i class="fa-solid fa-trash"></i> Xoá tài khoản
-                        </button>
-                    </form> --}}
                     <div class="d-flex gap-2 mb-2">
                         <form id="delete-account-form" action="/profile/delete" method="POST">
                             <button type="button" id="delete-account-btn" class="btn btn-danger">
@@ -163,15 +130,28 @@
             </div>
         </div>
 
-    <form id="deleteForm" method="POST" style="display:none;"></form>
+    <form id="delete-form" method="POST" style="display:none;"></form>
 
     <script>
         function deleteTask(taskId) {
-            if (confirm('Bạn có chắc muốn xoá task này không?')) {
-                const form = document.getElementById('deleteForm');
-                form.action = `/profile/delete/${taskId}`;
-                form.submit();
-            }
+            Swal.fire({
+                title: 'Bạn muốn xoá task này?',
+                text: "Bạn sẽ không thể hoàn tác lại hành động này!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Xoá task',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Get the hidden form
+                    const form = document.getElementById("delete-form");
+                    // Set the form action dynamically
+                    form.action = `/profile/delete/${taskId}`;
+                    form.submit();
+                }
+            });
         }
 
         document.getElementById("edit-profile-btn").addEventListener("click", function () {
@@ -220,6 +200,29 @@
     </script>
 
     <style>
+        .role-area {
+            display: flex;
+            flex-direction: column;
+            min-height: 140px; /* Hoặc 100vh hoặc 500px nếu bạn muốn khung cố định cao */
+        }
+        .role-icon {
+            margin-top: auto;
+            text-align: center;
+            padding-bottom: 10px;
+        }
+        .tooltip-inner {
+            background-color: #343a40 !important; /* màu nền */
+            color: #f8f9fa !important;            /* màu chữ */
+            font-size: 0.875rem;
+            padding: 5px 10px;
+            border-radius: 0.5rem;
+        }
+
+        .tooltip.bs-tooltip-top .arrow::before {
+            border-top-color: #343a40 !important;
+        }
+
+
         body {
             background: linear-gradient(45deg, #2c3e50 0%, #3498db 100%);
             background-attachment: fixed;

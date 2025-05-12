@@ -5,7 +5,8 @@
     {{#each dishes}}
     <li class="list-group-item d-flex justify-content-between align-items-center">
       <div>
-        <strong>{{this.name}}</strong> — Đăng bởi: {{this.userId.username}} ({{this.userId.role}})
+        <strong>{{this.name}}</strong> — Đăng bởi: {{this.userId.username}}
+          ({{#ifEquals this.userId.role 'admin'}}Admin{{else}}Thành viên{{/ifEquals}})
       </div>
       <div>
         <a href="/dishes/{{this._id}}/edit" class="btn btn-sm btn-warning me-2">Chỉnh sửa</a>
@@ -17,13 +18,69 @@
   {{/each}}
   </ul>
 
-  <h4>👥 Danh sách tài khoản:</h4>
-  <ul class="list-group">
-    {{#each users}}
-      <li class="list-group-item">
-        {{this.username}} – <strong>{{#ifEquals this.role 'admin'}}🛡️ Admin{{else}}👤 Thành viên{{/ifEquals}}</strong>
-      </li>
-    {{/each}}
-  </ul>
+  <h2 class="mt-5">Quản lý người dùng</h2>
+  <div class="table-responsive">
+    <table class="table table-striped text-center align-middle">
+      <thead>
+        <tr>
+          <th>Tên người dùng</th>
+          <th>Email</th>
+          <th>Vai trò</th>
+          <th>Trạng thái</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each users}}
+          <tr>
+            <td >{{this.username}}</td>
+            <td>{{this.email}}</td>
+            <td>
+              {{#ifEquals this.role "admin"}}
+                <span class="badge bg-danger" style="font-size: 13px; padding: 12px 33px;">Admin</span>
+              {{else}}
+                <span class="badge bg-primary" style="font-size: 13px; padding: 12px 20px;">Thành viên</span>
+              {{/ifEquals}}
+            </td>
+            <td>
+              {{#if this.isLocked}}
+                <span class="badge bg-danger" style="font-size: 13px; padding: 12px 20px">Đã khoá</span>
+              {{else}}
+                <span class="badge bg-success" style="font-size: 13px; padding: 12px 20px">Đang hoạt động</span>
+              {{/if}}
+            </td>
+            <td>
+              <form action="/admin/user/lock/{{this._id}}" method="POST" class="d-inline">
+                <button type="submit" class="btn btn-sm {{#if this.isLocked}}btn-success{{else}}btn-warning{{/if}}">
+                  {{#if this.isLocked}}
+                    <i class="fa-solid fa-unlock"></i> Mở khoá
+                  {{else}}
+                    <i class="fa-solid fa-lock"></i> Khoá
+                  {{/if}}
+                </button>
+              </form>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      {{#if message}}
+        Swal.fire({
+          icon: '{{message.type}}',
+          title: '{{#ifEquals message.type "error"}}Lỗi{{else}}Thông báo{{/ifEquals}}',
+          text: '{{message.text}}',
+          confirmButtonText: 'Đồng ý'
+        });
+      {{/if}}
+    });
+  </script>
+
+
 </div>
 

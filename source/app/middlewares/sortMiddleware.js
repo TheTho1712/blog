@@ -1,4 +1,3 @@
-
 module.exports = function sortMiddleware(req, res, next) {
     const sortType = req.query.type?.toLowerCase(); // chuẩn hóa về chữ thường
     const isValidType = ['asc', 'desc'].includes(sortType);
@@ -9,7 +8,10 @@ module.exports = function sortMiddleware(req, res, next) {
         column: null,
     };
 
-    if (Object.prototype.hasOwnProperty.call(req.query, '_sort') && req.query.column) {
+    if (
+        Object.prototype.hasOwnProperty.call(req.query, '_sort') &&
+        req.query.column
+    ) {
         Object.assign(res.locals._sort, {
             enabled: isValidType,
             type: isValidType ? sortType : 'default',
@@ -19,4 +21,3 @@ module.exports = function sortMiddleware(req, res, next) {
 
     next();
 };
-

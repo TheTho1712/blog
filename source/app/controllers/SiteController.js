@@ -6,7 +6,7 @@ const path = require('path');
 const fs = require('fs');
 const { removeListener } = require('process');
 const DEFAULT_AVATAR = '/img/default-avatar.png';
-const sessions = {}
+const sessions = {};
 
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
@@ -25,32 +25,32 @@ class SiteController {
     async index(req, res, next) {
         const loginSuccess = req.session.loginSuccess;
         delete req.session.loginSuccess;
-    
+
         const PAGE_SIZE = 6;
         const page = parseInt(req.query.page) || 1;
-    
+
         try {
             const totalDishes = await Dish.countDocuments({});
             const dishes = await Dish.find({})
-                .sort({ createdAt: -1 }) // sắp xếp theo ngày tạo mới nhất
+                .sort({ createdAt: -1 })
                 .skip((page - 1) * PAGE_SIZE)
                 .limit(PAGE_SIZE)
                 .lean();
-    
+
             const notifications = req.session.user
                 ? await Notification.find({
                       userId: req.session.user._id,
-                      isRead: false
+                      isRead: false,
                   }).lean()
                 : [];
-    
+
             if (req.session.user) {
                 await Notification.updateMany(
                     { userId: req.session.user._id, isRead: false },
-                    { isRead: true }
+                    { isRead: true },
                 );
             }
-    
+
             res.render('home', {
                 user: req.session.user,
                 dishes,
@@ -67,7 +67,7 @@ class SiteController {
     //GET /search
     searchResult(req, res, next) {
         const keyword = req.query.q;
-        
+
         if (!keyword) {
             return res.redirect('/');
         }
@@ -75,20 +75,20 @@ class SiteController {
         Dish.find({
             $or: [
                 // $regex: So khớp chữ, $options: 'i': Không phân biệt chữ hoa chữ thường
-                { name: { $regex: keyword, $options: 'i' }},
-                { description: { $regex: keyword, $options: 'i' }},
-                { time: { $regex: keyword, $options: 'i' }},
-                { level: { $regex: keyword, $options: 'i' }}
-            ]
+                { name: { $regex: keyword, $options: 'i' } },
+                { description: { $regex: keyword, $options: 'i' } },
+                { time: { $regex: keyword, $options: 'i' } },
+                { level: { $regex: keyword, $options: 'i' } },
+            ],
         })
-        .then(dishes => {
-            res.render('search-results', {
-                dishes: multipleMongooseToObject(dishes),
-                keyword: keyword,
-                resultsCount: dishes.length
-            });
-        })
-        .catch(next);
+            .then((dishes) => {
+                res.render('search-results', {
+                    dishes: multipleMongooseToObject(dishes),
+                    keyword: keyword,
+                    resultsCount: dishes.length,
+                });
+            })
+            .catch(next);
     }
 
     //GET /register
@@ -105,29 +105,27 @@ class SiteController {
                 error: 'Email không hợp lệ. Vui lòng nhập đúng định dạng.',
             });
         }
-    
-        try {
 
+        try {
             // Kiểm tra xem email đã tồn tại trong db chưa
             const existingUser = await User.findOne({ email });
             if (existingUser) {
                 return res.render('register', {
                     error: 'Email đã được sử dụng.',
                 });
-        }
+            }
             const hashedPassword = await bcrypt.hash(password, 10);
-            const newUser = new User({ 
+            const newUser = new User({
                 username,
                 password: hashedPassword,
-                email, 
-                gender, 
+                email,
+                gender,
                 age,
                 avatar: DEFAULT_AVATAR, // Đường dẫn đến ảnh mặc định
             });
             await newUser.save();
-    
+
             return res.render('register', { success: true });
-    
         } catch (error) {
             console.error(error);
             return res.render('register', {
@@ -147,7 +145,7 @@ class SiteController {
     //POST /login
     async login(req, res) {
         const { email, password } = req.body;
-    
+
         try {
             const user = await User.findOne({ email });
             if (!user) {
@@ -155,14 +153,14 @@ class SiteController {
                     error: 'Sai tài khoản hoặc mật khẩu không đúng',
                 });
             }
-    
+
             const passwordMatch = await bcrypt.compare(password, user.password);
             if (!passwordMatch) {
                 return res.render('login', {
                     error: 'Sai tài khoản hoặc mật khẩu không đúng',
                 });
             }
-    
+
             // Gán thông tin user vào session
             req.session.user = {
                 _id: user._id,
@@ -170,9 +168,10 @@ class SiteController {
                 email: user.email,
                 gender: user.gender,
                 age: user.age,
+                role: user.role,
                 avatar: user.avatar,
             };
-    
+
             return res.render('login', {
                 success: true,
             });
@@ -183,7 +182,6 @@ class SiteController {
             });
         }
     }
-    
 
     logout(req, res) {
         req.session.destroy((err) => {
@@ -207,20 +205,21 @@ class SiteController {
                 error: 'Email không hợp lệ. Vui lòng nhập đúng định dạng.',
             });
         }
-    
-        try {
-            const user = await User.findOne({ email});
 
-            if(!user) {
+        try {
+            const user = await User.findOne({ email });
+
+            if (!user) {
                 return res.render('forgot-password', {
                     error: 'Email không tồn tại trong hệ thống.',
                 });
             }
-            const token = crypto.randomBytes(32).toString('hex');   //tao token random
+            const token = crypto.randomBytes(32).toString('hex'); //tao token random
 
             // Lưu token vào cơ sở dữ liệu
             user.resetToken = token;
-            user.resetTokenExpiration = Date.now() + 3600000; // Token có hiệu lực trong 1 giờ
+            user.resetTokenExpiration = Date.now() + 15 * 60 * 1000; // Token có hiệu lực trong 15 phút
+
             await user.save();
 
             // tạo transporter gửi email
@@ -233,13 +232,13 @@ class SiteController {
             // });
 
             const transporter = nodemailer.createTransport({
-                host: "sandbox.smtp.mailtrap.io",
+                host: 'sandbox.smtp.mailtrap.io',
                 port: 2525,
                 auth: {
-                  user: "8c14b49918ad05",
-                  pass: "e6a860a3d7b5b6"
-                }
-              });
+                    user: '8c14b49918ad05',
+                    pass: 'e6a860a3d7b5b6',
+                },
+            });
 
             // gửi link reset mật khẩu
             const resetLink = `http://localhost:3000/reset-password?token=${token}`;
@@ -251,25 +250,24 @@ class SiteController {
                     <p>Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn.</p>
                     <p>Vui lòng nhấp vào liên kết dưới đây để đặt lại mật khẩu của bạn:</p>
                     <a href="${resetLink}"> Nhấn vào đây</a>
-                    <p>Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.</p>`
-            })
+                    <p>Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.</p>`,
+            });
             res.render('forgot-password', { success: true });
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error);
-                res.render('forgot-password', {
+            res.render('forgot-password', {
                 error: 'Đã xảy ra lỗi khi gửi email. Vui lòng thử lại.',
             });
         }
     }
 
     async resetPasswordForm(req, res) {
-        console.log('Token từ URL:', req.query.token);
+        // console.log('Token từ URL:', req.query.token);
         const { token } = req.query;
 
         const user = await User.findOne({
             resetToken: token,
-            resetTokenExpiration: { $gt: Date.now() } // Token chưa hết hạn
+            resetTokenExpiration: { $gt: Date.now() }, // Token chưa hết hạn
         });
 
         if (!user) {
@@ -277,12 +275,16 @@ class SiteController {
             const expiredUser = await User.findOne({ resetToken: token });
             if (expiredUser) {
                 console.log('Tìm thấy user nhưng token đã hết hạn.');
-                console.log('resetTokenExpiration:', expiredUser.resetTokenExpiration);
+                console.log(
+                    'resetTokenExpiration:',
+                    expiredUser.resetTokenExpiration,
+                );
             } else {
                 console.log('Token không khớp với DB');
             }
-        
-            req.session.tokenError = 'Liên kết không hợp lệ hoặc đã hết hạn. Vui lòng thử lại.';
+
+            req.session.tokenError =
+                'Liên kết không hợp lệ hoặc đã hết hạn. Vui lòng thử lại.';
             return res.redirect('/forgot-password');
         }
 
@@ -294,10 +296,11 @@ class SiteController {
 
         const user = await User.findOne({
             resetToken: token,
-            resetTokenExpiration: { $gt: Date.now() }
+            resetTokenExpiration: { $gt: Date.now() },
         });
         if (!user) {
-            req.session.tokenError = 'Liên kết không hợp lệ hoặc đã hết hạn. Vui lòng thử lại.';
+            req.session.tokenError =
+                'Liên kết không hợp lệ hoặc đã hết hạn. Vui lòng thử lại.';
             return res.redirect('/forgot-password');
         }
 

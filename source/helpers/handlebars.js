@@ -20,13 +20,14 @@ module.exports = {
             default: 'desc',
             asc: 'desc',
             desc: 'asc',
-        }
+        };
 
-        const icon = icons[sortType]
-        const type = types[sortType]
+        const icon = icons[sortType];
+        const type = types[sortType];
 
-        const href = Handlebars.escapeExpression(`?_sort&column=${field}&type=${type}`)
-
+        const href = Handlebars.escapeExpression(
+            `?_sort&column=${field}&type=${type}`,
+        );
 
         const output = `<a href="${href}">
         <i class="${icon}"></i>
@@ -42,32 +43,31 @@ module.exports = {
     notEq: (a, b) => a !== b,
 
     ifEquals: function (arg1, arg2, options) {
-        return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+        return arg1 == arg2 ? options.fn(this) : options.inverse(this);
     },
 
     range: function (currentPage, totalPages) {
         let delta = 2; // số trang trước/sau currentPage (=> tổng cộng 5 trang)
         let start = Math.max(1, currentPage - delta);
         let end = Math.min(totalPages, currentPage + delta);
-      
+
         // Điều chỉnh nếu gần đầu/cuối danh sách
         if (end - start < 2 * delta) {
-          if (start === 1) {
-            end = Math.min(totalPages, start + 2 * delta);
-          } else if (end === totalPages) {
-            start = Math.max(1, end - 2 * delta);
-          }
+            if (start === 1) {
+                end = Math.min(totalPages, start + 2 * delta);
+            } else if (end === totalPages) {
+                start = Math.max(1, end - 2 * delta);
+            }
         }
-      
+
         let result = [];
         for (let i = start; i <= end; i++) {
-          result.push(i);
+            result.push(i);
         }
         return result;
-      },
-      
-      json: function (context) {
-        return JSON.stringify(context);
-      },
+    },
 
-}
+    json: function (context) {
+        return JSON.stringify(context);
+    },
+};

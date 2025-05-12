@@ -43,6 +43,26 @@
         </div>
     </div>
 </body>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('locked') === '1') {
+        Swal.fire({
+            icon: 'error',
+            title: 'Tài khoản của bạn đã bị khoá!',
+            text: 'Vui lòng liên hệ Admin để biết thêm chi tiết.',
+            confirmButtonText: 'OK'
+        });
+
+        // Xoá ?locked=1 khỏi URL
+        const cleanUrl = window.location.href.split('?')[0];
+        window.history.replaceState({}, document.title, cleanUrl);
+    }
+</script>
+
+
+
 </html>
 
 {{#if error}}
@@ -56,8 +76,9 @@
             window.location.href = '/login';
         });
     </script>
-    {{/if}}
-    {{#if success}}
+{{/if}}
+
+{{#if success}}
     <script>
         Swal.fire({
             icon: 'success',

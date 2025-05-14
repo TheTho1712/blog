@@ -70,4 +70,25 @@ module.exports = {
     json: function (context) {
         return JSON.stringify(context);
     },
+
+    formatDate: function(date) {
+        if (!date) return 'N/A';
+    
+    const options = { 
+        day: '2-digit', 
+        month: '2-digit', 
+        year: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit'
+    };
+        return new Date(date).toLocaleDateString('vi-VN', options);
+    },
+
+    or: function (a, b) {
+        return a || b;
+    },
+    eq: function (a, b) {
+        return a === b;
+    },
+
 };

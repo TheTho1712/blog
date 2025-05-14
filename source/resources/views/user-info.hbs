@@ -1,0 +1,524 @@
+<link rel="stylesheet" href="/css/app.css">
+
+<div class="container mt-5 mb-5 user-info-page">
+  <div class="row">
+    <div class="col-md-10 col-lg-8 mx-auto">
+      <div class="card shadow user-profile-card">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h3 class="m-0">Thông tin tài khoản</h3>
+          <a href="/admin/dashboard" class="btn btn-light btn-sm">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại
+          </a>
+        </div>
+        
+        <div class="card-body">
+          <div class="text-center mb-4">
+            <div class="avatar-container mb-3">
+              {{#if profileUser.avatar}}
+                <img src="{{profileUser.avatar}}" alt="Avatar" class="img-thumbnail rounded-circle">
+              {{else}}
+                <div class="no-avatar">
+                  <i class="fa-solid fa-user"></i>
+                </div>
+              {{/if}}
+            </div>
+            
+            <h3 class="mb-0 username-display">{{profileUser.username}}</h3>
+            <p class="text-muted mt-2">
+              {{#ifEquals profileUser.role "admin"}}
+                <span class="badge bg-danger text-white">Admin</span>
+              {{else ifEquals profileUser.role "moderator"}}
+                <span class="badge bg-warning text-white">Moderator</span>
+              {{else}}
+                <span class="badge bg-primary text-white">Thành viên</span>
+              {{/ifEquals}}
+              
+              {{#if profileUser.isLocked}}
+                <span class="badge bg-danger ms-2 text-white">Đã khoá</span>
+              {{else}}
+                <span class="badge bg-success ms-2 text-white">Đang hoạt động</span>
+              {{/if}}
+            </p>
+          </div>
+          
+          <div class="user-info-section">
+            <div class="row">
+              <div class="col-md-6">
+                <table class="table">
+                  <tbody>
+                    <tr>
+                      <th>Tên người dùng:</th>
+                      <td>{{profileUser.username}}</td>
+                    </tr>
+                    <tr>
+                      <th>Email:</th>
+                      <td>{{profileUser.email}}</td>
+                    </tr>
+                    {{#if profileUser.age}}
+                    <tr>
+                      <th>Tuổi:</th>
+                      <td>{{profileUser.age}}</td>
+                    </tr>
+                    {{/if}}
+                  </tbody>
+                </table>
+              </div>
+              
+              <div class="col-md-6">
+                <table class="table">
+                  <tbody>
+                    {{#if profileUser.address}}
+                    <tr>
+                      <th>Địa chỉ:</th>
+                      <td>{{profileUser.address}}</td>
+                    </tr>
+                    {{/if}}
+                    
+                    {{#if profileUser.gender}}
+                    <tr>
+                      <th>Giới tính:</th>
+                      <td>
+                        {{#ifEquals profileUser.gender "Nam"}}Nam{{/ifEquals}}
+                        {{#ifEquals profileUser.gender "Nữ"}}Nữ{{/ifEquals}}
+                        {{#ifEquals profileUser.gender "Khác"}}Khác{{/ifEquals}}
+                      </td>
+                    </tr>
+                    {{/if}}
+                    <tr>
+                      <th>Ngày tạo:</th>
+                      <td>{{formatDate profileUser.createdAt}}</td>
+                    </tr>
+                    <tr>
+                      <th>Lần cập nhật cuối:</th>
+                      <td>{{formatDate profileUser.updatedAt}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          
+          <div class="user-stats mt-4">
+            <h4>Thống kê hoạt động</h4>
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <div class="card stats-card">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">Số bài viết</h5>
+                    <p class="card-text">{{profileUser.postCount}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <div class="card stats-card">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">Bình luận</h5>
+                    <p class="card-text">{{profileUser.commentCount}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <div class="card stats-card">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">Lượt thích</h5>
+                    <p class="card-text">{{profileUser.likeCount}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card-footer">
+          <div class="d-flex justify-content-between">
+            <form action="/admin/user/lock/{{profileUser._id}}" method="POST" class="d-inline lock-form">
+              <button type="button" class="btn {{#if profileUser.isLocked}}btn-success btn-unlock{{else}}btn-warning btn-lock{{/if}}"
+              data-username="{{profileUser.username}}">
+                {{#if profileUser.isLocked}}
+                  <i class="fa-solid fa-unlock"></i> Mở khoá tài khoản
+                {{else}}
+                  <i class="fa-solid fa-lock"></i> Khoá tài khoản
+                {{/if}}
+              </button>
+            </form>
+            
+            <form action="/admin/user/role/{{profileUser._id}}" method="POST" class="d-inline role-form">
+              <button type="button" class="btn {{#ifEquals profileUser.role "admin"}}btn-primary{{else}}btn-info{{/ifEquals}} btn-role-toggle"
+              data-username="{{profileUser.username}}" data-role="{{profileUser.role}}" {{#ifEquals profileUser.role "admin"}} disabled {{/ifEquals}}>
+                <i class="fa-solid fa-user-tag"></i> 
+                {{#ifEquals profileUser.role "admin"}}
+                  Không thể thay đổi
+                {{else ifEquals profileUser.role "moderator"}}
+                  Đổi thành Thành viên
+                {{else}}
+                  Đổi thành Moderator
+                {{/ifEquals}}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+
+	.user-profile-card {
+  border-radius: 15px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.user-profile-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+}
+
+.card-header {
+  background: linear-gradient(135deg, #4a6cf7, #2541b2);
+  padding: 1.2rem;
+  border-bottom: none;
+}
+
+.avatar-container {
+  position: relative;
+  margin-top: 10px;
+}
+
+.avatar-container img, 
+.no-avatar {
+  width: 170px !important;
+  height: 170px !important;
+  border: 5px solid white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.avatar-container img:hover,
+.no-avatar:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.no-avatar {
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.no-avatar i {
+  font-size: 90px !important;
+  color: #adb5bd !important;
+}
+
+.username-display {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  color: #343a40;
+}
+
+.badge {
+  padding: 8px 16px !important;
+  font-size: 14px !important;
+  font-weight: 600;
+  border-radius: 20px;
+  border: 2px solid white;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.badge.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+.badge.bg-warning {
+  background-color: #fd7e14 !important;
+}
+
+.badge.bg-primary {
+  background-color: #0d6efd !important;
+}
+
+.badge.bg-success {
+  background-color: #198754 !important;
+}
+
+.user-info-section {
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f8f9fa;
+}
+
+.table {
+  margin-bottom: 0;
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.table th {
+  width: 40%;
+  background-color: #f1f3f9;
+  color: #495057;
+  font-weight: 600;
+  padding: 12px 15px;
+  border-color: #e9ecef;
+}
+
+.table td {
+  padding: 12px 15px;
+  color: #212529;
+  border-color: #e9ecef;
+}
+
+.table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.user-stats {
+  margin-top: 30px;
+}
+
+.user-stats h4 {
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #343a40;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.user-stats h4:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background-color: #0d6efd;
+}
+
+.stats-card {
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  border: none;
+  overflow: hidden;
+  height: 100%;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.stats-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stats-card .card-body {
+  padding: 1.5rem;
+}
+
+.stats-card .card-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.stats-card .card-text {
+  font-size: 2.5rem !important;
+  font-weight: 700;
+  color: #0d6efd;
+  margin-bottom: 0;
+}
+
+.card-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 1.25rem;
+}
+
+.btn {
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-warning {
+  background-color: #fd7e14;
+  border-color: #fd7e14;
+  color: white;
+}
+
+.btn-success {
+  background-color: #198754;
+  border-color: #198754;
+}
+
+.btn-info {
+  background-color: #0dcaf0;
+  border-color: #0dcaf0;
+  color: white;
+}
+
+.btn-primary {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.btn i {
+  margin-right: 5px;
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Xử lý nút khoá/mở khoá
+    const lockBtn = document.querySelector('.btn-lock, .btn-unlock');
+    if (lockBtn) {
+      lockBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const form = this.closest('form');
+        const username = this.getAttribute('data-username');
+        const isUnlock = this.classList.contains('btn-unlock');
+        
+        Swal.fire({
+          title: isUnlock ? 'Mở khoá tài khoản?' : 'Khoá tài khoản?',
+          text: isUnlock 
+            ? `Bạn có muốn mở khoá tài khoản của ${username}?`
+            : `Bạn có muốn khoá tài khoản của ${username}?`,
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: isUnlock ? '#28a745' : '#f39c12',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: isUnlock ? 'Mở khoá' : 'Khoá',
+          cancelButtonText: 'Huỷ'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            form.submit();
+          }
+        });
+      });
+    }
+    
+    // Xử lý nút đổi vai trò
+
+		const roleBtn = document.querySelector('.btn-role-toggle');
+		if (roleBtn) {
+			roleBtn.addEventListener('click', function(e) {
+				e.preventDefault();
+				const form = this.closest('form');
+				const username = this.getAttribute('data-username');
+				const currentRole = this.getAttribute('data-role');
+				
+				// Chỉ xử lý nếu không phải admin
+				if (currentRole === 'admin') {
+					Swal.fire({
+						title: 'Không thể thay đổi',
+						text: 'Không thể thay đổi vai trò của Admin',
+						icon: 'info',
+						confirmButtonText: 'OK'
+					});
+					return;
+				}
+				
+				// Xác định vai trò mới
+				const newRole = currentRole === 'user' ? 'Moderator' : 'Thành viên';
+				
+				Swal.fire({
+					title: 'Thay đổi vai trò?',
+					text: `Bạn có muốn đổi vai trò của "${username}" thành ${newRole}?`,
+					icon: 'question',
+					showCancelButton: true,
+					confirmButtonColor: '#007bff',
+					cancelButtonColor: '#6c757d',
+					confirmButtonText: 'Đổi vai trò',
+					cancelButtonText: 'Huỷ'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						fetch(form.action, {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json',
+								'X-Requested-With': 'XMLHttpRequest'
+							},
+							credentials: 'same-origin'
+						})
+						.then(response => response.json())
+						.then(data => {
+							if (data.success) {
+								Swal.fire({
+									title: 'Thành công!',
+									text: data.message,
+									icon: 'success',
+									confirmButtonText: 'OK'
+								}).then(() => {
+									// Cập nhật UI
+									roleBtn.setAttribute('data-role', data.user.role);
+									
+									if (data.user.role === 'moderator') {
+										roleBtn.innerHTML = '<i class="fa-solid fa-user-tag"></i> Đổi thành Thành viên';
+										roleBtn.className = 'btn btn-primary btn-role-toggle';
+										
+										// Cập nhật badge nếu có
+										const roleBadge = document.querySelector('.badge');
+										if (roleBadge) {
+											roleBadge.className = 'badge bg-warning';
+											roleBadge.textContent = 'Moderator';
+										}
+										
+										// Cập nhật text role nếu có
+										const roleDisplay = document.querySelector('.role-display');
+										if (roleDisplay) roleDisplay.textContent = 'Điều hành viên';
+									} else {
+										roleBtn.innerHTML = '<i class="fa-solid fa-user-tag"></i> Đổi thành Moderator';
+										roleBtn.className = 'btn btn-info btn-role-toggle';
+										
+										// Cập nhật badge nếu có
+										const roleBadge = document.querySelector('.badge');
+										if (roleBadge) {
+											roleBadge.className = 'badge bg-primary';
+											roleBadge.textContent = 'Thành viên';
+										}
+										
+										// Cập nhật text role nếu có
+										const roleDisplay = document.querySelector('.role-display');
+										if (roleDisplay) roleDisplay.textContent = 'Thành viên';
+									}
+								});
+							} else {
+								Swal.fire({
+									title: 'Lỗi!',
+									text: data.message,
+									icon: 'error',
+									confirmButtonText: 'OK'
+								});
+							}
+						})
+						.catch(error => {
+							console.error('Error:', error);
+							Swal.fire({
+								title: 'Lỗi!',
+								text: 'Đã xảy ra lỗi khi kết nối với máy chủ',
+								icon: 'error',
+								confirmButtonText: 'OK'
+							});
+						});
+					}
+				});
+			});
+		}
+  });
+</script>

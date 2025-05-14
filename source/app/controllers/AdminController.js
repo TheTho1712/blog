@@ -65,15 +65,6 @@ class AdminController {
                 { new: true }
             );
             
-            // if(!newLockedStatus) {
-            //     // Nếu mở khoá tài khoản, gửi thông báo
-            //     await Notification.findOneAndDelete({
-            //         userId: user._id,
-            //         message: 'Tài khoản của bạn đã bị khoá. Vui lòng liên hệ Admin để biết thêm chi tiết.'
-            //     }, {sort: { createdAt: -1 }}
-            //     );
-            // }
-
 
             // Tạo thông báo cho người dùng
             if(newLockedStatus) {
@@ -96,6 +87,99 @@ class AdminController {
                 text: 'Đã xảy ra lỗi khi khoá/mở khoá tài khoản'
             };
             res.redirect('/admin/dashboard');
+        }
+    }
+
+    // [GET] /admin/user/:id/info
+    async getUserInfo(req, res) {
+        try {
+            const userId = req.params.id;
+
+            const profileUser = await User.findById(userId);
+            if (!profileUser) {
+                req.session.message = {
+                    type: 'error',
+                    text: 'Người dùng không tồn tại'
+                };
+                return res.redirect('/admin/dashboard');
+            }
+
+            const postCount = await Dish.countDocuments({ userId: userId });
+
+            const userInfo = {
+                ...profileUser.toObject(),
+                postCount: postCount || 0,
+                commentCount: 0, // Thêm nếu có model Comment
+                likeCount: 0,    // Thêm nếu có model Like
+            };
+
+            res.render('user-info', {
+                title: 'Thông tin người dùng',
+                // user: req.user,
+                profileUser: userInfo,
+            });
+        } catch (error) {
+            console.error('Lỗi khi load thông tin người dùng:', error);
+            res.status(500).send('Lỗi server');
+        }
+    }
+
+    async changeUserRole(req, res) {
+        try {
+            const userId = req.params.id;
+            
+            // Tìm user trong database
+            const user = await User.findById(userId);
+            
+            if (!user) {
+                return res.json({
+                    success: false,
+                    message: 'Không tìm thấy người dùng'
+                });
+            }
+            
+            // Chỉ cho phép chuyển đổi giữa member và moderator
+            // Không thay đổi vai trò admin
+            if (user.role === 'admin') {
+                return res.json({
+                    success: false,
+                    message: 'Không thể thay đổi vai trò của Admin'
+                });
+            }
+            
+            // Logic chuyển đổi mới: chỉ giữa member và moderator
+            const newRole = user.role === 'user' ? 'moderator' : 'user';
+            const oldRole = user.role;
+            user.role = newRole;
+            
+            // Lưu thay đổi vào database
+            await user.save();
+            
+            // Hiển thị tên vai trò người dùng thân thiện
+            const roleNames = {
+                'admin': 'Admin',
+                'moderator': 'Moderator', 
+                'user': 'Thành viên'
+            };
+            
+            // Trả về kết quả dạng JSON
+            return res.json({
+            success: true,
+            message: `Đã thay đổi vai trò của ${user.username} thành ${roleNames[newRole]}`,
+            user: {
+                _id: user._id,
+                username: user.username,
+                role: user.role,
+                oldRole: oldRole
+            }
+            });
+            
+        } catch (error) {
+            console.error('Lỗi khi thay đổi vai trò:', error);
+            return res.json({
+            success: false,
+            message: 'Đã xảy ra lỗi khi thay đổi vai trò người dùng'
+            });
         }
     }
 }

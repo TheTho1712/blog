@@ -69,6 +69,8 @@
                 <div class="role-icon">
                     {{#ifEquals user.role "admin"}}
                         <i class="fas fa-shield-alt" data-toggle="tooltip" title="Admin" style="color: red;"></i>
+                    {{else ifEquals user.role "moderator"}}
+                        <i class="fas fa-wrench" data-toggle="tooltip" title="Moderator" style="color: rgb(255, 255, 0);"></i>
                     {{else}}
                         <i class="fas fa-user" data-toggle="tooltip" title="Thành viên" style="color: rgb(255, 255, 255);"></i>
                     {{/ifEquals}}
@@ -118,11 +120,18 @@
                             </button>
                         </form>
 
-                        {{#ifEquals user.role 'admin'}}
+                        {{!-- {{#ifEquals user.role 'admin'}}
                             <a href="/admin/dashboard" class="btn btn-primary admin-button d-inline-block">
                                 <i class="fa-solid fa-user-shield"></i> Quản lý
                             </a>
-                        {{/ifEquals}}
+                        {{/ifEquals}} --}}
+
+                        {{#if (or (eq user.role 'admin') (eq user.role 'moderator'))}}
+                            <a href="/admin/dashboard" class="btn btn-primary admin-button d-inline-block">
+                                <i class="fa-solid fa-user-shield"></i> Quản lý
+                            </a>
+                        {{/if}}
+
                     </div>
                     
                     <a href="/" class="btn btn-back"><i class="fa-solid fa-left-long"></i> Quay về trang chủ</a>

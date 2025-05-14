@@ -1,0 +1,216 @@
+.user-info-page .user-profile-card {
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transform: none !important;
+  transition: none !important;
+}
+
+.user-info-page .card-header {
+  background: linear-gradient(135deg, #4a6cf7, #2541b2);
+  padding: 1.2rem;
+  border-bottom: none;
+}
+.user-info-page .user-profile-card:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
+  transform: none !important; 
+}
+
+.user-info-page .avatar-container {
+  position: relative;
+  margin-top: 10px;
+}
+
+.user-info-page .avatar-container img, 
+.user-info-page .no-avatar {
+  width: 170px !important;
+  height: 170px !important;
+  border: 5px solid white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.user-info-page .avatar-container img:hover,
+.user-info-page .no-avatar:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.user-info-page .no-avatar {
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.user-info-page .no-avatar i {
+  font-size: 90px !important;
+  color: #adb5bd !important;
+}
+
+.user-info-page .username-display {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  color: #343a40;
+}
+
+.user-info-page .badge {
+  padding: 8px 16px !important;
+  font-size: 14px !important;
+  font-weight: 600;
+  border-radius: 20px;
+  border: 2px solid white;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.user-info-page .badge.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+.user-info-page .bg-warning {
+  background-color: #fd7e14 !important;
+}
+
+.user-info-page .bg-primary {
+  background-color: #0d6efd !important;
+}
+
+.user-info-page .bg-success {
+  background-color: #198754 !important;
+}
+
+.user-info-page .user-info-section {
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f8f9fa;
+}
+
+.user-info-page .table {
+  margin-bottom: 0;
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.user-info-page .table th {
+  width: 40%;
+  background-color: #f1f3f9;
+  color: #495057;
+  font-weight: 600;
+  padding: 12px 15px;
+  border-color: #e9ecef;
+}
+
+.user-info-page .table td {
+  padding: 12px 15px;
+  color: #212529;
+  border-color: #e9ecef;
+}
+
+.user-info-page .table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.user-info-page .user-stats {
+  margin-top: 30px;
+}
+
+.user-info-page .user-stats h4 {
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #343a40;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.user-info-page .user-stats h4:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 220px;
+  height: 3px;
+  background-color: #0d6efd;
+}
+
+.user-info-page .stats-card {
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  border: none;
+  overflow: hidden;
+  height: 100%;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.user-info-page .stats-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.user-info-page .stats-card .card-body {
+  padding: 1.5rem;
+}
+
+.user-info-page .stats-card .card-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.user-info-page .stats-card .card-text {
+  font-size: 2.5rem !important;
+  font-weight: 700;
+  color: #0d6efd;
+  margin-bottom: 0;
+}
+
+.user-info-page .card-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 1.25rem;
+}
+
+.user-info-page .btn {
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.user-info-page .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.user-info-page .btn-warning {
+  background-color: #fd7e14;
+  border-color: #fd7e14;
+  color: white;
+}
+
+.user-info-page .btn-success {
+  background-color: #198754;
+  border-color: #198754;
+}
+
+.user-info-page .btn-info {
+  background-color: #0dcaf0;
+  border-color: #0dcaf0;
+  color: white;
+}
+
+.user-info-page .btn-primary {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.user-info-page .btn i {
+  margin-right: 5px;
+}

@@ -109,8 +109,8 @@ class AdminController {
             const userInfo = {
                 ...profileUser.toObject(),
                 postCount: postCount || 0,
-                commentCount: 0, // Thêm nếu có model Comment
-                likeCount: 0,    // Thêm nếu có model Like
+                commentCount: 0,
+                likeCount: 0,    
             };
 
             res.render('user-info', {
@@ -155,7 +155,6 @@ class AdminController {
             // Lưu thay đổi vào database
             await user.save();
             
-            // Hiển thị tên vai trò người dùng thân thiện
             const roleNames = {
                 'admin': 'Admin',
                 'moderator': 'Moderator', 

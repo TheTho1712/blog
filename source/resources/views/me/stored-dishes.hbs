@@ -56,7 +56,8 @@
                 <td>{{this.time}}</td>
                 <td>{{this.createdAt}}</td>
                 <td>
-                    <a href="/dishes/{{this._id}}/edit" class="btn btn-link">Sửa</button>
+                    <a href="/dishes/{{this.slug}}" class="btn btn-link"> Xem</button>
+                    <a href="/dishes/{{this._id}}/edit" class="btn btn-link"> Sửa</button>
                     <a href="" class="btn btn-link" data-toggle="modal" data-id="{{this._id}}" data-target="#delete-modal">Xoá</button>
                 </td>
             </tr>

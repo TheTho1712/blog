@@ -24,6 +24,13 @@ const DishSchema = new mongoose.Schema(
         steps: [{ type: String }],
         expImages: [{ type: String }],
         tips: { type: String },
+        comments: [
+            {
+                username: { type: String },
+                content: { type: String },
+                createdAt: { type: Date, default: Date.now },
+            },
+        ],
     },
     {
         _id: false,

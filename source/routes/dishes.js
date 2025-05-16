@@ -5,6 +5,7 @@ const uploadMany = require('../app/middlewares/expPicture');
 
 const dishController = require('../app/controllers/DishController');
 
+router.post('/:slug/comments', dishController.comments);
 router.get('/create', dishController.create);
 router.post('/store', uploadMany.array('images', 10), dishController.store);
 router.get('/:id/edit', userAuth, dishController.edit);

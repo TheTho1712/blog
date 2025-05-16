@@ -18,6 +18,7 @@ router.post('/profile/change-avatar', userAuth, upload.single('avatar'), profile
 router.post('/profile/delete', profileController.deleteAccount);
 router.get('/profile/change-password', profileController.changePasswordForm);
 router.post('/profile/change-password', profileController.changePassword);
+router.get('/profile/info', userAuth, profileController.showUserActivity);
 router.post('/profile', userAuth, profileController.addTask);
 router.get('/profile', userAuth, profileController.profile);
 

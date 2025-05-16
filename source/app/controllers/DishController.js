@@ -1,6 +1,7 @@
 const Dish = require('../models/Dish');
 const { mongooseToObject } = require('../../util/mongoose');
 const fs = require('fs');
+const { create } = require('../models/User');
 path = require('path');
 
 class DishController {
@@ -10,6 +11,9 @@ class DishController {
             .populate('userId')
             .lean()
             .then((dish) => {
+                if (dish && dish.comments && dish.comments.length > 0) {
+                dish.comments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                }
                 res.render('dishes/show', { dish });
             })
             .catch(next);
@@ -147,6 +151,32 @@ class DishController {
                 res.json({ message: 'action invalid' });
         }
     }
+
+    async comments(req, res) {
+        try {
+            const { content } = req.body;
+
+            if(!req.session.user) {
+                return res.status(401).json({ success: false, message: 'Bạn cần đăng nhập để bình luận' });
+            }
+
+            const dish = await Dish.findOne({ slug: req.params.slug });
+
+            dish.comments.push({
+            username: req.session.user.username,
+            content,
+            createdAt: new Date(),
+            
+        });
+    
+            await dish.save();
+            res.json({ success: true, comment: dish.comments[dish.comments.length - 1] });
+            
+        } catch (err) {
+            res.status(500).json({ success: false, message: 'Có lỗi xảy ra' });
+        }   
+    }
+
 }
 
 module.exports = new DishController();

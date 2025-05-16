@@ -1,0 +1,161 @@
+<link rel="stylesheet" href="/css/app.css">
+
+<div class="container mt-5 mb-5 user-info-page">
+  <div class="row">
+    <div class="col-md-10 col-lg-8 mx-auto">
+      <div class="card shadow user-profile-card">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h3 class="m-0"> Nhật ký hoạt động</h3>
+          <a href="/profile" class="btn btn-light btn-sm">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại
+          </a>
+        </div>
+        
+        <div class="card-body">
+          <div class="text-center mb-4">
+            <div class="avatar-container mb-3">
+              {{#if user.avatar}}
+                <img src="{{user.avatar}}" alt="Avatar" class="img-thumbnail rounded-circle">
+              {{else}}
+                <div class="no-avatar">
+                  <i class="fa-solid fa-user"></i>
+                </div>
+              {{/if}}
+            </div>
+            
+            <h3 class="mb-0 username-display">{{user.username}}</h3>
+            <p class="text-muted mt-2">
+              {{#ifEquals user.role "admin"}}
+                <span class="badge bg-danger text-white">Admin</span>
+              {{else ifEquals user.role "moderator"}}
+                <span class="badge bg-warning text-white">Moderator</span>
+              {{else}}
+                <span class="badge bg-primary text-white">Thành viên</span>
+              {{/ifEquals}}
+            </p>
+          </div>
+          
+          <div class="user-info-section">
+            <div class="row">
+              <div class="col-md-6">
+                <table class="table">
+                  <tbody>
+                    <tr>
+                      <th>Tên người dùng:</th>
+                      <td>{{user.username}}</td>
+                    </tr>
+                    <tr>
+                      <th>Email:</th>
+                      <td>{{user.email}}</td>
+                    </tr>
+                    {{#if user.age}}
+                    <tr>
+                      <th>Tuổi:</th>
+                      <td>{{user.age}}</td>
+                    </tr>
+                    {{/if}}
+                  </tbody>
+                </table>
+              </div>
+              
+              <div class="col-md-6">
+                <table class="table">
+                  <tbody>
+                    {{#if user.gender}}
+                    <tr>
+                      <th>Giới tính:</th>
+                      <td>
+                        {{#ifEquals user.gender "Nam"}}Nam{{/ifEquals}}
+                        {{#ifEquals user.gender "Nữ"}}Nữ{{/ifEquals}}
+                        {{#ifEquals user.gender "Khác"}}Khác{{/ifEquals}}
+                      </td>
+                    </tr>
+                    {{/if}}
+                    <tr>
+                      <th>Ngày tạo:</th>
+                      <td>{{formatDate user.createdAt}}</td>
+                    </tr>
+                    <tr>
+                      <th>Lần cập nhật cuối:</th>
+                      <td>{{formatDate user.updatedAt}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          
+          <div class="user-stats mt-4">
+            <h4>Thống kê hoạt động</h4>
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <div class="card stats-card">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">Số bài viết</h5>
+                    <p class="card-text">{{user.postCount}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <div class="card stats-card">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">Bình luận</h5>
+                    <p class="card-text">{{user.commentCount}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <div class="card stats-card">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">Lượt thích</h5>
+                    <p class="card-text">{{user.likeCount}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Bài viết gần đây -->
+          {{!-- <div class="recent-posts mt-5">
+            <h4>Bài viết gần đây</h4>
+            <div class="list-group">
+              {{#each recentPosts}}
+                <a href="/dishes/{{this.slug}}" class="list-group-item list-group-item-action">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{this.name}}</h5>
+                    <small>{{formatDate this.createdAt}}</small>
+                  </div>
+                  <p class="mb-1">{{shorten this.description 100}}</p>
+                </a>
+              {{else}}
+                <div class="list-group-item text-center text-muted">
+                  Bạn chưa có bài viết nào
+                </div>
+              {{/each}}
+            </div>
+          </div> --}}
+          
+          <!-- Bình luận gần đây -->
+          {{!-- <div class="recent-comments mt-5">
+            <h4>Bình luận gần đây</h4>
+            <div class="list-group">
+              {{#each recentComments}}
+                <div class="list-group-item">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">Bình luận trong <a href="/dishes/{{this.dishSlug}}">{{this.dishName}}</a></h6>
+                    <small>{{formatDate this.createdAt}}</small>
+                  </div>
+                  <p class="mb-1">{{this.content}}</p>
+                </div>
+              {{else}}
+                <div class="list-group-item text-center text-muted">
+                  Bạn chưa có bình luận nào
+                </div>
+              {{/each}}
+            </div>
+          </div> --}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

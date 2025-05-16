@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Dish = require('../models/Dish');
 const path = require('path');
 const bcrypt = require('bcryptjs');
 const fs = require('fs');
@@ -270,6 +271,52 @@ class ProfileController {
         }
     }
 
+    // Xem hoạt động của người dùng
+    async showUserActivity(req, res) {
+        try {
+        // Lấy thông tin người dùng hiện tại
+        const userId = req.session.user._id;
+        
+        // Lấy đầy đủ thông tin người dùng từ database
+        const user = await User.findById(userId);
+        
+        if (!user) {
+            return res.redirect('/profile');
+        }
+        
+        // Đếm số lượng bài viết của người dùng
+        const postCount = await Dish.countDocuments({ userId: userId });
+        // Đếm số lượng bình luận của người dùng
+        const commentResult = await Dish.aggregate([
+            // Mở rộng mảng comments để mỗi comment trở thành một document riêng
+            { $unwind: "$comments" },
+            // Lọc chỉ lấy comment của user hiện tại
+            { $match: { "comments.username": user.username } },
+            // Đếm tổng số comment
+            { $count: "total" }
+        ]);
+        const commentCount = commentResult.length > 0 ? commentResult[0].total : 0;
+
+        
+        // Tạo đối tượng dữ liệu cho view
+        const userInfo = {
+            ...user.toObject(),
+            postCount,
+            commentCount,
+            likeCount: 0,
+        };
+        
+        // Render view với dữ liệu đã chuẩn bị
+        res.render('info', {
+            user: userInfo, 
+        });
+        
+    } catch (error) {
+        console.error('Lỗi khi hiển thị hoạt động người dùng:', error);
+        req.session.error = 'Lỗi khi hiển thị hoạt động người dùng';
+        res.redirect('/profile');
+    }
+    }
     
 }
 

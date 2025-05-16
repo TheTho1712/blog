@@ -7,13 +7,15 @@
             <img src="{{dish.imageUrl}}" alt="{{dish.name}}" class="img-fluid rounded shadow">
             {{/if}}
 
-            <ul class="list-group mt-4">
+            <ul class="list-group mt-5">
                 <li class="list-group-item"><strong>⏱ Duration:</strong> {{dish.time}}</li>
                 <li class="list-group-item"><strong>🎯 Trình độ:</strong> {{dish.level}}</li>
                 <li class="list-group-item"><strong>✍️ Tác giả:</strong> {{dish.userId.username}}</li>
                 <li class="list-group-item"><strong>👑 Vai trò:</strong>
                 {{#ifEquals dish.userId.role 'admin'}}Admin{{else}}Thành viên{{/ifEquals}}</li>
             </ul>
+            
+            
         </div>
 
         <!-- Cột nội dung chính -->
@@ -21,38 +23,38 @@
             <h2 class="text-primary">{{dish.name}}</h2>
 
             {{#if dish.videoId}}
-            <div class="col-lg-9">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/{{dish.videoId}}?si=5yhRCasHauNwjnsM" title="YouTube video player" frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            </div>
+                <div class="col-lg-9">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/{{dish.videoId}}?si=5yhRCasHauNwjnsM" title="YouTube video player" frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
             {{/if}}
 
             {{#if dish.description}}
-            <h5 class="text-secondary">📝 Mô tả</h5>
-            <p>{{dish.description}}</p>
+                <h5 class="text-secondary">📝 Mô tả</h5>
+                <p>{{dish.description}}</p>
             {{/if}}
 
             {{#if dish.ingredients}}
-            <h5 class="text-secondary"> 🛒 Nguyên liệu</h5>
-            <div>
-                {{{dish.ingredients}}}
-            </div>
+                <h5 class="text-secondary"> 🛒 Nguyên liệu</h5>
+                <div>
+                    {{{dish.ingredients}}}
+                </div>
             {{/if}}
 
             {{#if dish.steps}}
-            <h5 class="text-secondary">👨‍🍳 Các bước thực hiện</h5>
-            <div>
-                {{{dish.steps}}}
-            </div>
+                <h5 class="text-secondary">👨‍🍳 Các bước thực hiện</h5>
+                <div>
+                    {{{dish.steps}}}
+                </div>
             {{/if}}
 
             <!-- Swiper chính: Ảnh lớn -->
             <div class="swiper swiper-main">
             <div class="swiper-wrapper">
                 {{#each dish.expImages}}
-                <div class="swiper-slide">
-                    <img src="{{this}}" alt="Step Image">
-                </div>
+                    <div class="swiper-slide">
+                        <img src="{{this}}" alt="Step Image">
+                    </div>
                 {{/each}}
             </div>
             </div>
@@ -61,21 +63,66 @@
             <div class="swiper swiper-thumbs">
             <div class="swiper-wrapper">
                 {{#each dish.expImages}}
-                <div class="swiper-slide">
-                    <img src="{{this}}" alt="Step Thumbnail">
-                </div>
+                    <div class="swiper-slide">
+                        <img src="{{this}}" alt="Step Thumbnail">
+                    </div>
                 {{/each}}
             </div>
             </div>
 
             <!-- SwiperJS -->
             {{#if dish.tips}}
-            <h5 class="text-secondary">💡 Mẹo nhỏ</h5>
-            <p>{{dish.tips}}</p>
+                <h5 class="text-secondary">💡 Mẹo nhỏ</h5>
+                <p>{{dish.tips}}</p>
             {{/if}}
         </div>
     </div>
 </div>
+<div class="mt-5">
+    <!-- Khung chứa tất cả bình luận -->
+    <div class="card mb-3">
+        <h5 class="mt-4 p-2" style="margin-left: 20px; color:rgb(0, 18, 136)" > Bình luận</h5>
+        <div class="card-body">
+        <!-- Danh sách bình luận -->
+            <div id="comment-list" class="mb-3">
+                {{#if dish.comments.length}}
+                {{#each dish.comments}}
+                    <div class="border-bottom p-2 mb-2 comment-item" data-comment-id="{{this._id}}">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="comment-content">
+                                <strong>{{this.username}}:</strong> {{this.content}} <br>
+                                <small class="text-muted">{{formatDate this.createdAt}}</small>
+                            </div>
+                        </div>
+                    </div>
+                {{/each}}
+                {{else}}
+                <div class="text-center text-muted py-3">
+                    <i class="fa-regular fa-comment-dots mb-2" style="font-size: 2rem;"></i>
+                    <p>Chưa có bình luận về bài viết này</p>
+                </div>
+                {{/if}}
+            </div>
+            <form id="comment-form">
+                <div class="mb-3">
+                <textarea class="form-control" id="comment-content" rows="2" placeholder="Nhập bình luận của bạn..."></textarea>
+                </div>
+                <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">Gửi bình luận</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+  .comment-content {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+  }
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 
@@ -93,6 +140,49 @@
         swiper: thumbSwiper,
     },
     });
+
+    document.getElementById('comment-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const content = document.getElementById('comment-content').value.trim();
+    if (!content) return;
+
+    try {
+        const res = await fetch(window.location.pathname + '/comments', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ content })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+        const list = document.getElementById('comment-list');
+        
+        // Xóa thông báo "Chưa có bình luận" nếu có
+        if (list.querySelector('.text-muted.py-3')) {
+            list.innerHTML = '';
+        }
+        
+        // Thêm comment mới vào đầu danh sách
+        const newComment = document.createElement('div');
+        newComment.className = 'border-bottom p-2 mb-2';
+        newComment.innerHTML = `<strong>${data.comment.username}:</strong> ${data.comment.content}<br>
+            <small class="text-muted">Vừa xong</small>`;
+        list.prepend(newComment);
+        
+        // Xóa nội dung đã nhập
+        document.getElementById('comment-content').value = '';
+        } else {
+        alert(data.message || 'Không gửi được bình luận');
+        }
+    } catch (error) {
+        console.error('Lỗi khi gửi bình luận:', error);
+        alert('Có lỗi xảy ra khi gửi bình luận');
+    }
+
+    });
 </script>
+
 
 

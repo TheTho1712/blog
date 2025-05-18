@@ -94,6 +94,7 @@ class AdminController {
     async getUserInfo(req, res) {
         try {
             const userId = req.params.id;
+            const user = await User.findById(userId);
 
             const profileUser = await User.findById(userId);
             if (!profileUser) {
@@ -106,10 +107,25 @@ class AdminController {
 
             const postCount = await Dish.countDocuments({ userId: userId });
 
+            const commentResult = await Dish.aggregate([
+                // Mở rộng mảng comments để mỗi comment trở thành một document riêng
+                { $unwind: "$comments" },
+                // Lọc chỉ lấy comment của user hiện tại
+                { $match: { "comments.username": user.username } },
+                // Đếm tổng số comment
+                { $count: "total" }
+            ]);
+            const commentCount = commentResult.length > 0 ? commentResult[0].total : 0;
+
+            const recentPosts = await Dish.find({ userId: userId })
+                .sort({ createdAt: -1 })
+                .limit(5)
+                .lean();
+
             const userInfo = {
                 ...profileUser.toObject(),
                 postCount: postCount || 0,
-                commentCount: 0,
+                commentCount,
                 likeCount: 0,    
             };
 
@@ -117,6 +133,7 @@ class AdminController {
                 title: 'Thông tin người dùng',
                 // user: req.user,
                 profileUser: userInfo,
+                recentPosts: recentPosts,
             });
         } catch (error) {
             console.error('Lỗi khi load thông tin người dùng:', error);

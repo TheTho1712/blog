@@ -297,6 +297,10 @@ class ProfileController {
         ]);
         const commentCount = commentResult.length > 0 ? commentResult[0].total : 0;
 
+        const recentPosts = await Dish.find({ userId: userId })
+            .sort({ createdAt: -1 })
+            .limit(5)
+            .lean();
         
         // Tạo đối tượng dữ liệu cho view
         const userInfo = {
@@ -308,14 +312,15 @@ class ProfileController {
         
         // Render view với dữ liệu đã chuẩn bị
         res.render('info', {
-            user: userInfo, 
+            user: userInfo,
+            recentPosts: recentPosts,
         });
         
-    } catch (error) {
-        console.error('Lỗi khi hiển thị hoạt động người dùng:', error);
-        req.session.error = 'Lỗi khi hiển thị hoạt động người dùng';
-        res.redirect('/profile');
-    }
+        } catch (error) {
+            console.error('Lỗi khi hiển thị hoạt động người dùng:', error);
+            req.session.error = 'Lỗi khi hiển thị hoạt động người dùng';
+            res.redirect('/profile');
+        }
     }
     
 }

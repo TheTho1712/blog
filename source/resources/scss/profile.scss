@@ -354,34 +354,7 @@ form[action="/profile"] button {
     align-items: center;
     gap: 15px; /* Tăng khoảng cách giữa các phần tử */
 }
-// .btn-primary.admin-button {
-//     background: linear-gradient(45deg, #3a416f, #4e54c8);
-//     border: none;
-//     border-radius: 5px;
-//     padding: 8px 15px;
-//     color: white;
-//     font-weight: 600;
-//     box-shadow: 0 4px 8px rgba(78, 84, 200, 0.3);
-//     transition: all 0.3s ease;
-//     display: inline-flex;
-//     align-items: center;
-//     gap: 8px;
-// }
 
-// .btn-primary.admin-button:hover {
-//     background: linear-gradient(45deg, #4e54c8, #3a416f);
-//     transform: translateY(-2px);
-//     box-shadow: 0 6px 12px rgba(78, 84, 200, 0.4);
-// }
-
-// .btn-primary.admin-button i {
-//     font-size: 1.1em;
-//     color: rgba(255, 255, 255, 0.9);
-// }
-
-// Add a profile-page wrapper class to your profile page's main container
-
-/* Scope all button styles to the profile page */
 .information-box {
     /* Your existing information-box styles remain */
     

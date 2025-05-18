@@ -54,7 +54,7 @@
                 <th scope="row">{{sum @index 1}}</th>
                 <td>{{this.name}}</td>
                 <td>{{this.time}}</td>
-                <td>{{this.createdAt}}</td>
+                <td>{{formatDate this.createdAt}}</td>
                 <td>
                     <a href="/dishes/{{this.slug}}" class="btn btn-link"> Xem</button>
                     <a href="/dishes/{{this._id}}/edit" class="btn btn-link"> Sửa</button>

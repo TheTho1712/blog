@@ -101,7 +101,7 @@
           <div class="user-stats mt-4">
             <h4>Thống kê hoạt động</h4>
             <div class="row">
-              <div class="col-md-4 mb-3">
+              <div class="col-md-4 mb-3" id="post-count-card" style="cursor: pointer;">
                 <div class="card stats-card">
                   <div class="card-body text-center">
                     <h5 class="card-title">Số bài viết</h5>
@@ -127,6 +127,25 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <div id="recent-posts-section" class="recent-posts mt-5" style="margin-left: 15px; margin-right: 15px; margin-bottom: 15px; display: none;">
+            <h4>Bài viết gần đây</h4>
+            <div class="list-group">
+              {{#each recentPosts}}
+                <a href="/dishes/{{this.slug}}" class="list-group-item list-group-item-action">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{this.name}}</h5>
+                    <small>{{formatDate this.createdAt}}</small>
+                  </div>
+                  {{!-- <p class="mb-1">{{shorten this.description 100}}</p> --}}
+                </a>
+              {{else}}
+                <div class="list-group-item text-center text-muted">
+                  Bạn chưa có bài viết nào
+                </div>
+              {{/each}}
+            </div>
         </div>
         
         <div class="card-footer">
@@ -301,5 +320,24 @@
 				});
 			});
 		}
+
+    const postCountCard = document.getElementById('post-count-card');
+    const recentPostsSection = document.querySelector('.recent-posts'); // Use class as fallback
+    
+    if (postCountCard && recentPostsSection) {
+      postCountCard.addEventListener('click', function() {
+        console.log('Post count card clicked'); // Debug message
+        
+        // Toggle visibility with visual feedback
+        if (window.getComputedStyle(recentPostsSection).display === 'none') {
+          recentPostsSection.style.display = 'block';
+          postCountCard.querySelector('.card').classList.add('border-primary');
+          recentPostsSection.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          recentPostsSection.style.display = 'none';
+          postCountCard.querySelector('.card').classList.remove('border-primary');
+        }
+      });
+    }
   });
 </script>

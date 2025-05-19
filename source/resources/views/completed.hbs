@@ -19,8 +19,6 @@
   {{/each}}
 </ul>
 
-
-
 <p>Số lượng việc đã hoàn thành: {{completedTasks.length}}</p>
 
 <!-- Nút xoá tất cả task hoàn thành -->
@@ -32,11 +30,9 @@
 
 <a href="/profile" class="btn btn-primary mt-3 mb-5"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-
     // Xoá từng việc đã hoàn thành
     document.querySelectorAll('form[action^="/profile/delete-completed/"]').forEach(function(form) {
       form.addEventListener('submit', function(event) {
@@ -58,8 +54,6 @@
         });
       });
     });
-
-
 
     // Xoá tất cả việc đã hoàn thành
     document.querySelector('form[action="/profile/delete-completed"]').addEventListener('submit', function(event) {

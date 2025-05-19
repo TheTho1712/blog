@@ -6,12 +6,12 @@
     <li class="list-group-item d-flex justify-content-between align-items-center">
       <div>
         <strong>{{this.name}}</strong> — Đăng bởi: {{this.userId.username}}
-          ({{#ifEquals this.userId.role 'admin'}}Admin{{else}}Thành viên{{/ifEquals}})
+          ({{#ifEquals this.userId.role 'admin'}}Admin{{else ifEquals this.userId.role 'moderator'}}Moderator {{else}}Thành viên{{/ifEquals}})
       </div>
       <div>
         <a href="/dishes/{{this._id}}/edit" class="btn btn-sm btn-warning me-2">Chỉnh sửa</a>
         <form action="/admin/{{this._id}}?_method=DELETE" method="POST" class="d-inline delete-form">
-          <button type="button" class="btn btn-sm btn-danger btn-delete" data-username="{{this.username}}">Xoá</button>
+          <button type="button" class="btn btn-sm btn-danger btn-delete" data-username="{{this.userId.username}}">Xoá</button>
         </form>
       </div>
     </li>
@@ -52,16 +52,6 @@
               {{/if}}
             </td>
             <td>
-              {{!-- <form action="/admin/user/lock/{{this._id}}" method="POST" class="d-inline lock-form">
-                <button type="button" class="btn btn-sm {{#if this.isLocked}}btn-success btn-unlock{{else}}btn-warning btn-lock{{/if}}"
-                data-username="{{this.username}}">
-                  {{#if this.isLocked}}
-                    <i class="fa-solid fa-unlock"></i> Mở khoá
-                  {{else}}
-                    <i class="fa-solid fa-lock"></i> Khoá
-                  {{/if}}
-                </button>
-              </form> --}}
               <a href="/admin/user/{{this._id}}/info" class="btn btn-warning">
                 <i class="fa-solid fa-circle-info"></i> Xem thông tin
               </a>

@@ -1,5 +1,4 @@
 <link rel="stylesheet" href="/css/app.css">
-
 <div class="container mt-5 mb-5 user-info-page">
   <div class="row">
     <div class="col-md-10 col-lg-8 mx-auto">
@@ -96,7 +95,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-4 mb-3">
+              <div class="col-md-4 mb-3" id="comment-count-card" style="cursor: pointer;">
                 <div class="card stats-card">
                   <div class="card-body text-center">
                     <h5 class="card-title">Bình luận</h5>
@@ -135,25 +134,26 @@
             </div>
           </div>
           
+          
           <!-- Bình luận gần đây -->
-          {{!-- <div class="recent-comments mt-5">
+          <div id="recent-comments-section" class="recent-comments mt-5" style="display: none;">
             <h4>Bình luận gần đây</h4>
             <div class="list-group">
               {{#each recentComments}}
-                <div class="list-group-item">
+                <a href="/dishes/{{this.slug}}" class="list-group-item list-group-item-action">
                   <div class="d-flex w-100 justify-content-between">
-                    <h6 class="mb-1">Bình luận trong <a href="/dishes/{{this.dishSlug}}">{{this.dishName}}</a></h6>
-                    <small>{{formatDate this.createdAt}}</small>
+                    <h5 class="mb-1">{{this.name}}</h5>
+                    <small>{{formatDate this.commentDate}}</small>
                   </div>
-                  <p class="mb-1">{{this.content}}</p>
-                </div>
+                  <p class="mb-1">{{this.comment}}</p>
+                </a>
               {{else}}
                 <div class="list-group-item text-center text-muted">
-                  Bạn chưa có bình luận nào
+                  Người dùng chưa có bình luận nào
                 </div>
               {{/each}}
             </div>
-          </div> --}}
+          </div>
         </div>
       </div>
     </div>
@@ -163,13 +163,12 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const postCountCard = document.getElementById('post-count-card');
-    const recentPostsSection = document.querySelector('.recent-posts'); // Use class as fallback
+    const recentPostsSection = document.querySelector('.recent-posts');
     
     if (postCountCard && recentPostsSection) {
       postCountCard.addEventListener('click', function() {
-        console.log('Post count card clicked'); // Debug message
+        //console.log('Post count card clicked');
         
-        // Toggle visibility with visual feedback
         if (window.getComputedStyle(recentPostsSection).display === 'none') {
           recentPostsSection.style.display = 'block';
           postCountCard.querySelector('.card').classList.add('border-primary');
@@ -177,6 +176,29 @@
         } else {
           recentPostsSection.style.display = 'none';
           postCountCard.querySelector('.card').classList.remove('border-primary');
+        }
+      });
+    }
+
+    const commentCard = document.getElementById('comment-count-card');
+    const recentCommentsSection = document.getElementById('recent-comments-section');
+    
+    if (commentCard && recentCommentsSection) {
+      commentCard.addEventListener('click', function() {
+        if (window.getComputedStyle(recentCommentsSection).display === 'none') {
+          recentCommentsSection.style.display = 'block';
+          commentCard.querySelector('.card').classList.add('border-primary');
+          recentCommentsSection.scrollIntoView({ behavior: 'smooth' });
+          
+          // Ẩn section bài viết nếu đang hiển thị
+          const recentPostsSection = document.getElementById('recent-posts-section');
+          if (recentPostsSection && window.getComputedStyle(recentPostsSection).display !== 'none') {
+            recentPostsSection.style.display = 'none';
+            document.getElementById('post-count-card').querySelector('.card').classList.remove('border-primary');
+          }
+        } else {
+          recentCommentsSection.style.display = 'none';
+          commentCard.querySelector('.card').classList.remove('border-primary');
         }
       });
     }

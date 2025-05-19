@@ -302,6 +302,20 @@ class ProfileController {
             .limit(5)
             .lean();
         
+        const recentComments = await Dish.aggregate([
+            { $unwind: "$comments" },
+            { $match: { "comments.username": user.username } },
+            { $sort: { "comments.createdAt": -1 } },
+            { $limit: 5 },
+            { $project: {
+                _id: 1, // 1: Giữ lại trường này, 0: Loại bỏ trường này
+                name: 1,
+                slug: 1,
+                comment: "$comments.content",
+                commentDate: "$comments.createdAt"
+            }}
+        ]);
+
         // Tạo đối tượng dữ liệu cho view
         const userInfo = {
             ...user.toObject(),
@@ -314,6 +328,7 @@ class ProfileController {
         res.render('info', {
             user: userInfo,
             recentPosts: recentPosts,
+            recentComments: recentComments,
         });
         
         } catch (error) {

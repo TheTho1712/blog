@@ -122,6 +122,20 @@ class AdminController {
                 .limit(5)
                 .lean();
 
+            const recentComments = await Dish.aggregate([
+                { $unwind: "$comments" },
+                { $match: { "comments.username": user.username } },
+                { $sort: { "comments.createdAt": -1 } },
+                { $limit: 5 },
+                { $project: {
+                    _id: 1, // 1: Giữ lại trường này, 0: Loại bỏ trường này
+                    name: 1,
+                    slug: 1,
+                    comment: "$comments.content",
+                    commentDate: "$comments.createdAt"
+                }}
+            ]);
+
             const userInfo = {
                 ...profileUser.toObject(),
                 postCount: postCount || 0,
@@ -134,6 +148,7 @@ class AdminController {
                 // user: req.user,
                 profileUser: userInfo,
                 recentPosts: recentPosts,
+                recentComments: recentComments,
             });
         } catch (error) {
             console.error('Lỗi khi load thông tin người dùng:', error);

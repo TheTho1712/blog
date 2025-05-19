@@ -1,3 +1,4 @@
+require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
@@ -30,11 +31,12 @@ app.use(cookieParser());
 
 app.use(
     session({
-        secret: 'secret-key', // thay bằng chuỗi mạnh khi lên production
+        secret: [process.env.SESSION_SECRET || 'fallback_secret_key'],
         resave: false,
         saveUninitialized: false,
         cookie: { maxAge: 3600000 },
     }),
+    
 );
 
 //template engine
